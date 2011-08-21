@@ -7,6 +7,8 @@ use Encode ();
 use Plack::Request;
 use Plack::Response;
 
+use Plack::Util::Accessor qw(html_content_type);
+
 our $VERSION = '0.01';
 
 sub new {
@@ -90,6 +92,13 @@ Malts - 次世代 Web Application Framework
 =head1 DESCRIPTION
 
 Malts is ...!
+
+=head1 ATTRIBUTES
+
+=head2 html_content_type
+
+    $c->html_content_type;
+    $c->html_content_type('text/html; charset=UTF-8');
 
 =head1 METHODS
 
