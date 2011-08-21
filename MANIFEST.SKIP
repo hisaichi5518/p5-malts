@@ -1,0 +1,11 @@
+#!include_default
+
+# skip author's files
+\bauthor\e
+\.dim.pl
+
+\.bs$
+\.o(?:|bj|ld|ut)$
+\.gz$
+nytprof
+MYMETA\.yml$
