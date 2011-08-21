@@ -4,7 +4,9 @@ use Test::More;
 
 use Malts;
 
-# test Malts here
-pass;
+my $malts = Malts->new;
+
+note 'testing $malts isa Malts';
+isa_ok $malts, 'Malts';
 
 done_testing;

@@ -5,6 +5,12 @@ use warnings;
 
 our $VERSION = '0.01';
 
+sub new {
+    my $class = shift;
+    my %args = @_ == 1 ? %{$_[0]} : @_;
+    bless {%args}, $class;
+}
+
 1;
 __END__
 
