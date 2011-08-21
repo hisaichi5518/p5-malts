@@ -83,6 +83,17 @@ sub ok {
     );
 }
 
+sub not_found {
+    my ($self, $not_found_message) = @_;
+
+    $not_found_message ||= "404 Not Found!";
+    return $self->create_response(
+        404,
+        ['Content-Length' => length($not_found_message)],
+        [$self->encoding->encode($not_found_message)]
+    );
+}
+
 1;
 __END__
 
@@ -187,6 +198,13 @@ PSGIアプリのコードリファレンスを返します。
     $c->ok($decoed_html);
 
 Status: 200のResponseのインスタンスを返します。
+
+=head2 not_found
+
+    $c->not_found;
+    $c->not_found($not_found_message);
+
+Status: 404のResponseクラスのインスタンスを返します。
 
 =head1 SEE ALSO
 
