@@ -68,6 +68,21 @@ sub to_app {
     };
 }
 
+sub ok {
+    my ($self, $decoed_html) = @_;
+    die "Can't find html." unless $decoed_html;
+
+    my $content_type = $self->html_content_type || 'text/html; charset=UTF-8';
+    return $self->create_response(
+        200,
+        [
+            'Content-Type'   => $content_type,
+            'Content-Length' => length($decoed_html),
+        ],
+        [$self->encoding->encode($decoed_html)]
+    );
+}
+
 1;
 __END__
 
@@ -166,6 +181,12 @@ Responseクラスのインスタンス作成し $c->response;に代入する。
     MyApp::Web->to_app;
 
 PSGIアプリのコードリファレンスを返します。
+
+=head2 ok
+
+    $c->ok($decoed_html);
+
+Status: 200のResponseのインスタンスを返します。
 
 =head1 SEE ALSO
 
