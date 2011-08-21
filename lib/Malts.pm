@@ -54,6 +54,18 @@ sub create_response {
     return $self->{response};
 }
 
+sub to_app {
+    my ($class, %args) = @_;
+
+    return sub {
+        my $env = shift;
+        my $self = $class->new(%args);
+        $self->create_request($env);
+        $self->create_response(200, [], 'ok');
+        return $self->response->finalize;
+    };
+}
+
 1;
 __END__
 
@@ -139,6 +151,12 @@ Requestクラスのインスタンス作成し $c->request;に代入する。
     $c->create_response($status, \%headers, \@bodys);
 
 Responseクラスのインスタンス作成し $c->response;に代入する。
+
+=head2 C<to_app>
+
+    MyApp::Web->to_app;
+
+PSGIアプリのコードリファレンスを返します。
 
 =head1 SEE ALSO
 
