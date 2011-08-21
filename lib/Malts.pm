@@ -5,47 +5,46 @@ use warnings;
 
 our $VERSION = '0.01';
 
-
 1;
 __END__
 
+=encoding utf8
+
 =head1 NAME
 
-Malts - Perl extention to do something
-
-=head1 VERSION
-
-This document describes Malts version 0.01.
+Malts - 次世代 Web Application Framework
 
 =head1 SYNOPSIS
 
-    use Malts;
+    package MyApp::Web;
+    use strict;
+    use warnings;
+    use parent 'Malts';
+
+    sub startup {
+        my $self = shift;
+        $self->create_response(200, [], ['Hello, World!']);
+    }
 
 =head1 DESCRIPTION
 
-# TODO
+Malts is ...!
 
-=head1 INTERFACE
+=head1 METHODS
 
-=head2 Functions
+=head2 C<method_name>
 
-=head3 C<< hello() >>
+    $c->method_name
 
-# TODO
-
-=head1 DEPENDENCIES
-
-Perl 5.8.1 or later.
-
-=head1 BUGS
-
-All complex software has bugs lurking in it, and this module is no
-exception. If you find a bug please either email me, or add the bug
-to cpan-RT.
+説明
 
 =head1 SEE ALSO
 
-L<perl>
+L<Plack>
+
+=head1 Repository
+
+  http://github.com/hisaichi5518/p5-malts
 
 =head1 AUTHOR
 
