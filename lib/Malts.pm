@@ -5,6 +5,7 @@ use warnings;
 
 use Encode ();
 use Plack::Request;
+use Plack::Response;
 
 our $VERSION = '0.01';
 
@@ -28,8 +29,15 @@ sub encoding {
 
 sub request { $_[0]->{request} }
 
+sub response { $_[0]->{response} }
+
 sub new_request {
     return Plack::Request->new($_[1]);
+}
+
+sub new_response {
+    shift;
+    return Plack::Response->new(@_);
 }
 
 sub create_request {
@@ -39,8 +47,11 @@ sub create_request {
     return $self->{request};
 }
 
-sub new_request {
-    return Plack::Request->new($_[1]);
+sub create_response {
+    my $self = shift;
+    $self->{response} = $self->new_response(@_);
+
+    return $self->{response};
 }
 
 1;
@@ -91,17 +102,43 @@ B<変更は推奨されない>が、携帯サイトの場合はその限りで�
 
 $c->create_request;された後ならRequestクラスのインスタンスを返す。
 
+=head2 C<response>
+
+    $c->response;
+
+$c->create_response;された後ならResponseクラスのインスタンスを返す。
+
 =head2 C<new_request>
 
     $c->new_request({PATH_INFO => '/'});
 
 Requestクラスのインスタンスを返す。
 
+=head2 C<new_response>
+
+    $c->new_response;
+    $c->new_response($status);
+    $c->new_response($status, \%headers);
+    $c->new_response($status, \%headers, $body);
+    $c->new_response($status, \%headers, \@bodys);
+
+Responseクラスのインスタンスを返す。
+
 =head2 C<create_request>
 
     $c->create_request({PATH_INFO => '/'});
 
 Requestクラスのインスタンス作成し $c->request;に代入する。
+
+=head2 C<create_response>
+
+    $c->create_response;
+    $c->create_response($status);
+    $c->create_response($status, \%headers);
+    $c->create_response($status, \%headers, $body);
+    $c->create_response($status, \%headers, \@bodys);
+
+Responseクラスのインスタンス作成し $c->response;に代入する。
 
 =head1 SEE ALSO
 
