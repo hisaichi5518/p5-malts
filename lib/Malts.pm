@@ -3,12 +3,26 @@ use 5.008_001;
 use strict;
 use warnings;
 
+use Encode ();
+
 our $VERSION = '0.01';
 
 sub new {
     my $class = shift;
     my %args = @_ == 1 ? %{$_[0]} : @_;
     bless {%args}, $class;
+}
+
+sub encoding {
+    my ($self, $encoding) = @_;
+
+    return $self->{encoding}
+        if !$encoding && exists $self->{encoding};
+
+    $self->{encoding} = Encode::find_encoding($encoding || 'utf8')
+        or die "encoding '$encoding' not found";
+
+    return $self->{encoding};
 }
 
 1;
@@ -38,11 +52,20 @@ Malts is ...!
 
 =head1 METHODS
 
-=head2 C<method_name>
+=head2 C<encoding>
 
-    $c->method_name
+    $c->encoding;
+    $c->encoding('utf8');
+    $c->encoding('shift-jis');
 
-説明
+
+渡した文字コードをEncode::find_encoding()したものが返される。
+
+文字コードが存在しない場合はエラーを返す。
+
+デフォルトは、utf8
+
+B<変更は推奨されない>が、携帯サイトの場合はその限りではない。
 
 =head1 SEE ALSO
 
