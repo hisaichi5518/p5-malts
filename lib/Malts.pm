@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use Encode ();
+use Plack::Request;
 
 our $VERSION = '0.01';
 
@@ -23,6 +24,23 @@ sub encoding {
         or die "encoding '$encoding' not found";
 
     return $self->{encoding};
+}
+
+sub request { $_[0]->{request} }
+
+sub new_request {
+    return Plack::Request->new($_[1]);
+}
+
+sub create_request {
+    my ($self, $env) = @_;
+    $self->{request} = $self->new_request($env);
+
+    return $self->{request};
+}
+
+sub new_request {
+    return Plack::Request->new($_[1]);
 }
 
 1;
@@ -66,6 +84,24 @@ Malts is ...!
 デフォルトは、utf8
 
 B<変更は推奨されない>が、携帯サイトの場合はその限りではない。
+
+=head2 C<request>
+
+    $c->request;
+
+$c->create_request;された後ならRequestクラスのインスタンスを返す。
+
+=head2 C<new_request>
+
+    $c->new_request({PATH_INFO => '/'});
+
+Requestクラスのインスタンスを返す。
+
+=head2 C<create_request>
+
+    $c->create_request({PATH_INFO => '/'});
+
+Requestクラスのインスタンス作成し $c->request;に代入する。
 
 =head1 SEE ALSO
 
