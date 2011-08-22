@@ -1,4 +1,7 @@
 # for Malts
+Plack
+Encode
+
 # Makefile.PL
 Module::Install
 Module::Install::AuthorTests
