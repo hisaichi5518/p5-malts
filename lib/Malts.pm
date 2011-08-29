@@ -66,7 +66,7 @@ sub to_app {
         my $env = shift;
         my $self = $class->new(%args);
         $self->create_request($env);
-        $self->create_response(200, [], 'ok');
+        $self->ok('ok');
         return $self->response->finalize;
     };
 }
