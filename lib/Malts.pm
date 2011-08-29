@@ -14,7 +14,10 @@ our $VERSION = '0.01';
 sub new {
     my $class = shift;
     my %args = @_ == 1 ? %{$_[0]} : @_;
-    bless {%args}, $class;
+    bless {
+        html_content_type => 'text/html; charset=UTF-8',
+        %args
+    }, $class;
 }
 
 sub encoding {
@@ -72,7 +75,7 @@ sub ok {
     my ($self, $decoed_html) = @_;
     die "Can't find html." unless $decoed_html;
 
-    my $content_type = $self->html_content_type || 'text/html; charset=UTF-8';
+    my $content_type = $self->html_content_type;
     return $self->create_response(
         200,
         [
@@ -127,6 +130,15 @@ Malts is ...!
     $c->html_content_type('text/html; charset=UTF-8');
 
 =head1 METHODS
+
+=head2 C<new>
+
+    MyApp->new;
+    MyApp->new(html_content_type => 'text/html; charset=UTF-8');
+
+アプリケーションのインスタンスを作成します。
+
+html_content_typeの初期値もここで設定されます。
 
 =head2 C<encoding>
 
