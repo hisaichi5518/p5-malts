@@ -1,4 +1,4 @@
-package Malts::Response;
+package Malts::Web::Response;
 use strict;
 use warnings;
 use parent 'Plack::Response';
@@ -10,12 +10,12 @@ __END__
 
 =head1 NAME
 
-Malts::Response - Malts用のResponseクラス
+Malts::Web::Response - Malts用のResponseクラス
 
 =head1 SYNOPSIS
 
-    use Malts::Response;
-    my $res = Malts::Response->new(200);
+    use Malts::Web::Response;
+    my $res = Malts::Web::Response->new(200);
     $res->content_type('text/html; charset=UTF-8');
     $res->body('Hello Malts World!');
 

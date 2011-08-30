@@ -2,10 +2,10 @@
 use strict;
 use Test::More;
 
-use Malts;
+use Malts::Web;
 
-my $req_class = 'Plack::Request';
-my $malts = Malts->new;
+my $req_class = 'Malts::Web::Request';
+my $malts = Malts::Web->new;
 
 {
     note 'testing dont have request';

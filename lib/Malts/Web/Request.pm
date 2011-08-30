@@ -1,4 +1,4 @@
-package Malts::Request;
+package Malts::Web::Request;
 use strict;
 use warnings;
 use parent 'Plack::Request';
@@ -10,13 +10,13 @@ __END__
 
 =head1 NAME
 
-Malts::Request - Malts用のRequestクラス
+Malts::Web::Request - Malts用のRequestクラス
 
 =head1 SYNOPSIS
 
-    use Malts::Request;
+    use Malts::Web::Request;
     my $env = {PATH_INFO => '/'};
-    my $req = Malts::Request->new($env);
+    my $req = Malts::Web::Request->new($env);
     $req->path_info;
 
 =head1 DESCRIPTION

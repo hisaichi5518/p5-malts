@@ -2,10 +2,10 @@
 use strict;
 use Test::More;
 
-use Malts;
+use Malts::Web;
 
-my $res_class = 'Plack::Response';
-my $malts = Malts->new;
+my $res_class = 'Malts::Web::Response';
+my $malts = Malts::Web->new;
 
 {
     my $res = $malts->response;

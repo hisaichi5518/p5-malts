@@ -3,7 +3,7 @@ use strict;
 use Test::More;
 
 BEGIN {
-    use_ok 'Malts::Request';
+    use_ok 'Malts::Web';
 }
 
 done_testing;

@@ -4,13 +4,13 @@ use utf8;
 use Test::More;
 use Encode qw(encode_utf8);
 
-use Malts;
+use Malts::Web;
 
-my $malts = Malts->new;
+my $malts = Malts::Web->new;
 {
     note 'testing ok';
     my $ok =  $malts->ok('ok');
-    isa_ok $ok, 'Plack::Response';
+    isa_ok $ok, 'Malts::Web::Response';
     is_deeply $ok->body, ['ok'];
 }
 {

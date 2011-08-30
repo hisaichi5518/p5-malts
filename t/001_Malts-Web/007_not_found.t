@@ -4,13 +4,13 @@ use utf8;
 use Test::More;
 use Encode qw(encode_utf8);
 
-use Malts;
+use Malts::Web;
 
-my $malts = Malts->new;
+my $malts = Malts::Web->new;
 {
     note 'testing not_found';
     my $not_found = $malts->not_found;
-    is ref $not_found, 'Plack::Response';
+    is ref $not_found, 'Malts::Web::Response';
     is_deeply $not_found->body, ['404 Not Found!'];
 }
 {
