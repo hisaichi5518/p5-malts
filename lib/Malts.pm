@@ -169,7 +169,7 @@ $c->create_response;された後ならResponseクラスのインスタンスを�
 
 =head2 C<new_request>
 
-    $c->new_request({PATH_INFO => '/'});
+    $c->new_request(\%env);
 
 Requestクラスのインスタンスを返す。
 
@@ -185,7 +185,7 @@ Responseクラスのインスタンスを返す。
 
 =head2 C<create_request>
 
-    $c->create_request({PATH_INFO => '/'});
+    $c->create_request(\%env);
 
 Requestクラスのインスタンス作成し $c->request;に代入する。
 
