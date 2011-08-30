@@ -21,7 +21,7 @@ Malts::Web::Request - Malts用のRequestクラス
 
 =head1 DESCRIPTION
 
-L<Plack::Request>を継承している。
+このモジュールは、L<Plack::Request>を継承している。
 
 =head1 SEE ALSO
 

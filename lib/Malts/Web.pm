@@ -116,6 +116,8 @@ Malts is ...!
 
 =head1 METHODS
 
+このモジュールは、L<Malts>を継承している。
+
 =head2 C<new>
 
     MyApp->new;
@@ -124,21 +126,6 @@ Malts is ...!
 アプリケーションのインスタンスを作成します。
 
 html_content_typeの初期値もここで設定されます。
-
-=head2 C<encoding>
-
-    $c->encoding;
-    $c->encoding('utf8');
-    $c->encoding('shift-jis');
-
-
-渡した文字コードをEncode::find_encoding()したものが返される。
-
-文字コードが存在しない場合はエラーを返す。
-
-デフォルトは、utf8
-
-B<変更は推奨されない>が、携帯サイトの場合はその限りではない。
 
 =head2 C<request>
 
