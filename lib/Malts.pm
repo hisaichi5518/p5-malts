@@ -25,6 +25,26 @@ sub encoding {
     return $self->{encoding};
 }
 
+sub config {
+    my $self = shift;
+    # Initialize
+    $self->{config} ||= {};
+
+    # Hash
+    return $self->{config} unless @_;
+
+    # Get
+    return $self->{config}->{$_[0]} unless @_ > 1 || ref $_[0];
+
+    # Set
+    my $values = ref $_[0] ? $_[0] : {@_};
+    for my $key (keys %$values) {
+        $self->{config}->{$key} = $values->{$key};
+    }
+
+    return $self->{config};
+}
+
 1;
 __END__
 
@@ -65,6 +85,16 @@ Malts is ...!
 デフォルトは、utf8
 
 B<変更は推奨されない>が、携帯サイトの場合はその限りではない。
+
+=head2 C<config>
+
+    $c->config;
+    $c->config($config_name => $config_value);
+    $c->config($config_name);
+
+設定を返します。
+
+C<Malts::Plugin::ConfigLoader>プラグインを使って、設定ファイルを読み込む事が可能です。
 
 =head1 SEE ALSO
 
