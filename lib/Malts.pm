@@ -19,6 +19,11 @@ sub new {
     bless {%args}, $class;
 }
 
+sub boostrap {
+    my $class = shift;
+    Malts->set_context($class->new(@_));
+}
+
 sub encoding {
     my ($self, $encoding) = @_;
 
@@ -88,6 +93,13 @@ Malts is ...!
     Malts->set_context($context);
 
 コンテキストをセットします。
+
+=head2 C<boostrap>
+
+    MyApp->boostrap;
+    MyApp->boostrap(mode => test);
+
+newした後にset_contextする。
 
 =head2 C<encoding>
 
