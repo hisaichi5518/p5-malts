@@ -13,6 +13,8 @@ our $VERSION = '0.01';
     sub set_context { $context = $_[1] }
 }
 
+sub startup {}
+
 sub new {
     my $class = shift;
     my %args = @_ == 1 ? %{$_[0]} : @_;
@@ -93,6 +95,12 @@ Malts is ...!
     Malts->set_context($context);
 
 コンテキストをセットします。
+
+=head2 C<startup>
+
+    $c->startup;
+
+アプリケーションにおける主要フックです。アプリケーション開始時に呼び出されます。
 
 =head2 C<boostrap>
 
