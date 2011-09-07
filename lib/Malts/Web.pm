@@ -55,7 +55,7 @@ sub to_app {
 
 sub ok {
     my ($self, $decoed_html) = @_;
-    die "Can't find html." unless $decoed_html;
+    die "Can't find html." unless defined $decoed_html;
 
     my $content_type = $self->html_content_type;
     return $self->create_response(
@@ -78,9 +78,6 @@ sub not_found {
         [$self->encoding->encode($not_found_message)]
     );
 }
-
-
-
 
 1;
 __END__
