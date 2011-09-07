@@ -48,7 +48,9 @@ sub to_app {
         my $env = shift;
         my $self = $class->new(%args);
         $self->create_request($env);
-        $self->ok('ok');
+        $self->startup;
+
+        die 'You must create a response.' unless $self->response;
         return $self->response->finalize;
     };
 }
