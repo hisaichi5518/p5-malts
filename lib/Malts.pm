@@ -7,6 +7,12 @@ use Encode ();
 
 our $VERSION = '0.01';
 
+{
+    my $context;
+    sub context     { $context }
+    sub set_context { $context = $_[1] }
+}
+
 sub new {
     my $class = shift;
     my %args = @_ == 1 ? %{$_[0]} : @_;
@@ -70,6 +76,18 @@ Malts is ...!
     MyApp->new(mode => 'test');
 
 アプリケーションのインスタンスを作成します。
+
+=head2 context
+
+    Malts->context;
+
+コンテキストを取り出します。Malts::Web::Requestなどでcontextを使う場合に使用します。
+
+=head2 set_context
+
+    Malts->set_context($context);
+
+コンテキストをセットします。
 
 =head2 C<encoding>
 
