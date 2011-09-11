@@ -2,21 +2,14 @@ package Malts::Web;
 use strict;
 use warnings;
 
-use parent 'Malts';
 use Malts::Web::Request;
 use Malts::Web::Response;
 use Plack::Util::Accessor qw(html_content_type);
-
-sub new {
-    my ($class, %args) = @_;
-    $class->SUPER::new(
-        html_content_type => 'text/html; charset=UTF-8',
-        %args
-    );
-}
+use Plack::Util ();
 
 sub request  { $_[0]->{request}  }
 sub response { $_[0]->{response} }
+
 
 sub new_request {
     return Malts::Web::Request->new($_[1]);
@@ -41,6 +34,14 @@ sub create_response {
     return $self->{response};
 }
 
+sub routes {
+    my ($self, $name, %args) = @_;
+    return $self->{routes} unless $name;
+    $self->{routes} = Plack::Util::load_class($name, 'Malts::Web::Routes')->new(%args);
+
+    return $self->{routes};
+}
+
 sub to_app {
     my ($class, %args) = @_;
 
@@ -49,6 +50,8 @@ sub to_app {
         my $self = $class->new(%args);
         $self->create_request($env);
         $self->startup;
+
+        $self->routes->dispatch($self) if $self->routes;
 
         die 'You must create a response.' unless $self->response;
         return $self->response->finalize;
@@ -169,6 +172,14 @@ Requestクラスのインスタンス作成し $c->request;に代入する。
     $c->create_response($status, \%headers, \@bodys);
 
 Responseクラスのインスタンス作成し $c->response;に代入する。
+
+=head2 C<routes>
+
+    my $r = $c->routes;
+       $r = $c->routes($routes_class);
+       $r = $c->routes('RSimple');
+
+$routes_classがあれば、ロードしてnewした後にRoutes Classを返す。
 
 =head2 C<to_app>
 

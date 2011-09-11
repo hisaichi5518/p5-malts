@@ -13,6 +13,7 @@ lib/Malts.pm
 lib/Malts/Web.pm
 lib/Malts/Web/Request.pm
 lib/Malts/Web/Response.pm
+lib/Malts/Web/Routes/RSimple.pm
 Makefile.PL
 MANIFEST			This list of files
 MANIFEST.SKIP
@@ -35,6 +36,9 @@ t/002_Malts-Web-Request/000_load.t
 t/002_Malts-Web-Request/001_basic.t
 t/003_Malts-Web-Response/000_load.t
 t/003_Malts-Web-Response/001_basic.t
+t/004_Malts-Web-Routes-RSimple/000_load.t
+t/004_Malts-Web-Routes-RSimple/001_basic.t
+t/004_Malts-Web-Routes-RSimple/002_begin.t
 xt/perlcritic.t
 xt/pod.t
 xt/podcoverage.t
