@@ -1,40 +1,53 @@
 #!perl -w
+package TestApp;
 use strict;
+use warnings;
+use parent 'Malts';
+
+package TestApp::Web;
+use strict;
+use warnings;
+
+use parent -norequire, 'TestApp';
+use parent 'Malts::Web';
+
+package main;
+use strict;
+use warnings;
+
 use Test::More;
 
-use Malts::Web;
-
+my $t = TestApp::Web->new;
 my $res_class = 'Malts::Web::Response';
-my $malts = Malts::Web->new;
 
-{
-    my $res = $malts->response;
+subtest 'testing dont have response' => sub {
+    my $res = $t->response;
     ok !$res;
-}
-{
-    note 'testing new response';
-    my $res = $malts->new_response();
+};
+
+subtest 'testing new response' => sub {
+    my $res = $t->new_response();
     isa_ok $res, $res_class;
 
-    $res = $malts->new_response(200);
+    $res = $t->new_response(200);
     isa_ok $res, $res_class;
 
-    $res = $malts->new_response(200, []);
+    $res = $t->new_response(200, []);
     isa_ok $res, $res_class;
 
-    $res = $malts->new_response(200, [], 'ok');
+    $res = $t->new_response(200, [], 'ok');
     isa_ok $res, $res_class;
 
-    $res = $malts->new_response(200, [], ['ok']);
+    $res = $t->new_response(200, [], ['ok']);
     isa_ok $res, $res_class;
-}
-{
-    note 'testing create_response';
-    my $res = $malts->create_response(200, [], ['ok']);
+};
+
+subtest 'testing create_response' => sub {
+    my $res = $t->create_response(200, [], ['ok']);
     isa_ok $res, $res_class;
 
-    ok $malts->response;
-    isa_ok $malts->response, $res_class;
-}
+    ok $t->response;
+    isa_ok $t->response, $res_class;
+};
 
 done_testing;

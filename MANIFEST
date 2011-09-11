@@ -24,6 +24,8 @@ t/000_Malts/000_load.t
 t/000_Malts/001_basic.t
 t/000_Malts/002_encoding.t
 t/000_Malts/003_config.t
+t/000_Malts/004_context.t
+t/000_Malts/005_boostrap.t
 t/001_Malts-Web/000_load.t
 t/001_Malts-Web/001_basic.t
 t/001_Malts-Web/002_html_content_type.t

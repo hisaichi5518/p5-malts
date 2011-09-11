@@ -47,8 +47,16 @@ sub to_app {
 
     return sub {
         my $env = shift;
-        my $self = $class->new(%args);
+
+        # Malts.pmを継承してるクラスで使う前提
+        my $self = $class->new(
+            html_content_type => 'text/html; charset=UTF-8',
+            %args
+        );
         $self->create_request($env);
+
+        # Malts.pmを継承してるモジュールで使われる前提なので
+        # このクラスにstartupがなくても問題ない
         $self->startup;
 
         $self->routes->dispatch($self) if $self->routes;
@@ -95,118 +103,118 @@ Malts - 次世代 Web Application Framework
 
 =head1 SYNOPSIS
 
+    pacakage MyApp;
+    use strict;
+    use warnings;
+    use parent 'Malts';
+
     package MyApp::Web;
     use strict;
     use warnings;
+    use parent -norequire, 'MyApp';
     use parent 'Malts::Web';
+    use Class::Method::Modifiers::Fast qw(after);
 
-    sub startup {
+    after startup => sub {
         my $self = shift;
-        $self->ok('Hello, World!');
-    }
+        $self->ok('hello Malts world');
+    };
 
 =head1 DESCRIPTION
 
 Malts is ...!
 
-=head1 ATTRIBUTES
+=head1 METHODS
 
 =head2 html_content_type
 
-    $c->html_content_type;
+    $content_type = $c->html_content_type;
     $c->html_content_type('text/html; charset=UTF-8');
-
-=head1 METHODS
-
-このモジュールは、L<Malts>を継承している。
-
-=head2 C<new>
-
-    MyApp->new;
-    MyApp->new(html_content_type => 'text/html; charset=UTF-8');
-
-アプリケーションのインスタンスを作成します。
-
-html_content_typeの初期値もここで設定されます。
 
 =head2 C<request>
 
-    $c->request;
+    $req = $c->request;
 
 $c->create_request;された後ならRequestクラスのインスタンスを返す。
 
 =head2 C<response>
 
-    $c->response;
+    $res = $c->response;
 
 $c->create_response;された後ならResponseクラスのインスタンスを返す。
 
 =head2 C<new_request>
 
-    $c->new_request(\%env);
+    $req = $c->new_request(\%env);
+    $req = $c->new_request({PATH_INFO => '/'});
 
 Requestクラスのインスタンスを返す。
 
 =head2 C<new_response>
 
-    $c->new_response;
-    $c->new_response($status);
-    $c->new_response($status, \%headers);
-    $c->new_response($status, \%headers, $body);
-    $c->new_response($status, \%headers, \@bodys);
+    $res = $c->new_response;
+    $res = $c->new_response($status);
+    $res = $c->new_response($status, \%headers);
+    $res = $c->new_response($status, \%headers, $body);
+    $res = $c->new_response($status, \%headers, \@bodys);
+    $res = $c->new_response(200, ['Content-Type' => 'text/html; charset=UTF-8'], ['ok']);
 
 Responseクラスのインスタンスを返す。
 
 =head2 C<create_request>
 
-    $c->create_request(\%env);
+    $req = $c->create_request(\%env);
+    $req = $c->create_request({PATH_INFO => '/'});
 
 Requestクラスのインスタンス作成し $c->request;に代入する。
 
 =head2 C<create_response>
 
-    $c->create_response;
-    $c->create_response($status);
-    $c->create_response($status, \%headers);
-    $c->create_response($status, \%headers, $body);
-    $c->create_response($status, \%headers, \@bodys);
+    $res = $c->create_response;
+    $res = $c->create_response($status);
+    $res = $c->create_response($status, \%headers);
+    $res = $c->create_response($status, \%headers, $body);
+    $res = $c->create_response($status, \%headers, \@bodys);
+    $res = $c->create_response(200, ['Content-Type' => 'text/html; charset=UTF-8'], ['ok']);
 
 Responseクラスのインスタンス作成し $c->response;に代入する。
 
 =head2 C<routes>
 
-    my $r = $c->routes;
-       $r = $c->routes($routes_class);
-       $r = $c->routes('RSimple');
+    $r = $c->routes;
+    $r = $c->routes($routes_class);
+    $r = $c->routes('RSimple');
 
 $routes_classがあれば、ロードしてnewした後にRoutes Classを返す。
 
 =head2 C<to_app>
 
-    MyApp::Web->to_app;
+    $app = MyApp::Web->to_app;
+    $app = MyApp::Web->to_app(%args);
+    $app = MyApp::Web->to_app(html_content_type => 'text/html; charset=UTF-8');
 
 PSGIアプリのコードリファレンスを返します。
 
+自動で I<html_content_type> に I<text/html; charset=UTF-8> がセットされまが、上書きする事も可能です。
+
 =head2 ok
 
-    $c->ok($decoed_html);
+    $res = $c->ok($decoed_html);
+    $res = $c->ok('<html>ok</html>'):
 
 Status: 200のResponseのインスタンスを返します。
 
 =head2 not_found
 
-    $c->not_found;
-    $c->not_found($not_found_message);
+    $res = $c->not_found;
+    $res = $c->not_found($not_found_message);
+    $res = $c->not_found('<html>404!</html>');
 
 Status: 404のResponseクラスのインスタンスを返します。
 
 =head1 SEE ALSO
 
 L<Plack>
-
-=head1 Repository
-
-  http://github.com/hisaichi5518/p5-malts
 
 =head1 AUTHOR
 

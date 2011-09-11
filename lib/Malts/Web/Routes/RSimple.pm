@@ -50,29 +50,7 @@ Malts::Web::Routes::RSimple - MaltsでRouter::Simpleを使う為のモジュー�
 
 =head1 DESCRIPTION
 
-高速なRouter Class である Router::Simple を Malts::Web で使う為のクラス
-
-=head1 ARGS
-
-=head2 namespace
-
-MyApp::Web::Controller 以下にコントローラを置きたくない場合に使う。
-
-これはnew でも指定する事が出来るが、argsで指定したほうが優先される。
-
-=head2 controller
-
-コントローラを指定する。
-
-一番前に「 + 」を付けるとnamespaceが無視される。
-
-controllerが指定されていないと404を返す。
-
-=head2 action
-
-アクションを指定する。
-
-actionが指定されていないと404を返す。
+高速なRouter Class である L<Router::Simple> を L<Malts::Web> で使う為のクラス
 
 =head1 METHOD
 
@@ -81,6 +59,32 @@ L<Router::Simple> を継承している。
 =head2 dispatch
 
     $c->dispatch($c);
+
+=over 3
+
+=item namespace
+
+MyApp::Web::Controller 以下にコントローラを置きたくない場合に使う。
+
+これはnew でも指定する事が出来るが、argsで指定したほうが優先される。
+
+デフォルトは、 I<MyApp::Web::Controller>
+
+=item controller
+
+コントローラを指定する。
+
+一番前に「 + 」を付けるとnamespaceが無視される。
+
+controllerが指定されていないと404を返す。
+
+=item action
+
+アクションを指定する。
+
+actionが指定されていないと404を返す。
+
+=back
 
 =head1 AUTHOR
 

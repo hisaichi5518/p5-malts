@@ -80,6 +80,7 @@ Malts is ...!
 =head2 C<new>
 
     MyApp->new;
+    MyApp->new(%args);
     MyApp->new(mode => 'test');
 
 アプリケーションのインスタンスを作成します。
@@ -93,6 +94,7 @@ Malts is ...!
 =head2 set_context
 
     Malts->set_context($context);
+    Mlats->set_context(Malts->new);
 
 コンテキストをセットします。
 
@@ -112,9 +114,8 @@ newした後にset_contextする。
 =head2 C<encoding>
 
     $c->encoding;
+    $c->encoding($encoding);
     $c->encoding('utf8');
-    $c->encoding('shift-jis');
-
 
 渡した文字コードをEncode::find_encoding()したものが返される。
 
@@ -126,9 +127,15 @@ B<変更は推奨されない>が、携帯サイトの場合はその限りで�
 
 =head2 C<config>
 
-    $c->config;
+    $config = $c->config;
+
+    # set
     $c->config($config_name => $config_value);
+    $c->config(name => 'hisaichi5518');
+
+    # get
     $c->config($config_name);
+    $name = $c->config('name');
 
 設定を返します。
 
