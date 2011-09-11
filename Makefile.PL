@@ -25,7 +25,11 @@ use inc::Module::Install;
 
 all_from 'lib/Malts.pm';
 
-requires "";
+requires 'Encode';
+requires 'Plack';
+requires 'Data::Util';
+requires 'Class::Method::Modifiers::Fast';
+requires 'parent';
 
 test_requires 'Test::More' => '0.88';
 

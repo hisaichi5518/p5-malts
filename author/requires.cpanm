@@ -1,6 +1,9 @@
 # for Malts
-Plack
 Encode
+Plack
+Data::Util
+Class::Method::Modifiers::Fast
+parent
 
 # Makefile.PL
 Module::Install
