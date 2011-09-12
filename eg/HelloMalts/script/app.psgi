@@ -3,9 +3,8 @@ use strict;
 use warnings;
 
 use parent qw(Malts Malts::Web);
-use Class::Method::Modifiers::Fast qw(after);
 
-after startup => sub {
+sub startup {
     my $self = shift;
     $self->ok('Hello Malts!');
 };
