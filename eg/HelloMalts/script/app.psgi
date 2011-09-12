@@ -1,0 +1,17 @@
+package HelloMalts::Web;
+use strict;
+use warnings;
+
+use parent qw(Malts Malts::Web);
+use Class::Method::Modifiers::Fast qw(after);
+
+after startup => sub {
+    my $self = shift;
+    $self->ok('Hello Malts!');
+};
+
+package main;
+use strict;
+use warnings;
+
+HelloMalts::Web->to_app;
