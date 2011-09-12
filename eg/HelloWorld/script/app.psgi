@@ -12,9 +12,14 @@ $INC{'HelloWorld/Web/Controller/Root.pm'} = __FILE__;
 
 sub begin {
     my ($self, $c) = @_;
+    # actionが実行される前に何か処理を加えたい場合ここに追加する。
+    # このメソッドは削除しても正常に動作する。
 }
+
 sub end {
     my ($self, $c) = @_;
+    # actionが実行された後に何か処理を加えたい場合ここに追加する。
+    # このメソッドは削除しても正常に動作する。
 }
 
 sub index {
