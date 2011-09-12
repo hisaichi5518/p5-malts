@@ -19,7 +19,7 @@
 * use Malts::Style::Premium qw(log config db api);
 * logもstyleに
 * オレオレコンテナ実装はStyleで
-* なぜ、ContainerではなくStyleかー＞スタイルを統一する為にあるから。
+* なぜ、ContainerではなくStyleか->スタイルを統一する為にあるから。
 * 個別に設定したい場合は、MyApp::Webなどに書く。
 * PODがないStyleはクソだよねーみたいな
 * Malts::Style::会社名 など出来るし、会社毎に規約が設定出来る。
