@@ -12,9 +12,9 @@
 * なぜそうするかを明確にする
 
 ## TODO
-* ログを取る。ルーティングテーブルとか出せるようにする
-* ただし、プラグインでやる
-* MALTS_DEBUG=1
+* ログを取る。
+* ルーティングテーブル表示をプラグインで出来るようにする。
+* $ENV{MALTS_DEBUG} = 1;
 * PLACK_ENV=developmentだったら自動でDEBUG MODEを有効にするプラグイン
 * use Malts::Style::Premium qw(log config db api);
 * logもstyleに
