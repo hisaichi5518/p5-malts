@@ -33,7 +33,7 @@ requires 'parent';
 
 test_requires 'Test::More' => '0.88';
 
-auto_set_repository;
+auto_set_repository if -e '.git';
 
 tests_recursive;
 author_tests 'xt';
