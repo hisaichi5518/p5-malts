@@ -68,7 +68,7 @@ sub to_app {
 
 sub ok {
     my ($self, $decoed_html) = @_;
-    die "Can't find html." unless defined $decoed_html;
+    die '$decoed_html is required' unless defined $decoed_html;
 
     my $content_type = $self->html_content_type;
     return $self->create_response(
