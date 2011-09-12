@@ -11,6 +11,7 @@ inc/Module/Install/Metadata.pm
 inc/Module/Install/Repository.pm
 inc/Module/Install/WriteAll.pm
 lib/Malts.pm
+lib/Malts/CLI.pm
 lib/Malts/Web.pm
 lib/Malts/Web/Request.pm
 lib/Malts/Web/Response.pm
