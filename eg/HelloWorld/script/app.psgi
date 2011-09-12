@@ -6,6 +6,8 @@ use parent 'Malts';
 package HelloWorld::Web::Controller::Root;
 use strict;
 use warnings;
+
+# HACK for Plack::Util::load_class()
 $INC{'HelloWorld/Web/Controller/Root.pm'} = __FILE__;
 
 sub begin {
