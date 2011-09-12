@@ -55,7 +55,7 @@ sub to_app {
         );
         $self->create_request($env);
 
-        # Malts.pmを継承してるモジュールで使われる前提なので
+        # Malts.pmを継承してるクラスで使われる前提なので
         # このクラスにstartupがなくても問題ない
         $self->startup;
 
@@ -126,7 +126,9 @@ Malts is ...!
 
 =head1 METHODS
 
-=head2 html_content_type
+以下のメソッドは、 L<Malts> が継承されているクラスで使用される事が前提になっている。
+
+=head2 C<html_content_type>
 
     $content_type = $c->html_content_type;
     $c->html_content_type('text/html; charset=UTF-8');
@@ -197,14 +199,14 @@ PSGIアプリのコードリファレンスを返します。
 
 自動で I<html_content_type> に I<text/html; charset=UTF-8> がセットされまが、上書きする事も可能です。
 
-=head2 ok
+=head2 C<ok>
 
     $res = $c->ok($decoed_html);
     $res = $c->ok('<html>ok</html>'):
 
 Status: 200のResponseのインスタンスを返します。
 
-=head2 not_found
+=head2 C<not_found>
 
     $res = $c->not_found;
     $res = $c->not_found($not_found_message);

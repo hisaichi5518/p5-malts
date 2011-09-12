@@ -21,9 +21,7 @@ Malts::Web::Response - Malts用のResponseクラス
 
 =head1 DESCRIPTION
 
-このモジュールは、L<Plack::Response>を継承している。
-
-詳しくは、L<Plack::Response>を参照。
+L<Plack::Response>を継承している。
 
 =head1 SEE ALSO
 
