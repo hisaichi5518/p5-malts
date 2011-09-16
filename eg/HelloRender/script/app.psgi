@@ -1,4 +1,4 @@
-package HelloMalts::Web;
+package HelloRender::Web;
 use strict;
 use warnings;
 
@@ -19,4 +19,4 @@ package main;
 use strict;
 use warnings;
 
-HelloMalts::Web->to_app;
+HelloRender::Web->to_app;

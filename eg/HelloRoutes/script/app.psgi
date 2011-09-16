@@ -1,14 +1,9 @@
-package HelloWorld;
-use strict;
-use warnings;
-use parent 'Malts';
-
-package HelloWorld::Web::Controller::Root;
+package HelloRoutes::Web::Controller::Root;
 use strict;
 use warnings;
 
 # HACK for Plack::Util::load_class()
-$INC{'HelloWorld/Web/Controller/Root.pm'} = __FILE__;
+$INC{'HelloRoutes/Web/Controller/Root.pm'} = __FILE__;
 
 sub begin {
     my ($self, $c) = @_;
@@ -24,18 +19,16 @@ sub end {
 
 sub index {
     my ($self, $c) = @_;
-    $c->ok('ok');
+    $c->ok('Hello Router::Simple World');
 }
 
-package HelloWorld::Web;
+package HelloRoutes::Web;
 use strict;
 use warnings;
 
-use parent -norequire, 'HelloWorld';
-use parent 'Malts::Web';
-use Class::Method::Modifiers::Fast qw(after);
+use parent qw(Malts Malts::Web);
 
-after startup => sub {
+sub startup {
     my $self = shift;
     my $r = $self->routes('RSimple');
     $r->connect('/' => {controller => 'Root', action => 'index'});
@@ -45,4 +38,4 @@ package main;
 use strict;
 use warnings;
 
-HelloWorld::Web->to_app;
+HelloRoutes::Web->to_app;

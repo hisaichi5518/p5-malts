@@ -1,4 +1,4 @@
-package HelloMalts::Web;
+package HelloLog::Web;
 use strict;
 use warnings;
 
@@ -19,5 +19,5 @@ use Plack::Builder;
 
 builder {
     enable "Plack::Middleware::Log::Minimal", autodump => 1;
-    HelloMalts::Web->to_app;
+    HelloLog::Web->to_app;
 };
