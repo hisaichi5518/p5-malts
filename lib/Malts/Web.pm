@@ -92,6 +92,15 @@ sub not_found {
     );
 }
 
+sub render {
+    my $self = shift;
+    die 'You must create a view.' unless $self->view;
+
+    my $decoed_html = $self->view->render(@_);
+    $self->ok($decoed_html);
+}
+
+
 1;
 __END__
 
@@ -222,6 +231,13 @@ Status: 200のResponseのインスタンスを返します。
     $res = $c->not_found('<html>404!</html>');
 
 Status: 404のResponseクラスのインスタンスを返します。
+
+=head2 C<render>
+
+    $c->render($template_path, \%args);
+    $c->render('root/index.tx', {foo => 'bar'});
+
+renderを使用するには、viewを指定している必要があります。
 
 =head1 SEE ALSO
 

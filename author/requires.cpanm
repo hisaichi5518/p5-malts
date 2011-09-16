@@ -4,6 +4,7 @@ Plack
 Data::Util
 Class::Method::Modifiers::Fast
 parent
+Text::Xslate
 
 # Makefile.PL
 Module::Install

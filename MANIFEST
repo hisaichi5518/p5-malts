@@ -36,6 +36,7 @@ t/001_Malts-Web/004_response.t
 t/001_Malts-Web/005_to_app.t
 t/001_Malts-Web/006_ok.t
 t/001_Malts-Web/007_not_found.t
+t/001_Malts-Web/008_render.t
 t/002_Malts-Web-Request/000_load.t
 t/002_Malts-Web-Request/001_basic.t
 t/003_Malts-Web-Response/000_load.t
