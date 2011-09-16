@@ -147,10 +147,6 @@ Malts is ...!
     $view = $c->view;
     $c->view(Text::Xslate->new);
 
-viewは自分で指定する事も可能ですが、Pluginで指定するとより簡単です。
-
-詳しくは、 L<Malts::Plugin::Web::View::Xslate> か L<Malts::Plugin::Web::View::Tiffany> を見てください。
-
 =head2 C<request>
 
     $req = $c->request;
