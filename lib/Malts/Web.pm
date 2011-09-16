@@ -59,7 +59,7 @@ sub to_app {
         # このクラスにstartupがなくても問題ない
         $self->startup;
 
-        $self->routes->dispatch($self) if $self->routes;
+        $self->routes->dispatch($self) or $self->not_found if $self->routes;
 
         die 'You must create a response.' unless $self->response;
         return $self->response->finalize;

@@ -30,6 +30,8 @@ sub dispatch {
     if (get_code_ref($controller, 'end')) {
         $controller->end($c);
     }
+
+    return 1;
 }
 
 1;

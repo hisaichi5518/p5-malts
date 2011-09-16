@@ -47,6 +47,7 @@ t/003_Malts-Web-Response/001_basic.t
 t/004_Malts-Web-Routes-RSimple/000_load.t
 t/004_Malts-Web-Routes-RSimple/001_basic.t
 t/004_Malts-Web-Routes-RSimple/002_begin.t
+t/004_Malts-Web-Routes-RSimple/003_not_found.t
 xt/perlcritic.t
 xt/pod.t
 xt/podcoverage.t
