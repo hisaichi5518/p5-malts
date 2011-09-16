@@ -2,6 +2,7 @@
 author/requires.cpanm
 Changes
 eg/HelloMalts/script/app.psgi
+eg/HelloRender/script/app.psgi
 eg/HelloWorld/script/app.psgi
 inc/Module/Install.pm
 inc/Module/Install/AuthorTests.pm
