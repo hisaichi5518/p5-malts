@@ -1,10 +1,10 @@
 .shipit
 author/requires.cpanm
 Changes
-eg/HelloLog/script/app.psgi
-eg/HelloMalts/script/app.psgi
-eg/HelloRender/script/app.psgi
-eg/HelloRoutes/script/app.psgi
+eg/hello-scripts/log.psgi
+eg/hello-scripts/malts.psgi
+eg/hello-scripts/render.psgi
+eg/hello-scripts/routes.psgi
 inc/Module/Install.pm
 inc/Module/Install/AuthorTests.pm
 inc/Module/Install/Base.pm
