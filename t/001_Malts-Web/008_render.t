@@ -1,15 +1,11 @@
 #!perl -w
-package TestApp::Web;
-use strict;
-use warnings;
-use utf8;
-use parent qw(Malts Malts::Web);
-
-package main;
 use strict;
 use warnings;
 use utf8;
 
+use FindBin;
+use lib "$FindBin::Bin/lib";
+use TestApp::Web;
 use Test::More;
 use Encode qw(encode_utf8);
 use Text::Xslate;

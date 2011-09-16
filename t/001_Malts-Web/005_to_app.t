@@ -1,26 +1,18 @@
 #!perl -w
-package TestApp;
-use strict;
-use warnings;
-use parent 'Malts';
-
 package TestApp::Web;
 use strict;
 use warnings;
 
-use parent -norequire, 'TestApp';
-use parent 'Malts::Web';
-use Class::Method::Modifiers::Fast qw(after);
+use parent qw(Malts Malts::Web);
 
-after startup => sub {
+sub startup {
     my $self = shift;
     $self->create_response(200, [], ['ok']);
-};
+}
 
 package main;
 use strict;
 use warnings;
-use utf8;
 
 use Test::More;
 

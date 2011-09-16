@@ -1,21 +1,11 @@
 #!perl -w
-package TestApp;
-use strict;
-use warnings;
-use parent 'Malts';
-
-package TestApp::Web;
-use strict;
-use warnings;
-
-use parent -norequire, 'TestApp';
-use parent 'Malts::Web';
-
-package main;
 use strict;
 use warnings;
 use utf8;
 
+use FindBin;
+use lib "$FindBin::Bin/lib";
+use TestApp::Web;
 use Test::More;
 use Encode qw(encode_utf8);
 
@@ -31,7 +21,7 @@ subtest 'testing decoded string' => sub {
     is_deeply $ok->body, [encode_utf8 'こんにちは'];
 };
 
-subtest 'testing return error if $decoed_html is required' => sub {
+subtest 'testing return error if not defined $decoded_html' => sub {
     eval { $t->ok };
     ok $@;
 };

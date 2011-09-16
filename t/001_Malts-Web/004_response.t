@@ -1,20 +1,10 @@
 #!perl -w
-package TestApp;
-use strict;
-use warnings;
-use parent 'Malts';
-
-package TestApp::Web;
 use strict;
 use warnings;
 
-use parent -norequire, 'TestApp';
-use parent 'Malts::Web';
-
-package main;
-use strict;
-use warnings;
-
+use FindBin;
+use lib "$FindBin::Bin/lib";
+use TestApp::Web;
 use Test::More;
 
 my $t = TestApp::Web->new;
@@ -31,23 +21,30 @@ subtest 'testing new response' => sub {
 
     $res = $t->new_response(200);
     isa_ok $res, $res_class;
+    is $res->status, 200;
 
     $res = $t->new_response(200, []);
     isa_ok $res, $res_class;
 
     $res = $t->new_response(200, [], 'ok');
     isa_ok $res, $res_class;
+    is $res->body, 'ok';
 
     $res = $t->new_response(200, [], ['ok']);
     isa_ok $res, $res_class;
+    is_deeply $res->body, ['ok'];
 };
 
 subtest 'testing create_response' => sub {
     my $res = $t->create_response(200, [], ['ok']);
     isa_ok $res, $res_class;
+    is $res->status, 200;
+    is_deeply $res->body, ['ok'];
 
     ok $t->response;
     isa_ok $t->response, $res_class;
+    is $t->response->status, 200;
+    is_deeply $t->response->body, ['ok'];
 };
 
 done_testing;

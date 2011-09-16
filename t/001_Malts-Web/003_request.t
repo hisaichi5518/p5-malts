@@ -1,20 +1,10 @@
 #!perl -w
-package TestApp;
-use strict;
-use warnings;
-use parent 'Malts';
-
-package TestApp::Web;
 use strict;
 use warnings;
 
-use parent -norequire, 'TestApp';
-use parent 'Malts::Web';
-
-package main;
-use strict;
-use warnings;
-
+use FindBin;
+use lib "$FindBin::Bin/lib";
+use TestApp::Web;
 use Test::More;
 
 my $t = TestApp::Web->new;
@@ -38,7 +28,7 @@ subtest 'testing create request' => sub {
     isa_ok $t->request, $req_class;
 };
 
-subtest 'testing return error if $env is required' => sub {
+subtest 'testing return error if not defined $env' => sub {
     eval { $t->create_request() };
     ok $@;
 };
