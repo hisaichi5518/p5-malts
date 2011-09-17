@@ -21,6 +21,18 @@ sub new {
     bless {%args}, $class;
 }
 
+sub app_base_class {
+    my $self = shift;
+    return $self->{app_base_class} if $self->{app_base_class};
+
+    ($self->{app_base_class}) = (ref($self) =~ m/(.+)(::[A-Za-z0-9]+)$/);
+    return $self->{app_base_class};
+}
+
+sub app_class {
+    ref $_[0];
+}
+
 sub boostrap {
     my $class = shift;
     Malts->set_context($class->new(@_));
@@ -84,6 +96,18 @@ Malts is ...!
     MyApp->new(mode => 'test');
 
 アプリケーションのインスタンスを作成します。
+
+=head2 C<app_base_class>
+
+    $app_base_class = $c->app_base_class;
+
+MyApp::Webで呼び出した場合、MyAppを返します。
+
+=head2 C<app_class>
+
+    $app_class = $c->app_class;
+
+MyApp::Webで呼び出した場合、MyApp::Webを返します。
 
 =head2 context
 
