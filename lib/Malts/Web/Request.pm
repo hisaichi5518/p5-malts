@@ -3,6 +3,11 @@ use strict;
 use warnings;
 use parent 'Plack::Request';
 
+sub args {
+    my $self = shift;
+    $self->env->{'malts.routing_args'};
+}
+
 1;
 __END__
 
@@ -22,6 +27,14 @@ Malts::Web::Request - Malts用のRequestクラス
 =head1 DESCRIPTION
 
 L<Plack::Request>を継承している。
+
+=head1 METHODS
+
+=head2 C<args>
+
+    $req->args;
+
+C<$env->{'malts.routing_args'}>を返す。
 
 =head1 SEE ALSO
 

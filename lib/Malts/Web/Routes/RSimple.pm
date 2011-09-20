@@ -9,7 +9,7 @@ sub dispatch {
     my ($self, $c) = @_;
     return unless my $args = $self->match($c->request->env);
 
-    $c->request->env->{'slug.routing_args'} = $args;
+    $c->request->env->{'malts.routing_args'} = $args;
     my $action     = $args->{action};
     my $controller = $args->{controller};
     my $namespace  = $args->{namespace} || $self->{namespace} || ref($c).'::Controller';

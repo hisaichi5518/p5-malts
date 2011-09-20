@@ -1,13 +1,8 @@
 #!perl -w
-package TestApp;
-use strict;
-use warnings;
-use parent 'Malts';
-
 package TestApp::Web::Controller::Root;
 use strict;
 use warnings;
-# HACK
+# HACK for Plack::Util::load_class()
 $INC{'TestApp/Web/Controller/Root.pm'} = 1;
 
 sub index {
@@ -19,15 +14,13 @@ package TestApp::Web;
 use strict;
 use warnings;
 
-use parent -norequire, 'TestApp';
-use parent 'Malts::Web';
-use Class::Method::Modifiers::Fast qw(after);
+use parent qw(Malts Malts::Web);
 
-after startup => sub {
+sub startup {
     my $self = shift;
     my $r = $self->routes('RSimple');
     $r->connect('/' => {controller => 'Root', action => 'index'});
-};
+}
 
 package main;
 use strict;
@@ -41,10 +34,28 @@ subtest 'testing routes' => sub {
 };
 
 subtest 'testing dispatch' => sub {
-    # 初期設定でtext/html; charset=UTF-8がセットされる
-    my $t = TestApp::Web->to_app;
-    my $psgi_app =  $t->({PATH_INFO => '/'});
+    my $psgi_app = psgi_app({PATH_INFO => '/'});
+    is $psgi_app->[0], 200;
     is_deeply $psgi_app->[2], ['ok'];
 };
+
+subtest 'testing routing args' => sub {
+    my $env = {PATH_INFO => '/'};
+    my $psgi_app = psgi_app($env);
+    ok my $args = $env->{'malts.routing_args'};
+    is_deeply $args, {controller => 'Root', action => 'index'};
+};
+
+subtest 'testing not found' => sub {
+    my $psgi_app = psgi_app({PATH_INFO => '/404'});
+    is $psgi_app->[0], 404;
+    is_deeply $psgi_app->[2], ['404 Not Found!'];
+};
+
+sub psgi_app {
+    my $env = shift;
+    my $t = TestApp::Web->to_app;
+    $t->($env);
+}
 
 done_testing;
