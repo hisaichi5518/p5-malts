@@ -26,6 +26,7 @@ sub app_base_class {
     my $self = shift;
     return $self->{app_base_class} if $self->{app_base_class};
 
+    # Web, CLIなどを削除
     ($self->{app_base_class}) = (ref($self) =~ m/(.+)(::[A-Za-z0-9]+)$/);
     return $self->{app_base_class};
 }
