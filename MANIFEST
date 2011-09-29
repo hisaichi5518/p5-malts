@@ -54,5 +54,4 @@ t/004_Malts-Web-Routes-RSimple/003_not_found.t
 xt/perlcritic.t
 xt/pod.t
 xt/podcoverage.t
-xt/podspell.t
 xt/podsynopsis.t
