@@ -42,23 +42,19 @@ sub routes {
     return $self->{routes};
 }
 
+# new, startupがない場合は、Malts.pmを継承していない
 sub to_app {
     my ($class, %args) = @_;
 
     return sub {
         my $env = shift;
 
-        # Malts.pmを継承してるクラスで使う前提
         my $self = $class->new(
             html_content_type => 'text/html; charset=UTF-8',
             %args
         );
         $self->create_request($env);
-
-        # Malts.pmを継承してるクラスで使われる前提なので
-        # このクラスにstartupがなくても問題ない
         $self->startup;
-
         $self->routes->dispatch($self) or $self->not_found if $self->routes;
 
         die 'You must create a response.' unless $self->response;
