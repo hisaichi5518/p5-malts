@@ -3,7 +3,8 @@ use 5.008_001;
 use strict;
 use warnings;
 
-use Encode ();
+use Encode     ();
+use File::Spec ();
 
 our $VERSION = '0.01';
 
@@ -31,6 +32,19 @@ sub app_base_class {
 
 sub app_class {
     ref $_[0];
+}
+
+# copied Amon2::Util::base_dir
+sub app_dir {
+    my $self = shift;
+    my $path = $self->app_base_class;
+    $path =~ s!::!/!g;
+    if (my $libpath = $INC{"$path.pm"}) {
+        $libpath =~ s!(?:blib/)?lib/+$path\.pm$!!;
+        File::Spec->rel2abs($libpath || './');
+    } else {
+        File::Spec->rel2abs('./');
+    }
 }
 
 sub boostrap {
@@ -117,6 +131,12 @@ MyApp::Webで呼び出した場合、MyAppを返します。
     $app_class = $c->app_class;
 
 MyApp::Webで呼び出した場合、MyApp::Webを返します。
+
+=head2 C<app_dir>
+
+    $app_dir = $c->app_dir;
+
+アプリケーションディレクトリを返します。
 
 =head2 C<mode>
 
