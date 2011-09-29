@@ -70,6 +70,15 @@ sub config {
     return $self->{config};
 }
 
+sub mode {
+    my ($self, $mode) = @_;
+    if (not defined $mode) {
+        return $ENV{PLACK_ENV} if $ENV{PLACK_ENV};
+        $mode = 'development';
+    }
+    $ENV{PLACK_ENV} = $mode;
+}
+
 1;
 __END__
 
@@ -108,6 +117,16 @@ MyApp::Webで呼び出した場合、MyAppを返します。
     $app_class = $c->app_class;
 
 MyApp::Webで呼び出した場合、MyApp::Webを返します。
+
+=head2 C<mode>
+
+    $plack_env = $c->mode;
+    $plack_env = $c->mode($mode);
+    $plack_env = $c->mode('test');
+
+PLACK_ENVを返す。またはセットします。
+
+何もセットされていない場合は、developmentをセットして返します。
 
 =head2 context
 
