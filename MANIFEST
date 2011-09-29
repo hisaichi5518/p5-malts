@@ -31,6 +31,7 @@ t/000_Malts/003_config.t
 t/000_Malts/004_context.t
 t/000_Malts/005_boostrap.t
 t/000_Malts/006_app_class.t
+t/000_Malts/007_mode.t
 t/001_Malts-Web/000_load.t
 t/001_Malts-Web/001_basic.t
 t/001_Malts-Web/002_html_content_type.t
@@ -43,6 +44,7 @@ t/001_Malts-Web/008_render.t
 t/001_Malts-Web/lib/TestApp/Web.pm
 t/002_Malts-Web-Request/000_load.t
 t/002_Malts-Web-Request/001_basic.t
+t/002_Malts-Web-Request/002_args.t
 t/003_Malts-Web-Response/000_load.t
 t/003_Malts-Web-Response/001_basic.t
 t/004_Malts-Web-Routes-RSimple/000_load.t
