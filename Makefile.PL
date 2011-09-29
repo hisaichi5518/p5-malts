@@ -31,6 +31,7 @@ requires 'Data::Util';
 requires 'Class::Method::Modifiers::Fast';
 requires 'parent';
 requires 'Text::Xslate' => 1.4001;
+requires 'File::Spec';
 
 test_requires 'Test::More' => '0.88';
 

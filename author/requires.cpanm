@@ -5,6 +5,7 @@ Data::Util
 Class::Method::Modifiers::Fast
 parent
 Text::Xslate
+File::Spec
 
 # Makefile.PL
 Module::Install
