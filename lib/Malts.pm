@@ -2,6 +2,7 @@ package Malts;
 use 5.008_001;
 use strict;
 use warnings;
+use constant DEBUG => (($ENV{PLACK_ENV} || '') eq 'development' ? 1 : 0);
 
 use Encode     ();
 use File::Spec ();
@@ -9,6 +10,9 @@ use File::Spec ();
 our $VERSION = '0.01';
 
 {
+    # for Log::Minimal
+    $ENV{LM_DEBUG} = DEBUG if DEBUG;
+
     my $context;
     sub context     { $context }
     sub set_context { $context = $_[1] }

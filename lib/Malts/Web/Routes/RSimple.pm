@@ -4,10 +4,14 @@ use warnings;
 
 use parent "Router::Simple";
 use Data::Util qw(get_code_ref);
+use Log::Minimal qw(debugf);
+use Malts ();
 
 sub dispatch {
     my ($self, $c) = @_;
     return unless my $args = $self->match($c->request->env);
+
+    debugf('match route! => %s', $args) if Malts::DEBUG;
 
     $c->request->env->{'malts.routing_args'} = $args;
     my $action     = $args->{action};
@@ -21,13 +25,16 @@ sub dispatch {
 
     # $controller has begin method.
     if (get_code_ref($controller, 'begin')) {
+        debugf "do $controller#begin!" if Malts::DEBUG;
         $controller->begin($c);
     }
 
+    debugf "do $controller#$action!" if Malts::DEBUG;
     $controller->$action($c);
 
     # $controller has end method.
     if (get_code_ref($controller, 'end')) {
+        debugf "do $controller#end!" if Malts::DEBUG;
         $controller->end($c);
     }
 

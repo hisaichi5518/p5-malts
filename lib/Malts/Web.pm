@@ -6,6 +6,8 @@ use Malts::Web::Request;
 use Malts::Web::Response;
 use Plack::Util::Accessor qw(html_content_type view);
 use Plack::Util ();
+use Malts ();
+use Log::Minimal qw(debugf croakf);
 
 sub request  { $_[0]->{request}  }
 sub response { $_[0]->{response} }
@@ -54,10 +56,19 @@ sub to_app {
             %args
         );
         $self->create_request($env);
-        $self->startup;
-        $self->routes->dispatch($self) or $self->not_found if $self->routes;
 
-        die 'You must create a response.' unless $self->response;
+        debugf('do '.ref($self).'#startup!') if Malts::DEBUG;
+        $self->startup;
+
+        if ($self->routes) {
+            $self->routes->dispatch($self) or $self->not_found;
+        }
+        elsif (Malts::DEBUG) {
+            debugf("Can't find routes. Do you want to make Web Application? use \$c->routes()!");
+        }
+
+        croakf 'You must create a response. use $c->create_response(), $c->render() or $c->ok()!'
+            unless $self->response;
         return $self->response->finalize;
     };
 }
