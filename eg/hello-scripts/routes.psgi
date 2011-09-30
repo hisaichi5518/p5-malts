@@ -38,4 +38,10 @@ package main;
 use strict;
 use warnings;
 
-HelloRoutes::Web->to_app;
+use Plack::Builder;
+
+builder {
+    enable "Plack::Middleware::Log::Minimal", autodump => 1;
+
+    HelloRoutes::Web->to_app;
+};

@@ -13,4 +13,10 @@ package main;
 use strict;
 use warnings;
 
-HelloMalts::Web->to_app;
+use Plack::Builder;
+
+builder {
+    enable "Plack::Middleware::Log::Minimal", autodump => 1;
+
+    HelloMalts::Web->to_app;
+};

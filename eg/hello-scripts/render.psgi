@@ -19,4 +19,10 @@ package main;
 use strict;
 use warnings;
 
-HelloRender::Web->to_app;
+use Plack::Builder;
+
+builder {
+    enable "Plack::Middleware::Log::Minimal", autodump => 1;
+
+    HelloRender::Web->to_app;
+};
