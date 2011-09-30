@@ -57,14 +57,14 @@ sub to_app {
         );
         $self->create_request($env);
 
-        debugf('do '.ref($self).'#startup!') if Malts::DEBUG;
+        debugf 'do '.ref($self).'#startup!' if Malts::DEBUG;
         $self->startup;
 
         if ($self->routes) {
             $self->routes->dispatch($self) or $self->not_found;
         }
         elsif (Malts::DEBUG) {
-            debugf("Can't find routes. Do you want to make Web Application? use \$c->routes()!");
+            debugf "Can't find routes. Do you want to make Web Application? use \$c->routes()!";
         }
 
         croakf 'You must create a response. use $c->create_response(), $c->render() or $c->ok()!'
@@ -101,6 +101,7 @@ sub not_found {
 
 sub render {
     my $self = shift;
+    debugf 'rendering template.' if Malts::DEBUG;
     die 'You must create a view.' unless $self->view;
 
     my $decoed_html = $self->view->render(@_);
