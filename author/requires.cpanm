@@ -6,6 +6,8 @@ Class::Method::Modifiers::Fast
 parent
 Text::Xslate
 File::Spec
+Log::Minimal
+Plack::Middleware::Log::Minimal
 
 # Makefile.PL
 Module::Install

@@ -32,6 +32,8 @@ requires 'Class::Method::Modifiers::Fast';
 requires 'parent';
 requires 'Text::Xslate' => 1.4001;
 requires 'File::Spec';
+requires 'Log::Minimal';
+requires 'Plack::Middleware::Log::Minimal';
 
 test_requires 'Test::More' => '0.88';
 
