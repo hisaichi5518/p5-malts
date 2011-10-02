@@ -2,18 +2,17 @@ package Malts;
 use 5.008_001;
 use strict;
 use warnings;
-use constant DEBUG => (($ENV{PLACK_ENV} || '') eq 'development' ? 1 : 0);
 
 use Encode     ();
 use File::Spec ();
 use Log::Minimal qw(debugf);
-use Plack::Util ();
+use Malts::Util ();
 
 our $VERSION = '0.01';
 
 {
     # for Log::Minimal
-    $ENV{LM_DEBUG} = DEBUG if DEBUG;
+    $ENV{LM_DEBUG} = Malts::Util::DEBUG if Malts::Util::DEBUG;
 
     my $context;
     sub context     { $context }
@@ -103,7 +102,7 @@ sub mode {
 sub plugin {
     my ($self, $name, $opts) = @_;
     my $plugin = Plack::Util::load_class($name, 'Malts::Plugin');
-    debugf 'load plugin => '.($plugin || '').'#init' if DEBUG;
+    debugf 'load plugin => '.($plugin || '').'#init' if Malts::Util::DEBUG;
 
     $plugin->init($self, $opts);
 }

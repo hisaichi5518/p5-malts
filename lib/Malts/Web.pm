@@ -5,8 +5,7 @@ use warnings;
 use Malts::Web::Request;
 use Malts::Web::Response;
 use Plack::Util::Accessor qw(html_content_type view);
-use Plack::Util ();
-use Malts ();
+use Malts::Util ();
 use Log::Minimal qw(debugf croakf);
 
 sub request  { $_[0]->{request}  }
@@ -57,13 +56,13 @@ sub to_app {
         );
         $self->create_request($env);
 
-        debugf 'do '.ref($self).'#startup!' if Malts::DEBUG;
+        debugf 'do '.ref($self).'#startup!' if Malts::Util::DEBUG;
         $self->startup;
 
         if ($self->routes) {
             $self->routes->dispatch($self) or $self->not_found;
         }
-        elsif (Malts::DEBUG) {
+        elsif (Malts::Util::DEBUG) {
             debugf "Can't find routes. Do you want to make Web Application? use \$c->routes()!";
         }
 
@@ -101,7 +100,7 @@ sub not_found {
 
 sub render {
     my $self = shift;
-    debugf 'rendering template.' if Malts::DEBUG;
+    debugf 'rendering template.' if Malts::Util::DEBUG;
     die 'You must create a view.' unless $self->view;
 
     my $decoed_html = $self->view->render(@_);
