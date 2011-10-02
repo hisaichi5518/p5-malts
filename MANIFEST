@@ -14,6 +14,7 @@ inc/Module/Install/Repository.pm
 inc/Module/Install/WriteAll.pm
 lib/Malts.pm
 lib/Malts/CLI.pm
+lib/Malts/Plugin/ConfigLoader.pm
 lib/Malts/Util.pm
 lib/Malts/Web.pm
 lib/Malts/Web/Request.pm
@@ -55,6 +56,9 @@ t/004_Malts-Web-Routes-RSimple/002_begin.t
 t/004_Malts-Web-Routes-RSimple/003_not_found.t
 t/005_Malts-Util/000_load.t
 t/005_Malts-Util/001_basic.t
+t/006_Malts-Plugin/000_config_loader.t
+t/006_Malts-Plugin/config/development.pl
+t/006_Malts-Plugin/config/test.pl
 xt/perlcritic.t
 xt/pod.t
 xt/podcoverage.t
