@@ -32,6 +32,7 @@ t/000_Malts/004_context.t
 t/000_Malts/005_boostrap.t
 t/000_Malts/006_app_class.t
 t/000_Malts/007_mode.t
+t/000_Malts/008_plugin.t
 t/001_Malts-Web/000_load.t
 t/001_Malts-Web/001_basic.t
 t/001_Malts-Web/002_html_content_type.t

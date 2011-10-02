@@ -6,6 +6,8 @@ use constant DEBUG => (($ENV{PLACK_ENV} || '') eq 'development' ? 1 : 0);
 
 use Encode     ();
 use File::Spec ();
+use Log::Minimal qw(debugf);
+use Plack::Util ();
 
 our $VERSION = '0.01';
 
@@ -96,6 +98,14 @@ sub mode {
         $mode = 'development';
     }
     $ENV{PLACK_ENV} = $mode;
+}
+
+sub plugin {
+    my ($self, $name, $opts) = @_;
+    my $plugin = Plack::Util::load_class($name, 'Malts::Plugin');
+    debugf 'load plugin => '.($plugin || '').'#init' if DEBUG;
+
+    $plugin->init($self, $opts);
 }
 
 1;
@@ -208,6 +218,17 @@ B<変更は推奨されない>が、携帯サイトの場合はその限りで�
 設定を返します。
 
 C<Malts::Plugin::ConfigLoader>プラグインを使って、設定ファイルを読み込む事が可能です。
+
+=head2 C<plugin>
+
+    $c->plugin($name => \%opts);
+    $c->plugin('Hoge' => {});
+
+上の例場合、Malts::Plugin::Hogeを読み込んで、initを実行します。
+
+また以下のように $name に+を付けてやるとMalts::Plugin以外を指定する事も出来ます。
+
+    $c->plugin('+MyApp::Plugin::Hoge');
 
 =head1 SEE ALSO
 
