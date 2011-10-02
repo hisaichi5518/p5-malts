@@ -48,7 +48,8 @@ sub app_dir {
     if (my $libpath = $INC{"$path.pm"}) {
         $libpath =~ s!(?:blib/)?lib/+$path\.pm$!!;
         File::Spec->rel2abs($libpath || './');
-    } else {
+    }
+    else {
         File::Spec->rel2abs('./');
     }
 }
