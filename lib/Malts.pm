@@ -56,7 +56,9 @@ sub app_dir {
 
 sub boostrap {
     my $class = shift;
-    Malts->set_context($class->new(@_));
+    my $self = Malts->set_context($class->new(@_));
+    $self->startup;
+    return $self;
 }
 
 sub encoding {
