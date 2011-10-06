@@ -35,7 +35,7 @@ requires 'File::Spec';
 requires 'Log::Minimal';
 requires 'Plack::Middleware::Log::Minimal';
 
-test_requires 'Test::More' => '0.88';
+test_requires 'Test::More' => '0.96';
 
 auto_set_repository if -e '.git';
 
