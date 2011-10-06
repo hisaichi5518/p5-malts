@@ -29,6 +29,7 @@ use parent 'Malts';
 
 sub startup {
     # CLI, Web共通のプラグインなど
+    # なくても動作可能
 }
 
 package HelloApp::Web;
