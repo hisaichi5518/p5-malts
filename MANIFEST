@@ -1,8 +1,9 @@
 .shipit
 author/requires.cpanm
 Changes
+eg/hello-scripts/app.psgi
+eg/hello-scripts/hello.psgi
 eg/hello-scripts/log.psgi
-eg/hello-scripts/malts.psgi
 eg/hello-scripts/render.psgi
 eg/hello-scripts/routes.psgi
 inc/Module/Install.pm
