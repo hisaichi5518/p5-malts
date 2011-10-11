@@ -8,6 +8,7 @@ Text::Xslate
 File::Spec
 Log::Minimal
 Plack::Middleware::Log::Minimal
+Router::Simple
 
 # Makefile.PL
 Module::Install

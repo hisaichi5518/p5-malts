@@ -34,6 +34,7 @@ requires 'Text::Xslate' => 1.4001;
 requires 'File::Spec';
 requires 'Log::Minimal';
 requires 'Plack::Middleware::Log::Minimal';
+requires 'Router::Simple';
 
 test_requires 'Test::More' => '0.96';
 
