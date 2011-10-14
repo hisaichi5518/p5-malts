@@ -13,20 +13,12 @@
 
 ## TODO
 * ルーティングテーブル表示をプラグインで出来るようにする。
-* use Malts::Style::Premium qw(config db api);
-* オレオレコンテナ実装はStyleで
-* なぜ、ContainerではなくStyleか->スタイルを統一する為にあるから。
-* 個別に設定したい場合は、MyAppなどに書く。
 * PODがないStyleはクソだよねーみたいな
-* Malts::Style::会社名 など出来るし、会社毎に規約が設定出来る。
 * Styleにはコーディング規約も含める
-* これはCPANにあげるべきじゃないよね
 
 メソッドを生やすのはMalts::Method::*
 * use Malts::Method::RenderJson; すると $c->render_json({}); が使えるようになる。
 Style同様に継承ではなく、Exporterを使う。
-モジュール名と同じメソッド名にするとか、命名規則を持たせたら被る事はない？
-一つのモジュールで複数のメソッドをインポートするのは? -> それStyleで出来るよ
 
 * use Malts::Method::Session;
 * use Malts::Plugin::CSDFDefeneder;
