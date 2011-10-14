@@ -11,9 +11,6 @@ use Malts::Util ();
 our $VERSION = '0.01';
 
 {
-    # for Log::Minimal
-    $ENV{LM_DEBUG} = Malts::Util::DEBUG if Malts::Util::DEBUG;
-
     my $context;
     sub context     { $context }
     sub set_context { $context = $_[1] }

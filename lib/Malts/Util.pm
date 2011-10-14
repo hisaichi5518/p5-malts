@@ -2,7 +2,7 @@ package Malts::Util;
 use strict;
 use warnings;
 use Plack::Util ();
-use constant DEBUG => (($ENV{PLACK_ENV} || '') eq 'development' ? 1 : 0);
+use constant DEBUG => (($ENV{PLACK_ENV} || 'development') eq 'development' ? 1 : 0);
 
 1;
 __END__

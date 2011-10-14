@@ -7,6 +7,7 @@ use Log::Minimal qw(debugf croakf);
 
 sub run {
     my ($class, $command, @args) = @_;
+    local $ENV{$Log::Minimal::ENV_DEBUG} = Malts::Util::DEBUG if Malts::Util::DEBUG;
     local $Log::Minimal::COLOR    = 1;
     local $Log::Minimal::AUTODUMP = 1;
 
