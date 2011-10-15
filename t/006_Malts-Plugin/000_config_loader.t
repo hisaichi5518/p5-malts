@@ -34,9 +34,9 @@ subtest 'testing mode' => sub {
     is $c->config->{config_loader_test}, 'ok';
 };
 
-subtest 'testing use $c->mode' => sub {
+subtest 'testing use $ENV{PLACK_ENV}' => sub {
+    $ENV{PLACK_ENV} = 'test';
     my $c = TestApp::Web->new;
-    $c->mode('test');
     $c->plugin('ConfigLoader');
     is $c->config->{config_loader_test}, 'ok';
 };

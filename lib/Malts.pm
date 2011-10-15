@@ -90,15 +90,6 @@ sub config {
     return $self->{config};
 }
 
-sub mode {
-    my ($self, $mode) = @_;
-    if (not defined $mode) {
-        return $ENV{PLACK_ENV} if $ENV{PLACK_ENV};
-        $mode = 'development';
-    }
-    $ENV{PLACK_ENV} = $mode;
-}
-
 sub plugin {
     my ($self, $name, $opts) = @_;
     my $plugin = Plack::Util::load_class($name, 'Malts::Plugin');
@@ -130,7 +121,6 @@ Malts is ...!
 
     MyApp->new;
     MyApp->new(%args);
-    MyApp->new(mode => 'test');
 
 アプリケーションのインスタンスを作成します。
 
@@ -151,16 +141,6 @@ MyApp::Webで呼び出した場合、MyApp::Webを返します。
     $app_dir = $c->app_dir;
 
 アプリケーションディレクトリを返します。
-
-=head2 C<mode>
-
-    $plack_env = $c->mode;
-    $plack_env = $c->mode($mode);
-    $plack_env = $c->mode('test');
-
-PLACK_ENVを返す。またはセットします。
-
-何もセットされていない場合は、developmentをセットして返します。
 
 =head2 context
 
@@ -184,7 +164,7 @@ PLACK_ENVを返す。またはセットします。
 =head2 C<boostrap>
 
     MyApp->boostrap;
-    MyApp->boostrap(mode => test);
+    MyApp->boostrap(%options);
 
 newした後にset_contextする。
 
