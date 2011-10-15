@@ -56,7 +56,7 @@ sub to_app {
         );
         $self->create_request($env);
 
-        debugf 'do '.ref($self).'#startup!' if Malts::Util::DEBUG;
+        debugf "do $class'#startup!" if Malts::Util::DEBUG;
         $self->startup;
 
         if ($self->routes) {
