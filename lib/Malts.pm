@@ -5,7 +5,7 @@ use warnings;
 
 use Encode     ();
 use File::Spec ();
-use Log::Minimal qw(debugf);
+use Log::Minimal qw(debugf croakf);
 use Malts::Util ();
 
 our $VERSION = '0.01';
