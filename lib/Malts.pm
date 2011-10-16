@@ -72,22 +72,7 @@ sub encoding {
 
 sub config {
     my $self = shift;
-    # Initialize
     $self->{config} ||= {};
-
-    # Hash
-    return $self->{config} unless @_;
-
-    # Get
-    return $self->{config}->{$_[0]} unless @_ > 1 || ref $_[0];
-
-    # Set
-    my $values = ref $_[0] ? $_[0] : {@_};
-    for my $key (keys %$values) {
-        $self->{config}->{$key} = $values->{$key};
-    }
-
-    return $self->{config};
 }
 
 sub plugin {
@@ -185,15 +170,17 @@ B<変更は推奨されない>が、携帯サイトの場合はその限りで�
 
 =head2 C<config>
 
+このメソッドは現在set・getができますが、将来的にはsetができなくなる可能性があります。
+
+設定を変更するのを設定ファイル以外で動的にするとバグの原因になるのでやめましょう。
+
     $config = $c->config;
 
     # set
-    $c->config($config_name => $config_value);
-    $c->config(name => 'hisaichi5518');
+    $c->config->{name} = 'hisaichi5518';
 
     # get
-    $c->config($config_name);
-    $name = $c->config('name');
+    $c->config->{name};
 
 設定を返します。
 

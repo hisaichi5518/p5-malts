@@ -14,13 +14,17 @@ my $malts = Malts->new;
 }
 {
     note 'testing set config';
-    my $config = $malts->config(name => 'hisaichi5518');
-    ok $config;
-    is_deeply $config, {name => 'hisaichi5518'};
+    $malts->config->{name} = 'hisada';
+    is_deeply $malts->config, {name => 'hisada'};
+
+    my $config = $malts->config;
+    $config->{name} = 'hisaichi5518';
+    ok $malts->config;
+    is_deeply $malts->config, {name => 'hisaichi5518'};
 }
 {
     note 'testing get config';
-    my $config = $malts->config('name');
+    my $config = $malts->config->{name};
     ok $config;
     is $config, 'hisaichi5518';
 }
@@ -29,11 +33,6 @@ my $malts = Malts->new;
     my $config = $malts->config;
     ok $config;
     is_deeply $config, {name => 'hisaichi5518'};
-}
-{
-    note 'testing error';
-    eval { $malts->config([hisaichi => 'hoge']) };
-    ok $@;
 }
 
 done_testing;
