@@ -4,7 +4,7 @@ use warnings;
 
 use parent "Router::Simple";
 use Data::Util qw(get_code_ref);
-use Log::Minimal qw(debugf);
+use Log::Minimal qw(debugf croakf);
 use Malts::Util ();
 
 sub dispatch {
@@ -18,23 +18,23 @@ sub dispatch {
     my $controller = $args->{controller};
     my $namespace  = $args->{namespace} || $self->{namespace} || ref($c).'::Controller';
 
-    die "path matched route! but can't find Controller or Action!"
+    croakf "path matched route! but can't find Controller or Action!"
         if !$action || !$controller;
 
     $controller = Plack::Util::load_class($controller, $namespace);
 
     # $controller has begin method.
     if (get_code_ref($controller, 'begin')) {
-        Malts::Util::DEBUG && debugf "do $controller#begin!";
+        Malts::Util::DEBUG && debugf "do $controller->begin!";
         $controller->begin($c);
     }
 
-    Malts::Util::DEBUG && debugf "do $controller#$action!";
+    Malts::Util::DEBUG && debugf "Dispatching $controller->$action!";
     $controller->$action($c);
 
     # $controller has end method.
     if (get_code_ref($controller, 'end')) {
-        Malts::Util::DEBUG && debugf "do $controller#end!";
+        Malts::Util::DEBUG && debugf "do $controller->end!";
         $controller->end($c);
     }
 

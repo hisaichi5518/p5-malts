@@ -79,7 +79,7 @@ sub plugin {
     my ($self, $name, $opts) = @_;
     my $plugin = Plack::Util::load_class($name, 'Malts::Plugin');
     croakf 'Cannot find $plugin' if not defined $plugin;
-    debugf "load plugin => $plugin#init" if Malts::Util::DEBUG;
+    Malts::Util::DEBUG && debugf "load plugin => $plugin->init";
 
     $plugin->init($self, $opts);
 }

@@ -14,7 +14,7 @@ sub run {
     croakf("usage: $0 subcommand [--options, ...][args, ...]") if not defined $command;
     my $self = $class->new;
 
-    Malts::Util::DEBUG && debugf("do $class#startup!");
+    Malts::Util::DEBUG && debugf("do $class->startup!");
     $self->startup;
 
     my $subcommand = {$self->alias}->{$command} || $command;
@@ -30,7 +30,7 @@ sub run {
         if (Malts::Util::DEBUG) {
             debugf('options: %s', $self->options || {});
             debugf('args: %s', $self->args || []);
-            debugf("$subcommand_class#run");
+            debugf("do $subcommand_class->run");
         }
         $subcommand_class->run($self);
     }
