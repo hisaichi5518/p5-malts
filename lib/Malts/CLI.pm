@@ -7,14 +7,14 @@ use Log::Minimal qw(debugf croakf);
 
 sub run {
     my ($class, $command, @args) = @_;
-    local $ENV{$Log::Minimal::ENV_DEBUG} = Malts::Util::DEBUG if Malts::Util::DEBUG;
+    Malts::Util::DEBUG && local $ENV{$Log::Minimal::ENV_DEBUG} = Malts::Util::DEBUG;
     local $Log::Minimal::COLOR    = 1;
     local $Log::Minimal::AUTODUMP = 1;
 
     croakf("usage: $0 subcommand [--options, ...][args, ...]") if not defined $command;
     my $self = $class->new;
 
-    debugf("do $class#startup!") if Malts::Util::DEBUG;
+    Malts::Util::DEBUG && debugf("do $class#startup!");
     $self->startup;
 
     my $subcommand = {$self->alias}->{$command} || $command;

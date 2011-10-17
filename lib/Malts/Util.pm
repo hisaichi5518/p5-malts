@@ -23,8 +23,7 @@ L<Malts::Util>の中で、L<Plack::Util>をuseしているのでL<Malts::Util>�
 
 =head2 C<DEBUG>
 
-    warn '$ENV{PLACK_ENV} is development!'
-        if Malts::Util::DEBUG;
+    Malts::Util::DEBUG && warn '$ENV{PLACK_ENV} is development!'
 
 $ENV{PLACK_ENV}がdevelopmentの時に1を返します。
 

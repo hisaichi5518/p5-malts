@@ -56,7 +56,7 @@ sub to_app {
         );
         $self->create_request($env);
 
-        debugf "do $class'#startup!" if Malts::Util::DEBUG;
+        Malts::Util::DEBUG && debugf "do $class'#startup!";
         $self->startup;
 
         if ($self->routes) {
@@ -100,7 +100,7 @@ sub not_found {
 
 sub render {
     my $self = shift;
-    debugf 'rendering template.' if Malts::Util::DEBUG;
+    Malts::Util::DEBUG && debugf 'rendering template.';
     die 'You must create a view.' unless $self->view;
 
     my $decoed_html = $self->view->render(@_);

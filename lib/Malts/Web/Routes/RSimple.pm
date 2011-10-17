@@ -11,7 +11,7 @@ sub dispatch {
     my ($self, $c) = @_;
     return unless my $args = $self->match($c->request->env);
 
-    debugf('match route! => %s', $args) if Malts::Util::DEBUG;
+    Malts::Util::DEBUG && debugf('match route! => %s', $args);
 
     $c->request->env->{'malts.routing_args'} = $args;
     my $action     = $args->{action};
@@ -25,16 +25,16 @@ sub dispatch {
 
     # $controller has begin method.
     if (get_code_ref($controller, 'begin')) {
-        debugf "do $controller#begin!" if Malts::Util::DEBUG;
+        Malts::Util::DEBUG && debugf "do $controller#begin!";
         $controller->begin($c);
     }
 
-    debugf "do $controller#$action!" if Malts::Util::DEBUG;
+    Malts::Util::DEBUG && debugf "do $controller#$action!";
     $controller->$action($c);
 
     # $controller has end method.
     if (get_code_ref($controller, 'end')) {
-        debugf "do $controller#end!" if Malts::Util::DEBUG;
+        Malts::Util::DEBUG && debugf "do $controller#end!";
         $controller->end($c);
     }
 
