@@ -21,4 +21,23 @@
 Style同様に継承ではなく、Exporterを使う。
 
 * use Malts::Method::Session;
+* use Malts::Method::OpenSocial;
+* use Malts::Method::Form::Shakan;
+* use Malts::Method::MobileAgent; # など
+
+$cに生やしまくるのは, いけてない。ただController向けに生やすのはいい気がする。
+Web APIを叩くとかは全部Modelでする。悩むならmodelに入れとけばいいんじゃないのか系。
+
+拡張するならこうで
+use parent 'Malts::Model::Auth::Facebook';
+
+そのまま使うなら
+my $facebook = Malts::Model::Auth::Facebook->new;
+$facebook->auth('username', 'pass');
+みたいな感じかな。
+
+* StyleでのModelはMalts::Style::Hoge::Model::* に入れる。
+
+作り次第強制的に読み込む
 * use Malts::Plugin::CSDFDefeneder;
+* use Malts::Plugin::SecurityHeaders;
