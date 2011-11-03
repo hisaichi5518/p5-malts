@@ -8,6 +8,16 @@ sub shake {
     return int(rand(5)) + 1;
 }
 
+=pod
+
+Modelにはロジックを書きます。
+
+どれだけ細かくてもModelに書くべきです。
+
+メリットとして、テストがしやすい・変更がしやすいなどがあります。
+
+=cut
+
 package HelloApp::Web::Controller::Root;
 use strict;
 use warnings;
@@ -22,15 +32,30 @@ sub index {
     $c->render('root/index.tx', {user => $dice->{user}, dice_num => $dice_num});
 }
 
+=pod
+
+Controllerは、Modelが出した結果をViewに渡すだけと考えると分かりやすいです。
+
+めんどくさいとControllerにロジックを書いてしまいがいちですが、それは間違いです。Modelに書きましょう。
+
+=cut
+
 package HelloApp;
 use strict;
 use warnings;
 use parent 'Malts';
 
 sub startup {
-    # CLI, Web共通のプラグインなど
-    # なくても動作可能
+    # CLI, Web共通のプラグインなどをここで宣言する
+    # startupはMaltsの中にあるので、なくても動作可能
 }
+
+=pod
+
+HelloApp::Webが、Maltsを継承しているのであれば、今回は作成する必要はありませんが、
+CLIスクリプトを作成するときに便利なので、作成した方がよいでしょう。
+
+=cut
 
 package HelloApp::Web;
 use strict;
@@ -52,6 +77,18 @@ after startup => sub {
     $r->connect('/' => {controller => 'Root', action => 'index'});
 };
 
+=pod
+
+HelloAppから継承したstartupをafterで拡張します。
+
+そこでWeb専用のプラグインやviewの設定を行います。viewはTiffanyプロトコルに合ったものであればなんでも大丈夫です。
+
+Viewに$cをそのまま渡すとメモリリークします。$cを渡すとゴチャゴチャになっていいことないのでオススメしません。
+
+NOTE: ルーティングについて変更の可能性あり
+
+=cut
+
 package main;
 use strict;
 use warnings;
@@ -63,3 +100,13 @@ builder {
 
     HelloApp::Web->to_app;
 };
+
+__END__
+
+=encoding utf8
+
+=head1 NAME
+
+app.psgi - DICEを振る
+
+=cut

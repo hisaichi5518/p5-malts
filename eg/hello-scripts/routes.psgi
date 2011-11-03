@@ -7,20 +7,24 @@ $INC{'HelloRoutes/Web/Controller/Root.pm'} = __FILE__;
 
 sub begin {
     my ($self, $c) = @_;
-    # actionが実行される前に何か処理を加えたい場合ここに追加する。
-    # このメソッドは削除しても正常に動作する。
 }
 
 sub end {
     my ($self, $c) = @_;
-    # actionが実行された後に何か処理を加えたい場合ここに追加する。
-    # このメソッドは削除しても正常に動作する。
 }
 
 sub index {
     my ($self, $c) = @_;
     $c->ok('Hello Router::Simple World');
 }
+
+=pod
+
+begin・endメソッドは特別であり、そのメソッドが存在している場合に限り、actionが実行される前と後に実行される。
+
+begin, endが存在していなくてもエラーはでない。
+
+=cut
 
 package HelloRoutes::Web;
 use strict;
@@ -32,7 +36,13 @@ sub startup {
     my $self = shift;
     my $r = $self->routes('RSimple');
     $r->connect('/' => {controller => 'Root', action => 'index'});
-};
+}
+
+=pod
+
+ルーティングする。仕様変更の可能性がある。
+
+=cut
 
 package main;
 use strict;
@@ -45,3 +55,13 @@ builder {
 
     HelloRoutes::Web->to_app;
 };
+
+__END__
+
+=pod
+
+=head1 NAME
+
+routes.psgi - ルーティングを試す
+
+=cut
