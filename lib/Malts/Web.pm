@@ -11,7 +11,6 @@ use Log::Minimal qw(debugf croakf);
 sub request  { $_[0]->{request}  }
 sub response { $_[0]->{response} }
 
-
 sub new_request {
     return Malts::Web::Request->new($_[1]);
 }
@@ -115,132 +114,97 @@ __END__
 
 =head1 NAME
 
-Malts - 次世代 Web Application Framework
+Malts::Web - 次世代 Web Application Framework
 
 =head1 SYNOPSIS
-
-    pacakage MyApp;
-    use strict;
-    use warnings;
-    use parent 'Malts';
 
     package MyApp::Web;
     use strict;
     use warnings;
-    use parent -norequire, 'MyApp';
-    use parent 'Malts::Web';
-    use Class::Method::Modifiers::Fast qw(after);
+    use parent qw(Malts Malts::Web);
 
-    after startup => sub {
+    sub startup {
         my $self = shift;
         $self->ok('hello Malts world');
-    };
-
-=head1 DESCRIPTION
-
-Malts is ...!
+    }
 
 =head1 METHODS
 
-以下のメソッドは、 L<Malts> が継承されているクラスで使用される事が前提になっている。
+以下のメソッドは、 L<Malts> が継承されているクラスで使用される事が前提になっています。
 
-=head2 C<html_content_type>
+=head2 C<< $c->html_content_type -> Str >>
 
-    $content_type = $c->html_content_type;
+    my $content_type = $c->html_content_type;
     $c->html_content_type('text/html; charset=UTF-8');
 
-=head2 C<view>
+=head2 C<< $c->view -> Object >>
 
-    $view = $c->view;
+    my $view = $c->view;
     $c->view(Text::Xslate->new);
 
-=head2 C<request>
+=head2 C<< $c->request -> Object >>
 
-    $req = $c->request;
+    my $req = $c->request;
 
-$c->create_request;された後ならRequestクラスのインスタンスを返す。
+C< $c->{request} >のショートカット
 
-=head2 C<response>
+=head2 C<< $c->response -> Object >>
 
-    $res = $c->response;
+    my $res = $c->response;
 
-$c->create_response;された後ならResponseクラスのインスタンスを返す。
+C< $c->{response} >のショートカット
 
-=head2 C<new_request>
+=head2 C<< $c->new_request(\%env) -> Object >>
 
-    $req = $c->new_request(\%env);
     $req = $c->new_request({PATH_INFO => '/'});
 
-Requestクラスのインスタンスを返す。
+C< Malts::Web::Request >のインスタンス化を行います。
 
-=head2 C<new_response>
+=head2 C<< $c->new_response($status[, \@headers[, \@bodys]]) -> Object >>
 
-    $res = $c->new_response;
-    $res = $c->new_response($status);
-    $res = $c->new_response($status, \%headers);
-    $res = $c->new_response($status, \%headers, $body);
-    $res = $c->new_response($status, \%headers, \@bodys);
     $res = $c->new_response(200, ['Content-Type' => 'text/html; charset=UTF-8'], ['ok']);
 
-Responseクラスのインスタンスを返す。
+C< Malts::Web::Response >にインスタンス化を行います。
 
-=head2 C<create_request>
+=head2 C<< $c->create_request(\%env) -> Object >>
 
-    $req = $c->create_request(\%env);
     $req = $c->create_request({PATH_INFO => '/'});
 
-Requestクラスのインスタンス作成し $c->request;に代入する。
+C< Malts::Web::Request >のインスタンス化を行い、オブジェクトをC< $c->{request} >に代入する。
 
-=head2 C<create_response>
+=head2 C<< $c->create_response($status[, \@headers[, \@bodys]]) -> Object >>
 
-    $res = $c->create_response;
-    $res = $c->create_response($status);
-    $res = $c->create_response($status, \%headers);
-    $res = $c->create_response($status, \%headers, $body);
-    $res = $c->create_response($status, \%headers, \@bodys);
     $res = $c->create_response(200, ['Content-Type' => 'text/html; charset=UTF-8'], ['ok']);
 
-Responseクラスのインスタンス作成し $c->response;に代入する。
+C< Malts::Web::Response >のインスタンス化を行い、オブジェクトをC< $c->{response} >に代入する。
 
-=head2 C<routes>
+=head2 C<< $c->routes($routes_class) -> Object >>
 
-    $r = $c->routes;
-    $r = $c->routes($routes_class);
-    $r = $c->routes('RSimple');
+    my $routes = $c->routes('RSimple');
 
-$routes_classがあれば、ロードしてnewした後にRoutes Classを返す。
+C< $routes_class >があれば、読み込んでC< Malts::Routes::$routes_class >のインスタンス化を行った後にそのオブジェクトを返す。
 
-=head2 C<to_app>
+=head2 C<< $class->to_app(%args) -> CodeRef >>
 
-    $app = MyApp::Web->to_app;
-    $app = MyApp::Web->to_app(%args);
-    $app = MyApp::Web->to_app(html_content_type => 'text/html; charset=UTF-8');
+    my $app = MyApp::Web->to_app(html_content_type => 'text/html; charset=UTF-8');
 
-PSGIアプリのコードリファレンスを返します。
+アプリのコードリファレンスを返します。
 
-自動で I<html_content_type> に I<text/html; charset=UTF-8> がセットされまが、上書きする事も可能です。
+自動で I<html_content_type> に I<text/html; charset=UTF-8> がセットされますが、上書きする事も可能です。
 
-=head2 C<ok>
+=head2 C<< $c->ok($decoed_html) -> Object >>
 
-    $res = $c->ok($decoed_html);
     $res = $c->ok('<html>ok</html>'):
 
-Status: 200のResponseのインスタンスを返します。
+=head2 C<< $c->not_found($decoed_html) -> Object >>
 
-=head2 C<not_found>
-
-    $res = $c->not_found;
-    $res = $c->not_found($not_found_message);
     $res = $c->not_found('<html>404!</html>');
 
-Status: 404のResponseクラスのインスタンスを返します。
+=head2 C<< $c->render($template_path[, \%args]) -> Object >>
 
-=head2 C<render>
+    $res = $c->render('root/index.tx', {foo => 'bar'});
 
-    $c->render($template_path, \%args);
-    $c->render('root/index.tx', {foo => 'bar'});
-
-renderを使用するには、viewを指定している必要があります。
+C< $c->render >を使用するには、C< $c->view >を指定している必要があります。
 
 =head1 SEE ALSO
 
