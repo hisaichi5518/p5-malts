@@ -200,6 +200,10 @@ C<Malts::Plugin::ConfigLoader>プラグインを使って、設定ファイル�
 
     $c->plugin('+MyApp::Plugin::Hoge');
 
+=head2 C<context>, C<set_context>
+
+使用は非推奨。
+
 =head1 SEE ALSO
 
 L<Plack>, L<Amon2>, L<Mojolicious>
