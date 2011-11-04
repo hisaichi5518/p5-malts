@@ -4,6 +4,19 @@ use warnings;
 use Plack::Util ();
 use constant DEBUG => (($ENV{PLACK_ENV} || 'development') eq 'development' ? 1 : 0);
 
+{
+    my $_encoding;
+    sub encoding {
+        my ($encoding) = @_;
+        !$encoding && $_encoding && return $_encoding;
+
+        $_encoding = Encode::find_encoding($encoding || 'utf8')
+            or die "encoding '$encoding' not found";
+
+        return $_encoding;
+    }
+}
+
 1;
 __END__
 
@@ -26,6 +39,12 @@ L<Malts::Util>の中で、L<Plack::Util>をuseしているのでL<Malts::Util>�
     Malts::Util::DEBUG && warn '$ENV{PLACK_ENV} is development!'
 
 $ENV{PLACK_ENV}がdevelopmentの時に1を返します。
+
+=head2 C<< encoding($encoding) >>
+
+    Malts::Util::encoding('utf8');
+
+C< Encode::find_encoding() >を実行してキャッシュする。
 
 =head1 BUGS
 

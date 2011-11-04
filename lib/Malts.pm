@@ -54,14 +54,7 @@ sub boostrap {
 
 sub encoding {
     my ($self, $encoding) = @_;
-
-    return $self->{encoding}
-        if !$encoding && exists $self->{encoding};
-
-    $self->{encoding} = Encode::find_encoding($encoding || 'utf8')
-        or die "encoding '$encoding' not found";
-
-    return $self->{encoding};
+    Malts::Util::encoding($encoding);
 }
 
 sub config {
@@ -162,10 +155,12 @@ C< $object >のクラス名を返します。
 
 C< $class >をインスタンス化したあとにstartupを実行します。
 
-=head2 C<< $object->encoding($encoding) >>
+=head2 C<< $object->encoding($encoding) -> Object >>
 
     my $encoding = $object->encoding;
     $encoding = $object->encoding($encoding);
+
+C<Malts::Util::encoding()>へのショートカット
 
 =head2 C<< $object->config -> HashRef >>
 
