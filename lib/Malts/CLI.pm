@@ -127,7 +127,7 @@ Malts::CLI - 次世代 CLI Application Framework
 
 =head1 METHODS
 
-=head2 C<alias>
+=head2 C<< $c->alias >>
 
     package MyApp::CLI;
     use parent qw(Malts Malts::CLI);
@@ -138,7 +138,7 @@ Malts::CLI - 次世代 CLI Application Framework
         );
     }
 
-=head2 C<args>
+=head2 C<< $c->args >>
 
     my $args = $c->args;
 
@@ -146,11 +146,11 @@ Malts::CLI - 次世代 CLI Application Framework
 
     my @default_options = $c->default_options;
 
-=head2 C<options>
+=head2 C<< $c->options >>
 
     my $options = $c->options;
 
-=head2 C<parse_options>
+=head2 C<< $c->parse_options(%args) >>
 
     $c->parse_options(
         option_spec  => \@option_spec,
@@ -158,9 +158,9 @@ Malts::CLI - 次世代 CLI Application Framework
         args => \@args,
     );
 
-$c->options と $c->args にそれぞれ突っ込まれる。
+C<$c->options>とC<$c->args>にそれぞれ突っ込まれる。
 
-=head2 C<run>
+=head2 C<< $class->run >>
 
     MyApp::CLI->run(@ARGV);
 

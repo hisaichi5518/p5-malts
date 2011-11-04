@@ -21,7 +21,7 @@ Malts::Util - Utility subroutines for Malts and Malts user
 
 L<Malts::Util>の中で、L<Plack::Util>をuseしているのでL<Malts::Util>をuseするとL<Plack::Util>も使えるようになります。
 
-=head2 C<DEBUG>
+=head2 C<< DEBUG >>
 
     Malts::Util::DEBUG && warn '$ENV{PLACK_ENV} is development!'
 
