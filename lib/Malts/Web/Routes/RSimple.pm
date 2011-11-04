@@ -65,7 +65,7 @@ Malts::Web::Routes::RSimple - MaltsでRouter::Simpleを使う為のモジュー�
 
 L<Router::Simple> を継承している。
 
-=head2 dispatch
+=head2 C<< $c->dispatch >>
 
     $c->dispatch($c);
 

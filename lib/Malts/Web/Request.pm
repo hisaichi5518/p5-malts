@@ -30,7 +30,7 @@ L<Plack::Request>を継承している。
 
 =head1 METHODS
 
-=head2 C<args>
+=head2 C<< $c->args >>
 
     $req->args;
 
