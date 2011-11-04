@@ -33,9 +33,9 @@ sub app_class {
 
 # copied Amon2::Util::base_dir
 sub app_dir {
-    my $self = shift;
-    my $path = $self->app_base_class;
+    my $path = $_[0]->app_base_class;
     $path =~ s!::!/!g;
+
     if (my $libpath = $INC{"$path.pm"}) {
         $libpath =~ s!(?:blib/)?lib/+$path\.pm$!!;
         File::Spec->rel2abs($libpath || './');
