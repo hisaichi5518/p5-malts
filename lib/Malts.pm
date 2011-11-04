@@ -123,7 +123,7 @@ C< $class >はMaltsを継承したクラスとして説明していきます。
 
 C< $object >はC< $class->new() >で作成されたオブジェクトです。
 
-=head2 C<< $class->new(%args|\%args) -> Object>>
+=head2 C<< $class->new(%args|\%args) -> Object >>
 
     my $object = $class->new;
     $object = $class->new(%args);
