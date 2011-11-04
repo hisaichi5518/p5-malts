@@ -55,10 +55,45 @@ encodingをRequestに持ってくる。
 package MyApp::Web::Dispatcher;
 use strict;
 use warnings;
-use Malts::Web::Routes::RSimple qw(get dispatcher);
+use Malts::Web::Routes::RSimple;
+
+namespace 'MyApp::Web::C';
 
 get '/user/:user_id' => 'User#index';
 get '/post/:post_id' => 'Post#index';
 get '/about' => {user_id => 1};
+
+1;
+
+つかってないメソッドをわざわざimportするのおかしい。
+
+package MyApp::Web::Dispatcher;
+use strict;
+use warnings;
+use Malts::Web::Routes::RSmart;
+
+namespace 'MyApp::Web::C';
+constraints +{
+    user_id => qr//,
+    post_id => qr//,
+};
+
+get '/user/:user_id' => 'User#index';
+get '/post/:post_id' => 'Post#index';
+get '/about' => {user_id => 1};
+
+1;
+
+package MyApp::Web;
+use strict;
+use warnings;
+use MyApp::Web::Dispatcher;
+
+sub startup {
+    my ($self) = @_;
+    $self->plugin('ConfigLoader' => {default => {user_name => 'hisada'}});
+
+    MyApp::Web::Dispatcher->dispatch($self);
+}
 
 1;
