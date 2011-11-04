@@ -7,8 +7,7 @@ use Malts;
 {
     note 'testing boostrap';
     my $c = Malts->boostrap;
-    ok $c->context;
-    isa_ok $c->context, 'Malts';
+    isa_ok $c, 'Malts';
 }
 
 done_testing;

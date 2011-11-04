@@ -10,12 +10,6 @@ use Malts::Util ();
 
 our $VERSION = '0.01';
 
-{
-    my $context;
-    sub context     { $context }
-    sub set_context { $context = $_[1] }
-}
-
 sub startup {}
 
 sub new {
@@ -53,7 +47,7 @@ sub app_dir {
 
 sub boostrap {
     my $class = shift;
-    my $self = Malts->set_context($class->new(@_));
+    my $self = $class->new(@_);
     $self->startup;
     return $self;
 }
@@ -199,10 +193,6 @@ C<Malts::Plugin::ConfigLoader>プラグインを使って、設定ファイル�
 また以下のように C< $name >に+を付けるとMalts::Plugin以外のネームスペースを指定する事が出来ます。
 
     $c->plugin('+MyApp::Plugin::Hoge');
-
-=head2 C<context>, C<set_context>
-
-使用は非推奨。
 
 =head1 SEE ALSO
 
