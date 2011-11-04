@@ -95,86 +95,91 @@ Malts - 次世代 Web Application Framework
 
 =head1 SYNOPSIS
 
-    # TODO
+    package MyApp;
+    use strict;
+    use warnings;
+    use parent 'Malts';
+
+    sub startup {
+        my ($self) = @_;
+        $self->ok('hello world!');
+    }
+
+    1;
 
 =head1 DESCRIPTION
 
-Malts is ...!
+B<Maltsは、まだ不安定です。大きな変更が告知なしで実行される段階です。使用は控えてください。>
+
+Maltsは、必要最低限の機能のみを実装したウェブアプリケーションフレームワークです。
+
+とても小さく、分かりやすいがMaltsのコンセプトです。
+
+Maltsをもっと便利に使いたい場合は、L<Malts::Style>, L<拡張について|https://github.com/malts/p5-malts/wiki/%E6%8B%A1%E5%BC%B5%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6> を参照してください。
 
 =head1 METHODS
 
-=head2 C<new>
+C< $class >はMaltsを継承したクラスとして説明していきます。
 
-    MyApp->new;
-    MyApp->new(%args);
+C< $object >はC< $class->new() >で作成されたオブジェクトです。
 
-アプリケーションのインスタンスを作成します。
+=head2 C<< $class->new(%args|\%args) -> Object>>
 
-=head2 C<app_base_class>
+    my $object = $class->new;
+    $object = $class->new(%args);
+    $object = $class->new(\%args);
 
-    $app_base_class = $c->app_base_class;
+C< $class >のインスタンス化を行います。
 
-MyApp::Webで呼び出した場合、MyAppを返します。
+=head2 C<< $object->app_base_class -> Str >>
 
-=head2 C<app_class>
+    my $app_base_class = $c->app_base_class;
 
-    $app_class = $c->app_class;
+アプリケーションのベースクラスを自動で判定して返します。自動で判定しているので、うまくいかない場合もあります。
 
-MyApp::Webで呼び出した場合、MyApp::Webを返します。
+その時は、C<< $class->new(app_base_class => 'MyApp') >>と設定してください。
 
-=head2 C<app_dir>
+=head2 C<< $object->app_class -> Str >>
 
-    $app_dir = $c->app_dir;
+    my $app_class = $c->app_class;
+
+C< $object >のクラス名を返します。
+
+=head2 C<< $object->app_dir -> Str >>
+
+    my $app_dir = $c->app_dir;
 
 アプリケーションディレクトリを返します。
 
-=head2 context
+=head2 C<< $object->startup >>
 
-    Malts->context;
-
-コンテキストを取り出します。Malts::Web::Requestなどでcontextを使う場合に使用します。
-
-=head2 set_context
-
-    Malts->set_context($context);
-    Mlats->set_context(Malts->new);
-
-コンテキストをセットします。
-
-=head2 C<startup>
-
-    $c->startup;
+    sub startup {
+        my ($object) = @_;
+        $object->app_dir;
+    }
 
 アプリケーションにおける主要フックです。アプリケーション開始時に呼び出されます。
 
-=head2 C<boostrap>
+=head2 C<< $class->boostrap(%args|\%args) -> Object >>
 
-    MyApp->boostrap;
-    MyApp->boostrap(%options);
+    my $object = $class->boostrap;
+    $object = $class->boostrap(%args);
+    $object = $class->boostrap(\%args);
 
-newした後にset_contextする。
+C< $class >をインスタンス化したあとにstartupを実行します。
 
-=head2 C<encoding>
+=head2 C<< $object->encoding($encoding) >>
 
-    $c->encoding;
-    $c->encoding($encoding);
-    $c->encoding('utf8');
+    my $encoding = $object->encoding;
+    $encoding = $object->encoding($encoding);
 
-渡した文字コードをEncode::find_encoding()したものが返される。
-
-文字コードが存在しない場合はエラーを返す。
-
-デフォルトは、utf8
-
-B<変更は推奨されない>が、携帯サイトの場合はその限りではない。
-
-=head2 C<config>
+=head2 C<< $object->config -> HashRef >>
 
 このメソッドは現在set・getができますが、将来的にはsetができなくなる可能性があります。
 
 設定を変更するのを設定ファイル以外で動的にするとバグの原因になるのでやめましょう。
 
-    $config = $c->config;
+    my $config = $c->config;
 
     # set
     $c->config->{name} = 'hisaichi5518';
@@ -189,11 +194,9 @@ C<Malts::Plugin::ConfigLoader>プラグインを使って、設定ファイル�
 =head2 C<plugin>
 
     $c->plugin($name => \%opts);
-    $c->plugin('Hoge' => {});
+    $c->plugin('Hoge' => {}); # Malts::Plugin::Hogeを読み込んで、initメソッドを実行する
 
-上の例場合、Malts::Plugin::Hogeを読み込んで、initを実行します。
-
-また以下のように $name に+を付けてやるとMalts::Plugin以外を指定する事も出来ます。
+また以下のように C< $name >に+を付けるとMalts::Plugin以外のネームスペースを指定する事が出来ます。
 
     $c->plugin('+MyApp::Plugin::Hoge');
 
