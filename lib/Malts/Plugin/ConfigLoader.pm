@@ -20,7 +20,7 @@ __END__
 
 =head1 METHOD
 
-=head2 C<init>
+=head2 C<< $class->init($c, $opts) >>
 
     Malts::Plugin::ConfigLoader->init($c, $opts);
 
