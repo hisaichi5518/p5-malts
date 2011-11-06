@@ -1,6 +1,22 @@
-package HelloApp::Model::Dice;
 use strict;
 use warnings;
+
+package HelloApp;
+use parent 'Malts';
+
+sub startup {
+    # CLI, Web共通のプラグインなどをここで宣言する
+    # startupはMaltsの中にあるので、なくても動作可能
+}
+
+=pod
+
+HelloApp::Webが、Maltsを継承しているのであれば、今回は作成する必要はありませんが、
+CLIスクリプトを作成するときに便利なので、作成した方がよいでしょう。
+
+=cut
+
+package HelloApp::Model::Dice;
 
 sub new {bless {}, shift}
 
@@ -18,10 +34,45 @@ Modelにはロジックを書きます。
 
 =cut
 
-package HelloApp::Web::Controller::Root;
-use strict;
-use warnings;
+package HelloApp::Web;
+use parent -norequire, 'HelloApp';
+use parent 'Malts::Web';
+use Text::Xslate;
+use Class::Method::Modifiers::Fast;
 
+after startup => sub {
+    my $self = shift;
+
+    $self->view(Text::Xslate->new(
+        path => {'root/index.tx' => '<: $user :> DICE: <: $dice_num :>'}
+    ));
+    HelloApp::Web::Dispatcher->dispatch($self) or return $self->not_found;
+};
+
+=pod
+
+HelloAppから継承したstartupをafterで拡張します。
+
+そこでWeb専用のプラグインやviewの設定を行います。viewはTiffanyプロトコルに合ったものであればなんでも大丈夫です。
+
+Viewに$cをそのまま渡すとメモリリークします。$cを渡すとゴチャゴチャになっていいことないのでオススメしません。
+
+NOTE: ルーティングについて変更の可能性あり
+
+=cut
+
+package HelloApp::Web::Dispatcher;
+use Malts::Web::Router::Simple::Declare;
+
+get '/' => 'Root#index';
+
+=pod
+
+routesを指定する。
+
+=cut
+
+package HelloApp::Web::Controller::Root;
 # HACK for Plack::Util::load_class()
 $INC{'HelloApp/Web/Controller/Root.pm'} = __FILE__;
 
@@ -40,59 +91,7 @@ Controllerは、Modelが出した結果をViewに渡すだけと考えると分�
 
 =cut
 
-package HelloApp;
-use strict;
-use warnings;
-use parent 'Malts';
-
-sub startup {
-    # CLI, Web共通のプラグインなどをここで宣言する
-    # startupはMaltsの中にあるので、なくても動作可能
-}
-
-=pod
-
-HelloApp::Webが、Maltsを継承しているのであれば、今回は作成する必要はありませんが、
-CLIスクリプトを作成するときに便利なので、作成した方がよいでしょう。
-
-=cut
-
-package HelloApp::Web;
-use strict;
-use warnings;
-
-use parent -norequire, 'HelloApp';
-use parent 'Malts::Web';
-use Text::Xslate;
-use Class::Method::Modifiers::Fast;
-
-after startup => sub {
-    my $self = shift;
-
-    $self->view(Text::Xslate->new(
-        path => {'root/index.tx' => '<: $user :> DICE: <: $dice_num :>'}
-    ));
-
-    my $r = $self->routes('RSimple');
-    $r->connect('/' => {controller => 'Root', action => 'index'});
-};
-
-=pod
-
-HelloAppから継承したstartupをafterで拡張します。
-
-そこでWeb専用のプラグインやviewの設定を行います。viewはTiffanyプロトコルに合ったものであればなんでも大丈夫です。
-
-Viewに$cをそのまま渡すとメモリリークします。$cを渡すとゴチャゴチャになっていいことないのでオススメしません。
-
-NOTE: ルーティングについて変更の可能性あり
-
-=cut
-
 package main;
-use strict;
-use warnings;
-
 use Plack::Builder;
 
 builder {

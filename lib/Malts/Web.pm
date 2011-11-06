@@ -34,14 +34,6 @@ sub create_response {
     return $self->{response};
 }
 
-sub routes {
-    my ($self, $name, %args) = @_;
-    return $self->{routes} unless $name;
-    $self->{routes} = Plack::Util::load_class($name, 'Malts::Web::Routes')->new(%args);
-
-    return $self->{routes};
-}
-
 # new, startupがない場合は、Malts.pmを継承していない
 sub to_app {
     my ($class, %args) = @_;
@@ -57,13 +49,6 @@ sub to_app {
 
         Malts::Util::DEBUG && debugf "do $class->startup!";
         $self->startup;
-
-        if ($self->routes) {
-            $self->routes->dispatch($self) or $self->not_found;
-        }
-        elsif (Malts::Util::DEBUG) {
-            debugf "Can't find routes. Do you want to make Web Application? use \$c->routes()!";
-        }
 
         croakf 'You must create a response. use $c->create_response(), $c->render() or $c->ok()!'
             unless $self->response;
@@ -177,12 +162,6 @@ C< Malts::Web::Request >のインスタンス化を行い、オブジェクト�
     $res = $c->create_response(200, ['Content-Type' => 'text/html; charset=UTF-8'], ['ok']);
 
 C< Malts::Web::Response >のインスタンス化を行い、オブジェクトをC< $c->{response} >に代入する。
-
-=head2 C<< $c->routes($routes_class) -> Object >>
-
-    my $routes = $c->routes('RSimple');
-
-C< $routes_class >があれば、読み込んでC< Malts::Routes::$routes_class >のインスタンス化を行った後にそのオブジェクトを返す。
 
 =head2 C<< $class->to_app(%args) -> CodeRef >>
 

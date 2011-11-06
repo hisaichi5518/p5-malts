@@ -1,7 +1,7 @@
-package HelloLog::Web;
 use strict;
 use warnings;
 
+package HelloLog::Web;
 use parent qw(Malts Malts::Web);
 use Log::Minimal;
 
@@ -18,9 +18,6 @@ Maltsは内部でもLog::Minimalを使用している。なのでアプリ側で
 =cut
 
 package main;
-use strict;
-use warnings;
-
 use Plack::Builder;
 
 builder {
