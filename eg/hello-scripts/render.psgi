@@ -1,7 +1,7 @@
-package HelloRender::Web;
 use strict;
 use warnings;
 
+package HelloRender::Web;
 use parent qw(Malts Malts::Web);
 use Text::Xslate;
 
@@ -26,9 +26,6 @@ startupでviewの設定を行う。
 =cut
 
 package main;
-use strict;
-use warnings;
-
 use Plack::Builder;
 
 builder {

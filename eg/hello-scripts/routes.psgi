@@ -1,7 +1,32 @@
-package HelloRoutes::Web::Controller::Root;
 use strict;
 use warnings;
 
+package HelloRoutes::Web;
+use parent qw(Malts Malts::Web);
+
+sub startup {
+    my $self = shift;
+    HelloRoutes::Web::Dispatcher->dispatch($self) or $self->not_found;
+}
+
+=pod
+
+dispatch()を実行する。
+
+=cut
+
+package HelloRoutes::Web::Dispatcher;
+use Malts::Web::Router::Simple::Declare;
+
+get '/' => 'Root#index';
+
+=pod
+
+routesを指定する。get, post, put, deleteがある。
+
+=cut
+
+package HelloRoutes::Web::Controller::Root;
 # HACK for Plack::Util::load_class()
 $INC{'HelloRoutes/Web/Controller/Root.pm'} = __FILE__;
 
@@ -26,28 +51,7 @@ begin, endが存在していなくてもエラーはでない。
 
 =cut
 
-package HelloRoutes::Web;
-use strict;
-use warnings;
-
-use parent qw(Malts Malts::Web);
-
-sub startup {
-    my $self = shift;
-    my $r = $self->routes('RSimple');
-    $r->connect('/' => {controller => 'Root', action => 'index'});
-}
-
-=pod
-
-ルーティングする。仕様変更の可能性がある。
-
-=cut
-
 package main;
-use strict;
-use warnings;
-
 use Plack::Builder;
 
 builder {

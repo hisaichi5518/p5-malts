@@ -1,7 +1,7 @@
-package HelloMalts::Web;
 use strict;
 use warnings;
 
+package HelloMalts::Web;
 use parent qw(Malts Malts::Web);
 
 sub startup {
@@ -18,9 +18,6 @@ startupでresponseを返すようにしているので高速に動作するが�
 =cut
 
 package main;
-use strict;
-use warnings;
-
 use Plack::Builder;
 
 builder {
