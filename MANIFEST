@@ -20,7 +20,7 @@ lib/Malts/Util.pm
 lib/Malts/Web.pm
 lib/Malts/Web/Request.pm
 lib/Malts/Web/Response.pm
-lib/Malts/Web/Routes/RSimple.pm
+lib/Malts/Web/Router/Simple/Declare.pm
 Makefile.PL
 MANIFEST			This list of files
 MANIFEST.SKIP
@@ -49,10 +49,9 @@ t/002_Malts-Web-Request/001_basic.t
 t/002_Malts-Web-Request/002_args.t
 t/003_Malts-Web-Response/000_load.t
 t/003_Malts-Web-Response/001_basic.t
-t/004_Malts-Web-Routes-RSimple/000_load.t
-t/004_Malts-Web-Routes-RSimple/001_basic.t
-t/004_Malts-Web-Routes-RSimple/002_begin.t
-t/004_Malts-Web-Routes-RSimple/003_not_found.t
+t/004_Malts-Web-Router-Simple-Declare/000_load.t
+t/004_Malts-Web-Router-Simple-Declare/001_basic.t
+t/004_Malts-Web-Router-Simple-Declare/lib/TestApp.pm
 t/005_Malts-Util/000_load.t
 t/005_Malts-Util/001_basic.t
 t/006_Malts-Plugin/000_config_loader.t
