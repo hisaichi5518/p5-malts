@@ -64,12 +64,18 @@ sub import {
         return 1;
     };
 
-
-    for my $method (qw/GET POST PUT DELETE/) {
-        install_subroutine($caller, lc($method) => sub {
-            $connect_with_method->($method, @_);
-        });
-    }
+    install_subroutine($caller, get => sub {
+        $connect_with_method->('GET', @_);
+    });
+    install_subroutine($caller, post => sub {
+        $connect_with_method->('POST', @_);
+    });
+    install_subroutine($caller, put => sub {
+        $connect_with_method->('PUT', @_);
+    });
+    install_subroutine($caller, del => sub {
+        $connect_with_method->('DELETE', @_);
+    });
 
     install_subroutine($caller, dispatch => $dispatch);
     install_subroutine($caller, router_as_string => sub { $router->as_string });
@@ -86,12 +92,12 @@ Malts::Web::Router::Simple - MaltsでRouter::Simpleを使う為のモジュー�
 
 =head1 SYNOPSIS
 
-    use Malts::Web::Router::Simple;
+    use Malts::Web::Router::Simple::Declare;
 
     get  '/' => 'Root#index';
     post '/' => 'Root#post';
     put  '/' => 'Root#put';
-    delete '/' => 'Root#delete';
+    del '/' => 'Root#delete';
 
 =head1 DESCRIPTION
 
@@ -111,9 +117,9 @@ Malts::Web::Router::Simple - MaltsでRouter::Simpleを使う為のモジュー�
 
     put '/path' => 'Controller#action';
 
-=head2 C<< delete($path => $dist|\%dist) >>
+=head2 C<< del($path => $dist|\%dist) >>
 
-    delete '/path' => 'Controller#action';
+    del '/path' => 'Controller#action';
 
 =head2 C<< $class->dispatch($c) >>
 
