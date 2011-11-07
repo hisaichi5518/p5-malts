@@ -1,84 +1,66 @@
 package Malts::Web::Router::Simple::Declare;
 use strict;
 use warnings;
+use 5.10.1;
 
-use Data::Util qw(get_code_ref install_subroutine);
 use Log::Minimal qw(debugf croakf);
 use Malts::Util ();
 use Router::Simple 0.03;
 
-sub import {
-    my $caller = scalar caller;
-    my $router = Router::Simple->new;
+use Exporter 'import';
+our @EXPORT = qw(get post put del dispatch router_as_string);
 
-    my $connect_with_method = sub {
-        my ($method, $path, $dest, $opt) = @_;
-        $opt->{method} = $method;
-        if (ref $dest) {
-            $router->connect($path => $dest, $opt);
-        }
-        elsif (!$dest) {
-            $router->connect($path => {}, $opt);
-        }
-        else {
-            my %dest;
-            my ($controller, $action) = split '#', $dest;
-            $dest{controller} = $controller;
-            $dest{action}     = $action;
-            $router->connect($path => \%dest, $opt);
-        }
-    };
+sub get  { _connect_with_method('GET', @_);  }
+sub post { _connect_with_method('POST', @_); }
+sub put  { _connect_with_method('PUT', @_);  }
+sub del  { _connect_with_method('DELETE', @_); }
 
+sub router_as_string {
+    _router->as_string;
+}
 
-    my $dispatch = sub {
-        my ($self, $c) = @_;
-        return unless my $args = $router->match($c->request->env);
+sub _router {
+    state $router = Router::Simple->new;
+    $router;
+}
 
-        Malts::Util::DEBUG && debugf('match route! => %s', $args);
+sub dispatch {
+    my ($class, $c) = @_;
+    return unless my $args = _router->match($c->request->env);
 
-        $c->request->env->{'malts.routing_args'} = $args;
-        my $action     = $args->{action};
-        my $controller = $args->{controller};
-        my $namespace  = ref($c).'::Controller';
+    Malts::Util::DEBUG && debugf('match route! => %s', $args);
 
-        croakf "path matched route! but can't find Controller or Action!"
-            if !$action || !$controller;
+    $c->request->env->{'malts.routing_args'} = $args;
+    my $action     = $args->{action};
+    my $controller = $args->{controller};
+    my $namespace  = ref($c).'::Controller';
 
-        $controller = Plack::Util::load_class($controller, $namespace);
+    croakf "path matched route! but can't find Controller or Action!"
+        if !$action || !$controller;
 
-        # $controller has begin method.
-        if (get_code_ref($controller, 'begin')) {
-            Malts::Util::DEBUG && debugf "do $controller->begin!";
-            $controller->begin($c);
-        }
+    $controller = Plack::Util::load_class($controller, $namespace);
 
-        Malts::Util::DEBUG && debugf "Dispatching $controller->$action!";
-        $controller->$action($c);
+    Malts::Util::DEBUG && debugf "Dispatching $controller->$action!";
+    $controller->$action($c);
+    return 1;
+}
 
-        # $controller has end method.
-        if (get_code_ref($controller, 'end')) {
-            Malts::Util::DEBUG && debugf "do $controller->end!";
-            $controller->end($c);
-        }
-
-        return 1;
-    };
-
-    install_subroutine($caller, get => sub {
-        $connect_with_method->('GET', @_);
-    });
-    install_subroutine($caller, post => sub {
-        $connect_with_method->('POST', @_);
-    });
-    install_subroutine($caller, put => sub {
-        $connect_with_method->('PUT', @_);
-    });
-    install_subroutine($caller, del => sub {
-        $connect_with_method->('DELETE', @_);
-    });
-
-    install_subroutine($caller, dispatch => $dispatch);
-    install_subroutine($caller, router_as_string => sub { $router->as_string });
+sub _connect_with_method {
+    my ($method, $path, $dest, $opt) = @_;
+    $opt->{method} = $method;
+    if (ref $dest) {
+        _router->connect($path => $dest, $opt);
+    }
+    elsif (!$dest) {
+        _router->connect($path => {}, $opt);
+    }
+    else {
+        my %dest;
+        my ($controller, $action) = split '#', $dest;
+        $dest{controller} = $controller;
+        $dest{action}     = $action;
+        _router->connect($path => \%dest, $opt);
+    }
 }
 
 1;
@@ -124,6 +106,12 @@ Malts::Web::Router::Simple - MaltsでRouter::Simpleを使う為のモジュー�
 =head2 C<< $class->dispatch($c) >>
 
     $class->dispatch($c);
+
+=head2 C<< router_as_string() >>
+
+    router_as_string;
+
+どのようなPATH_INFOにマッチするかを表示します。
 
 =head1 AUTHOR
 
