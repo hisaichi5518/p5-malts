@@ -49,6 +49,7 @@ sub to_app {
 
         Malts::Util::DEBUG && debugf "do $class->startup!";
         $self->startup;
+        $self->dispatch;
 
         croakf 'You must create a response. use $c->create_response(), $c->render() or $c->ok()!'
             unless $self->response;
