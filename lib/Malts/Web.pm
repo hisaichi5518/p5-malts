@@ -51,8 +51,9 @@ sub to_app {
         $self->startup;
         $self->dispatch;
 
-        croakf 'You must create a response. use $c->create_response(), $c->render() or $c->ok()!'
-            unless $self->response;
+        unless ($self->response) {
+            $self->throw('You must create a response. use $c->create_response(), $c->render() or $c->ok()!');
+        }
         return $self->response->finalize;
     };
 }
@@ -92,6 +93,9 @@ sub render {
     $self->ok($decoed_html);
 }
 
+sub throw {
+    croakf @_;
+}
 
 1;
 __END__
