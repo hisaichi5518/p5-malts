@@ -58,32 +58,6 @@ sub to_app {
     };
 }
 
-sub ok {
-    my ($self, $decoed_html) = @_;
-    die '$decoed_html is required' unless defined $decoed_html;
-
-    my $content_type = $self->html_content_type;
-    return $self->create_response(
-        200,
-        [
-            'Content-Type'   => $content_type,
-            'Content-Length' => length($decoed_html),
-        ],
-        [$self->encoding->encode($decoed_html)]
-    );
-}
-
-sub not_found {
-    my ($self, $not_found_message) = @_;
-
-    $not_found_message ||= "404 Not Found!";
-    return $self->create_response(
-        404,
-        ['Content-Length' => length($not_found_message)],
-        [$self->encoding->encode($not_found_message)]
-    );
-}
-
 sub render {
     my $self = shift;
     Malts::Util::DEBUG && debugf 'rendering template.';
