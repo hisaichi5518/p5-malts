@@ -6,9 +6,10 @@ use 5.10.1;
 use Log::Minimal qw(debugf croakf);
 use Malts::Util ();
 use Router::Simple 0.03;
-
 use Exporter 'import';
 our @EXPORT = qw(get post put del dispatch router_as_string);
+
+my $_ROUTER = Router::Simple->new;
 
 sub get  { _connect_with_method('GET', @_);  }
 sub post { _connect_with_method('POST', @_); }
@@ -16,17 +17,12 @@ sub put  { _connect_with_method('PUT', @_);  }
 sub del  { _connect_with_method('DELETE', @_); }
 
 sub router_as_string {
-    _router->as_string;
-}
-
-sub _router {
-    state $router = Router::Simple->new;
-    $router;
+    $_ROUTER->as_string;
 }
 
 sub dispatch {
     my ($class, $c) = @_;
-    return unless my $args = _router->match($c->request->env);
+    return unless my $args = $_ROUTER->match($c->request->env);
 
     Malts::Util::DEBUG && debugf('match route! => %s', $args);
 
@@ -41,25 +37,24 @@ sub dispatch {
     $controller = Plack::Util::load_class($controller, $namespace);
 
     Malts::Util::DEBUG && debugf "Dispatching $controller->$action!";
-    $controller->$action($c);
-    return 1;
+    return $controller->$action($c);
 }
 
 sub _connect_with_method {
     my ($method, $path, $dest, $opt) = @_;
     $opt->{method} = $method;
     if (ref $dest) {
-        _router->connect($path => $dest, $opt);
+        $_ROUTER->connect($path => $dest, $opt);
     }
     elsif (!$dest) {
-        _router->connect($path => {}, $opt);
+        $_ROUTER->connect($path => {}, $opt);
     }
     else {
         my %dest;
         my ($controller, $action) = split '#', $dest;
         $dest{controller} = $controller;
         $dest{action}     = $action;
-        _router->connect($path => \%dest, $opt);
+        $_ROUTER->connect($path => \%dest, $opt);
     }
 }
 
