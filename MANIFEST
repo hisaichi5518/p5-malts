@@ -59,6 +59,7 @@ t/007_Malts-CLI/000_load.t
 t/007_Malts-CLI/001_basic.t
 t/007_Malts-CLI/002_run.t
 t/007_Malts-CLI/lib/TestApp/CLI.pm
+t/999_Malts-Apps/001_hello-scripts.t
 xt/perlcritic.t
 xt/pod.t
 xt/podcoverage.t
