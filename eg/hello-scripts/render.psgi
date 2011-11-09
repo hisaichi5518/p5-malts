@@ -5,16 +5,16 @@ package HelloRender::Web;
 use parent qw(Malts Malts::Web);
 use Text::Xslate;
 
-sub startup {
+sub dispatch {
     my $self = shift;
-    $self->view(Text::Xslate->new(
-        path => {
-            index => 'Hello <: $type :> World!'
-        }
-    ));
     $self->render('index', {type => 'Xslate'});
 }
 
+sub view {
+    Text::Xslate->new(path => {
+        index => 'Hello <: $type :> World!'
+    });
+}
 =pod
 
 startupでviewの設定を行う。

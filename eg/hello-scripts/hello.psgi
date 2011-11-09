@@ -4,9 +4,9 @@ use warnings;
 package HelloMalts::Web;
 use parent qw(Malts Malts::Web);
 
-sub startup {
+sub dispatch {
     my $self = shift;
-    $self->ok('Hello Malts!');
+    $self->create_response(200, [], ['Hello Malts!']);
 }
 
 =pod

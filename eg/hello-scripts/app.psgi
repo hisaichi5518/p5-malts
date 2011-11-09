@@ -40,14 +40,16 @@ use parent 'Malts::Web';
 use Text::Xslate;
 use Class::Method::Modifiers::Fast;
 
-after startup => sub {
+sub dispatch {
     my $self = shift;
-
-    $self->view(Text::Xslate->new(
-        path => {'root/index.tx' => '<: $user :> DICE: <: $dice_num :>'}
-    ));
-    HelloApp::Web::Dispatcher->dispatch($self) or return $self->not_found;
+    HelloApp::Web::Dispatcher->dispatch($self) or return $self->create_response(404, [], ['Not Found!']);
 };
+
+sub view {
+    Text::Xslate->new(
+        path => {'root/index.tx' => '<: $user :> DICE: <: $dice_num :>'}
+    );
+}
 
 =pod
 

@@ -4,9 +4,9 @@ use warnings;
 package HelloRoutes::Web;
 use parent qw(Malts Malts::Web);
 
-sub startup {
+sub dispatch {
     my $self = shift;
-    HelloRoutes::Web::Dispatcher->dispatch($self) or $self->not_found;
+    HelloRoutes::Web::Dispatcher->dispatch($self) or $self->create_response(404, [], ['Not Found!']);
 }
 
 =pod
@@ -40,7 +40,7 @@ sub end {
 
 sub index {
     my ($self, $c) = @_;
-    $c->ok('Hello Router::Simple World');
+    $c->create_response(200, [], ['Hello Router::Simple World']);
 }
 
 =pod

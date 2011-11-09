@@ -8,7 +8,7 @@ use Log::Minimal;
 sub startup {
     my $self = shift;
     infof('hello logging!');
-    $self->ok('Hello Log::Minimal World!');
+    $self->create_response(200, [], ['Hello Log::Minimal World!']);
 }
 
 =pod
