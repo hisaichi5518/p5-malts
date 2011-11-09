@@ -1,14 +1,20 @@
 #!perl -w
+package TestApp::Web;
+use strict;
+use warnings;
+use parent qw(Malts Malts::Web);
+use Text::Xslate;
+
+sub view_text { $_[0]->{view_conf} = {path => {file => $_[1]}} }
+sub view { Text::Xslate->new($_[0]->{view_conf}) }
+
+package main;
 use strict;
 use warnings;
 use utf8;
 
-use FindBin;
-use lib "$FindBin::Bin/lib";
-use TestApp::Web;
 use Test::More;
 use Encode qw(encode_utf8);
-use Text::Xslate;
 
 subtest 'testing render' => sub {
     my $res = render('ascii');
@@ -28,7 +34,7 @@ subtest 'testing content_type' => sub {
 sub render {
     my $text = shift;
     my $t = TestApp::Web->new(@_);
-    $t->view(Text::Xslate->new(path => {file => $text}));
+    $t->view_text($text);
     my $res = $t->render('file');
     isa_ok $res, 'Malts::Web::Response', encode_utf8 "\$res(body: $text)";
     is $res->content_length, length($text), encode_utf8 "content_length == length($text)";

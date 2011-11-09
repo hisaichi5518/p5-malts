@@ -21,10 +21,7 @@ subtest 'testing dispatch. return Status: 404' => sub {
     is_404({PATH_INFO => '/404', REQUEST_METHOD => 'GET'});
     is_404({PATH_INFO => '/', REQUEST_METHOD => 'POST'});
     is_404({PATH_INFO => '/'});
-};
-
-subtest 'testing dispatch. return Error' => sub {
-    is_error({PATH_INFO => '/500', REQUEST_METHOD => 'GET'});
+    is_404({PATH_INFO => '/500', REQUEST_METHOD => 'GET'});
 };
 
 sub psgi_app {

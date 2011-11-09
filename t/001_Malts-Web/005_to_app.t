@@ -5,10 +5,10 @@ use warnings;
 
 use parent qw(Malts Malts::Web);
 
-sub startup {
-    my $self = shift;
-    $self->create_response(200, [], ['ok']);
+sub dispatch {
+    shift->create_response(200, [], ['ok']);
 }
+
 
 package main;
 use strict;

@@ -4,7 +4,7 @@ use warnings;
 
 use Malts::Web::Request;
 use Malts::Web::Response;
-use Plack::Util::Accessor qw(html_content_type view);
+use Plack::Util::Accessor qw(html_content_type);
 use Malts::Util ();
 use Log::Minimal qw(debugf croakf);
 
@@ -49,12 +49,13 @@ sub to_app {
 
         Malts::Util::DEBUG && debugf "do $class->startup!";
         $self->startup;
-        $self->dispatch;
+        my $res = $self->dispatch;
+        $self->after_dispatch($res);
 
-        unless ($self->response) {
+        unless ($res) {
             $self->throw('You must create a response. use $c->create_response(), $c->render() or $c->ok()!');
         }
-        return $self->response->finalize;
+        return $res->finalize;
     };
 }
 
@@ -64,12 +65,24 @@ sub render {
     die 'You must create a view.' unless $self->view;
 
     my $decoed_html = $self->view->render(@_);
-    $self->ok($decoed_html);
+    return $self->create_response(
+        200,
+        [
+            'Content-Type'   => $self->html_content_type,
+            'Content-Length' => length($decoed_html),
+        ],
+        [Malts::Util::encoding()->encode($decoed_html)]
+    );
 }
 
 sub throw {
+    shift;
     croakf @_;
 }
+
+sub dispatch {}
+sub view {}
+sub after_dispatch {}
 
 1;
 __END__
