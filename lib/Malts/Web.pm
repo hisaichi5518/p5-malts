@@ -53,7 +53,7 @@ sub to_app {
         $self->after_dispatch($res);
 
         unless ($res) {
-            $self->throw('You must create a response. use $c->create_response(), $c->render() or $c->ok()!');
+            croakf 'You must create a response. use $c->create_response(), $c->render() or $c->ok()!';
         }
         return $res->finalize;
     };
@@ -73,11 +73,6 @@ sub render {
         ],
         [Malts::Util::encoding()->encode($decoed_html)]
     );
-}
-
-sub throw {
-    shift;
-    croakf @_;
 }
 
 sub dispatch {}
