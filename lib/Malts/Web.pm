@@ -172,6 +172,31 @@ C< Malts::Web::Response >のインスタンス化を行い、オブジェクト�
 
 C< $c->render >を使用するには、C< $c->view >を指定している必要があります。
 
+=head2 C<< $c->after_dispatch($res) >>
+
+    $c->after_dispatch($res);
+
+上書きしてフックします。
+
+    sub after_dispatch {
+        my ($c, $res) = @_;
+        $res->body("hisaichi5518");
+        $c->plguin("Web::Hoge");
+    }
+
+=head2 C<< $c->dispatch >>
+
+    $c->dispatch;
+
+C<dispatch>は必ずResponseオブジェクトを返さなければなりません。
+
+以下のように上書きして使います。
+
+    sub dispatch {
+        my $c = shift;
+        MyApp::Web::Dispatcher->dispatch($c) or $c->create_response(404, [], ['ERROR!']);
+    }
+
 =head1 SEE ALSO
 
 L<Plack>
