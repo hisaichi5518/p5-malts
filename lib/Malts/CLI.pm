@@ -19,7 +19,7 @@ sub run {
 
     my $subcommand = {$self->alias}->{$command} || $command;
     if (ref $subcommand ne 'CODE') {
-        my $subcommand_class = Plack::Util::load_class($subcommand, $self->app_class.'::Command');
+        my $subcommand_class = Plack::Util::load_class($subcommand, ref($self).'::Command');
 
         $self->parse_options(
             option_spec  => [$subcommand_class->option_spec],

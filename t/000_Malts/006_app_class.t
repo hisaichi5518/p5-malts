@@ -8,6 +8,8 @@ use File::Spec ();
 # HACK for Malts::app_dir
 $INC{'TestApp/Web.pm'} = File::Spec->rel2abs('./lib/TestApp');
 
+sub app_base_class { 'TestApp' }
+
 package TestApp1::Web;
 use strict;
 use warnings;
@@ -20,23 +22,13 @@ use Test::More;
 use Malts;
 
 subtest 'testing app_base_class' => sub {
-    my $c = Malts->new(app_base_class => 'TestApp');
-    is $c->app_base_class, 'TestApp';
+    my $c = Malts->new;
+    is $c->app_base_class, undef;
 };
 
 subtest 'testing app_base_class is TestApp' => sub {
     my $c = TestApp::Web->new;
     is $c->app_base_class, 'TestApp';
-};
-
-subtest 'testing app_class' => sub {
-    my $c = Malts->new;
-    is $c->app_class, 'Malts';
-};
-
-subtest 'testing app_class is TestApp::Web' => sub{
-    my $c = TestApp::Web->new;
-    is $c->app_class, 'TestApp::Web';
 };
 
 subtest 'testing app_dir' => sub {

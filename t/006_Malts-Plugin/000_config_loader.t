@@ -8,6 +8,8 @@ use FindBin;
 # HACK for Malts::app_base_class
 $INC{'TestApp.pm'} = $FindBin::Bin;
 
+sub app_base_class { 'TestApp' }
+
 package main;
 use strict;
 use Test::More;

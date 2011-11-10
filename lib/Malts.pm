@@ -18,18 +18,7 @@ sub new {
     bless {%args}, $class;
 }
 
-sub app_base_class {
-    my $self = shift;
-    return $self->{app_base_class} if $self->{app_base_class};
-
-    # Web, CLIなどを削除
-    ($self->{app_base_class}) = (ref($self) =~ m/(.+)(::[A-Za-z0-9]+)$/);
-    return $self->{app_base_class};
-}
-
-sub app_class {
-    ref $_[0];
-}
+sub app_base_class {}
 
 # copied Amon2::Util::base_dir
 sub app_dir {
@@ -118,19 +107,19 @@ C< $object >はC< $class->new() >で作成されたオブジェクトです。
 
 C< $class >のインスタンス化を行います。
 
-=head2 C<< $object->app_base_class -> Str >>
+=head2 C<< $object->app_base_class >>
 
     my $app_base_class = $c->app_base_class;
 
-アプリケーションのベースクラスを自動で判定して返します。自動で判定しているので、うまくいかない場合もあります。
+アプリケーションのベースクラスを返します。しかし、そのままでは使用する事が出来ず、アプリケーション側で設定する必要があります。
 
-その時は、C<< $class->new(app_base_class => 'MyApp') >>と設定してください。
+設定は、メソッドを上書きする事で出来ます。
 
-=head2 C<< $object->app_class -> Str >>
+    package MyApp;
+    use parent 'Malts';
+    sub app_base_class { 'MyApp' }
 
-    my $app_class = $c->app_class;
-
-C< $object >のクラス名を返します。
+C<app_base_class>を設定しないとエラーが出るメソッドがあります。
 
 =head2 C<< $object->app_dir -> Str >>
 
