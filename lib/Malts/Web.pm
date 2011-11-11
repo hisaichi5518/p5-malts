@@ -14,11 +14,6 @@ sub new_request {
     return Malts::Web::Request->new($_[1]);
 }
 
-sub new_response {
-    shift;
-    return Malts::Web::Response->new(@_);
-}
-
 sub create_request {
     my ($self, $env) = @_;
     $self->{request} = $self->new_request($env);
@@ -28,9 +23,7 @@ sub create_request {
 
 sub create_response {
     my $self = shift;
-    $self->{response} = $self->new_response(@_);
-
-    return $self->{response};
+    return Malts::Web::Response->new(@_);
 }
 
 # new, startupがない場合は、Malts.pmを継承していない
@@ -125,12 +118,6 @@ C< $c->{request} >のショートカット
 
 C< Malts::Web::Request >のインスタンス化を行います。
 
-=head2 C<< $c->new_response($status[, \@headers[, \@bodys]]) -> Object >>
-
-    $res = $c->new_response(200, ['Content-Type' => 'text/html; charset=UTF-8'], ['ok']);
-
-C< Malts::Web::Response >にインスタンス化を行います。
-
 =head2 C<< $c->create_request(\%env) -> Object >>
 
     $req = $c->create_request({PATH_INFO => '/'});
@@ -141,7 +128,7 @@ C< Malts::Web::Request >のインスタンス化を行い、オブジェクト�
 
     $res = $c->create_response(200, ['Content-Type' => 'text/html; charset=UTF-8'], ['ok']);
 
-C< Malts::Web::Response >のインスタンス化を行い、オブジェクトをC< $c->{response} >に代入する。
+C< Malts::Web::Response >にインスタンス化を行います。
 
 =head2 C<< $class->to_app(%args) -> CodeRef >>
 
