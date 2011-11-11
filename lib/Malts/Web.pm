@@ -9,7 +9,6 @@ use Malts::Util ();
 use Log::Minimal qw(debugf croakf);
 
 sub request  { $_[0]->{request}  }
-sub response { $_[0]->{response} }
 
 sub new_request {
     return Malts::Web::Request->new($_[1]);
@@ -119,12 +118,6 @@ Malts::Web - 次世代 Web Application Framework
     my $req = $c->request;
 
 C< $c->{request} >のショートカット
-
-=head2 C<< $c->response -> Object >>
-
-    my $res = $c->response;
-
-C< $c->{response} >のショートカット
 
 =head2 C<< $c->new_request(\%env) -> Object >>
 

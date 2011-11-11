@@ -10,11 +10,6 @@ use Test::More;
 my $t = TestApp::Web->new;
 my $res_class = 'Malts::Web::Response';
 
-subtest 'testing dont have response' => sub {
-    my $res = $t->response;
-    ok !$res;
-};
-
 subtest 'testing new response' => sub {
     my $res = $t->new_response();
     isa_ok $res, $res_class;
@@ -40,11 +35,6 @@ subtest 'testing create_response' => sub {
     isa_ok $res, $res_class;
     is $res->status, 200;
     is_deeply $res->body, ['ok'];
-
-    ok $t->response;
-    isa_ok $t->response, $res_class;
-    is $t->response->status, 200;
-    is_deeply $t->response->body, ['ok'];
 };
 
 done_testing;
