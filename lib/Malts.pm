@@ -1,5 +1,5 @@
 package Malts;
-use 5.008_001;
+use 5.10.1;
 use strict;
 use warnings;
 
