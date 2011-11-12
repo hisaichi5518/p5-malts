@@ -13,11 +13,13 @@ sub app_base_class { 'TestApp' }
 package main;
 use strict;
 use Test::More;
+use Scope::Container qw(start_scope_container);
 
 BEGIN {
     use_ok 'Malts::Plugin::ConfigLoader';
 }
 
+my $sc = start_scope_container;
 subtest 'testing config_loader' => sub {
     my $c = TestApp::Web->new;
     Malts::Plugin::ConfigLoader->init($c);

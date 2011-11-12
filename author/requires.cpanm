@@ -9,6 +9,7 @@ File::Spec
 Log::Minimal
 Plack::Middleware::Log::Minimal
 Router::Simple
+Scope::Container
 
 # Makefile.PL
 Module::Install

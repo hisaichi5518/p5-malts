@@ -7,6 +7,7 @@ use Encode     ();
 use File::Spec ();
 use Log::Minimal qw(debugf croakf);
 use Malts::Util ();
+use Scope::Container;
 
 our $VERSION = '0.01';
 
@@ -48,7 +49,10 @@ sub encoding {
 
 sub config {
     my $self = shift;
-    $self->{config} ||= {};
+    if (my $config = scope_container('config')) {
+        return $config;
+    }
+    scope_container(config => {});
 }
 
 sub plugin {
@@ -153,6 +157,8 @@ C<Malts::Util::encoding()>へのショートカット
 
 =head2 C<< $object->config -> HashRef >>
 
+L<Scope::Container>に保存された設定を返します。
+
 このメソッドは現在set・getができますが、将来的にはsetができなくなる可能性があります。
 
 設定を変更するのを設定ファイル以外で動的にするとバグの原因になるのでやめましょう。
@@ -164,8 +170,6 @@ C<Malts::Util::encoding()>へのショートカット
 
     # get
     $c->config->{name};
-
-設定を返します。
 
 C<Malts::Plugin::ConfigLoader>プラグインを使って、設定ファイルを読み込む事が可能です。
 

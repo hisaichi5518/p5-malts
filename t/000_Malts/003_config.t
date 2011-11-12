@@ -3,9 +3,10 @@ use strict;
 use Test::More;
 
 use Malts;
+use Scope::Container qw(start_scope_container);
 
 my $malts = Malts->new;
-
+my $sc = start_scope_container;
 {
     note 'testing get default config';
     my $config = $malts->config;
