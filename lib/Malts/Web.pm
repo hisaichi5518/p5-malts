@@ -45,7 +45,7 @@ sub to_app {
         $self->after_dispatch($res);
 
         unless ($res) {
-            croakf 'You must create a response. use $c->create_response(), $c->render() or $c->ok()!';
+            croakf 'You must create a response. use $c->create_response(), $c->render()!';
         }
         return $res->finalize;
     };
@@ -89,7 +89,7 @@ Malts::Web - 次世代 Web Application Framework
 
     sub startup {
         my $self = shift;
-        $self->ok('hello Malts world');
+        $self->create_response(200, [], 'hello Malts world');
     }
 
 =head1 METHODS
@@ -137,14 +137,6 @@ C< Malts::Web::Response >にインスタンス化を行います。
 アプリのコードリファレンスを返します。
 
 自動で I<html_content_type> に I<text/html; charset=UTF-8> がセットされますが、上書きする事も可能です。
-
-=head2 C<< $c->ok($decoed_html) -> Object >>
-
-    $res = $c->ok('<html>ok</html>'):
-
-=head2 C<< $c->not_found($decoed_html) -> Object >>
-
-    $res = $c->not_found('<html>404!</html>');
 
 =head2 C<< $c->render($template_path[, \%args]) -> Object >>
 

@@ -78,7 +78,7 @@ Malts - 次世代 Web Application Framework
 
     sub startup {
         my ($self) = @_;
-        $self->ok('hello world!');
+        $self->create_response(200, [], 'hello world!');
     }
 
     1;
