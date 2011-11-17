@@ -10,6 +10,7 @@ Log::Minimal
 Plack::Middleware::Log::Minimal
 Router::Simple
 Scope::Container
+Plack::Middleware::Scope::Container
 
 # Makefile.PL
 Module::Install
