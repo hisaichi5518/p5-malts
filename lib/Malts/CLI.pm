@@ -4,6 +4,7 @@ use warnings;
 
 use Malts::Util ();
 use Log::Minimal qw(debugf croakf);
+use namespace::clean;
 
 sub run {
     my ($class, $command, @args) = @_;

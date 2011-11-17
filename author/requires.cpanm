@@ -11,6 +11,7 @@ Plack::Middleware::Log::Minimal
 Router::Simple
 Scope::Container
 Plack::Middleware::Scope::Container
+namespace::clean
 
 # Makefile.PL
 Module::Install

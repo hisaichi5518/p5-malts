@@ -7,6 +7,7 @@ use Malts::Web::Response;
 use Plack::Util::Accessor qw(html_content_type);
 use Malts::Util ();
 use Log::Minimal qw(debugf croakf);
+use namespace::clean;
 
 sub request  { $_[0]->{request}  }
 

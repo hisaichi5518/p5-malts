@@ -37,6 +37,7 @@ requires 'Plack::Middleware::Log::Minimal';
 requires 'Router::Simple';
 requires 'Scope::Container';
 requires 'Plack::Middleware::Scope::Container';
+requires 'namespace::clean';
 
 test_requires 'Test::More' => '0.96';
 

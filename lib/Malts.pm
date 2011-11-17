@@ -3,11 +3,12 @@ use 5.10.1;
 use strict;
 use warnings;
 
-use Encode     ();
+use Encode ();
 use File::Spec ();
 use Log::Minimal qw(debugf croakf);
 use Malts::Util ();
-use Scope::Container;
+use Scope::Container qw(scope_container);
+use namespace::clean;
 
 our $VERSION = '0.01';
 
