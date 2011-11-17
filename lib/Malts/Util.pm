@@ -2,8 +2,9 @@ package Malts::Util;
 use strict;
 use warnings;
 use Plack::Util ();
-use constant DEBUG => (($ENV{PLACK_ENV} || 'development') eq 'development' ? 1 : 0);
 use Scope::Container qw(scope_container);
+use Log::Minimal qw(croakf);
+use constant DEBUG => (($ENV{PLACK_ENV} || 'development') eq 'development' ? 1 : 0);
 
 sub encoding {
     my ($encoding) = @_;
@@ -11,7 +12,7 @@ sub encoding {
     !$encoding && $enc && return $enc;
 
     $enc = Encode::find_encoding($encoding || 'utf8')
-        or die "encoding '$encoding' not found";
+        or croakf "encoding '$encoding' not found";
 
     scope_container(encoding => $enc);
 

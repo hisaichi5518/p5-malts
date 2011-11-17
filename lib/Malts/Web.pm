@@ -55,7 +55,7 @@ sub render {
     my $self = shift;
     my $status = shift;
     Malts::Util::DEBUG && debugf 'rendering template.';
-    die 'You must create a view.' unless $self->view;
+    $self->view or croakf 'You must create a view.';
 
     my $decoed_html = $self->view->render(@_);
     return $self->create_response(
