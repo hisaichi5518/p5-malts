@@ -4,10 +4,11 @@ use warnings;
 
 use Malts::Web::Request;
 use Malts::Web::Response;
-use Plack::Util::Accessor qw(html_content_type);
 use Malts::Util ();
 use Log::Minimal qw(debugf croakf);
 use namespace::clean;
+
+use Plack::Util::Accessor qw(html_content_type);
 
 sub request  { $_[0]->{request}  }
 
