@@ -3,38 +3,47 @@ use strict;
 use Test::More;
 
 use Malts;
+use Scope::Container qw(start_scope_container);
 
+my $sc = start_scope_container;
 my $malts = Malts->new;
 
 
-{
-    note 'testing default encoding';
+subtest 'testing default encoding' => sub {
     my $encoding = $malts->encoding;
     ok $encoding;
     isa_ok $encoding, 'Encode::utf8';
-}
-{
-    note 'testing shift-jis';
+};
+
+subtest 'testing shift-jis' => sub {
     my $encoding = $malts->encoding('shift-jis');
     ok $encoding;
     isa_ok $encoding, 'Encode::XS';
-}
-{
-    note 'testing euc-jp';
+};
+
+subtest 'testing euc-jp' => sub {
     my $encoding = $malts->encoding('euc-jp');
     ok $encoding;
     isa_ok $encoding, 'Encode::XS';
-}
-{
-    note 'testing default changes';
+};
+
+subtest 'testing default changes' => sub {
     my $encoding = $malts->encoding;
     ok $encoding;
     isa_ok $encoding, 'Encode::XS';
-}
-{
-    note 'testing error';
+};
+
+subtest 'testing error' => sub {
+    my $encoding = $malts->encoding;
+    ok $encoding;
+    isa_ok $encoding, 'Encode::XS';
+
     eval { $malts->encoding('hisaichi5518') };
     ok $@;
-}
+
+    $encoding = $malts->encoding;
+    ok $encoding;
+    isa_ok $encoding, 'Encode::XS';
+};
 
 done_testing;

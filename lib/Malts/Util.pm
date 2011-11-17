@@ -3,18 +3,18 @@ use strict;
 use warnings;
 use Plack::Util ();
 use constant DEBUG => (($ENV{PLACK_ENV} || 'development') eq 'development' ? 1 : 0);
+use Scope::Container qw(scope_container);
 
-{
-    my $_encoding;
-    sub encoding {
-        my ($encoding) = @_;
-        !$encoding && $_encoding && return $_encoding;
+sub encoding {
+    my ($encoding) = @_;
+    my $enc = scope_container('encoding');
+    !$encoding && $enc && return $enc;
 
-        $_encoding = Encode::find_encoding($encoding || 'utf8')
-            or die "encoding '$encoding' not found";
+    $enc = Encode::find_encoding($encoding || 'utf8')
+        or die "encoding '$encoding' not found";
 
-        return $_encoding;
-    }
+    scope_container(encoding => $enc);
+
 }
 
 1;
