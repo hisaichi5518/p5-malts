@@ -19,27 +19,33 @@ use Scope::Container qw(start_scope_container);
 
 my $sc = start_scope_container;
 subtest 'testing render' => sub {
-    my $res = render('ascii');
+    my $res = res(200, 'ascii');
     is_deeply $res->body, ['ascii'];
 };
 
 subtest 'testing encoded str' => sub {
-    my $res = render('日本語');
+    my $res = res(200, '日本語');
     is_deeply $res->body, [encode_utf8 '日本語'];
 };
 
 subtest 'testing content_type' => sub {
-    my $res = render('ok', html_content_type => 'text/html; charset=UTF-8');
+    my $res = res(200, 'ok', html_content_type => 'text/html; charset=UTF-8');
     is $res->headers->{'content-type'}, 'text/html; charset=UTF-8';
 };
 
-sub render {
+subtest 'testing status: 404' => sub {
+    res(404, 'not found');
+};
+
+sub res {
+    my $status = shift;
     my $text = shift;
     my $t = TestApp::Web->new(@_);
     $t->view_text($text);
-    my $res = $t->render('file');
+    my $res = $t->render($status, 'file');
     isa_ok $res, 'Malts::Web::Response', encode_utf8 "\$res(body: $text)";
     is $res->content_length, length($text), encode_utf8 "content_length == length($text)";
+    is $res->status, $status, "status: $status";
     return $res;
 }
 

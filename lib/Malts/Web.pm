@@ -53,12 +53,13 @@ sub to_app {
 
 sub render {
     my $self = shift;
+    my $status = shift;
     Malts::Util::DEBUG && debugf 'rendering template.';
     die 'You must create a view.' unless $self->view;
 
     my $decoed_html = $self->view->render(@_);
     return $self->create_response(
-        200,
+        $status,
         [
             'Content-Type'   => $self->html_content_type,
             'Content-Length' => length($decoed_html),
@@ -138,11 +139,16 @@ C< Malts::Web::Response >にインスタンス化を行います。
 
 自動で I<html_content_type> に I<text/html; charset=UTF-8> がセットされますが、上書きする事も可能です。
 
-=head2 C<< $c->render($template_path[, \%args]) -> Object >>
+=head2 C<< $c->render($status, $template_path[, \%args]) -> Object >>
 
-    $res = $c->render('root/index.tx', {foo => 'bar'});
+    $res = $c->render(200, 'root/index.tx', {foo => 'bar'});
 
-C< $c->render >を使用するには、C< $c->view >を指定している必要があります。
+C< $c->render() >を使用するには、C< $c->view() >を指定している必要があります。
+
+    sub view {
+        state $view = Text::Xslate->new(...);
+        return $view;
+    }
 
 =head2 C<< $c->after_dispatch($res) >>
 

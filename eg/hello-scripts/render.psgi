@@ -7,7 +7,7 @@ use Text::Xslate;
 
 sub dispatch {
     my $self = shift;
-    $self->render('index', {type => 'Xslate'});
+    $self->render(200, 'index', {type => 'Xslate'});
 }
 
 sub view {

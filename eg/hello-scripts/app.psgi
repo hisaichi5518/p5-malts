@@ -82,7 +82,7 @@ sub index {
     my ($self, $c) = @_;
     my $dice = HelloApp::Model::Dice->new(user => 'hisaichi');
     my $dice_num = $dice->shake;
-    $c->render('root/index.tx', {user => $dice->{user}, dice_num => $dice_num});
+    $c->render(200, 'root/index.tx', {user => $dice->{user}, dice_num => $dice_num});
 }
 
 =pod
