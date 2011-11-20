@@ -2,6 +2,8 @@ package Malts::Web::Request;
 use strict;
 use warnings;
 use parent 'Plack::Request';
+use Plack::Session;
+use Log::Minimal qw(croakf);
 
 sub args {
     my $self = shift;
@@ -16,6 +18,16 @@ sub parameters {
         my $body  = $self->body_parameters;
         Hash::MultiValue->new($query->flatten, $body->flatten, %{$self->args || {}});
     };
+}
+
+sub session {
+    my $self = shift;
+    for my $key (qw/psgix.session psgix.session.options/) {
+        croakf('Cant find $req->env->{%s}. you must use Plack::Middleware::Session.', $key)
+            if not exists $self->env->{$key};
+    }
+
+    $self->{session} ||= Plack::Session->new($self->env);
 }
 
 1;
@@ -53,6 +65,16 @@ C<$env->{'malts.routing_args'}>を返す。
 C<Plack::Request#parameters>とほぼ同じですが、L<Malts::Web::Request>特有のC<args>メソッドも含みます。
 
 L<Hash::MultiValue>のオブジェクトを返します。
+
+=head2 C<< $req->session() -> Object >>
+
+    $req->session();
+
+L<Plack::Session>のオブジェクトを返す。
+
+またC<$env->{'psgix.session'}>, C<$env->{'psgix.session.options'}>がないとエラーを吐く。
+
+これはL<Plack::Middleware::Session>を使用すれば避けられる。
 
 =head1 SEE ALSO
 
