@@ -12,23 +12,29 @@
 * なぜそうするかを明確にする
 
 ## TODO
+* Malts::*系
+- use Malts::Plugin::SecurityHeaders;
+- use Malts::Web::Request::OpenSocial;
+- $c->request->requestor; とか？まだふわふわしてる
+
+* App::malts(別dist)
+- $ malts init Foo Template
+- $ malts new Foo Template:tag
+- git initとか出来たら良い。
+
+* Malts::CLIの削除
+- 今はまだサポートする余裕ない
+
+## MEMO
 * Styleにはコーディング規約も含める
 * メソッドを生やすのはMalts::*
 - Methodとかめんどい。
 - Style同様に継承ではなく、Exporterを使う。
-* use Malts::Web::Form::Shakan;
-- $c->form; はあれば便利かなー。
+
 * $cにロジックを生やすのはイケてない。ただController向けに生やすのはいい気がする。
 - $cには出来るだけ生やさない。
 - RequestにあるべきものはRequestに突っ込む。
 - Web APIを叩くとかは全部モジュール+Modelでする。悩むならmodelに入れとけばいいんじゃないのか系。
 - Facebook, GitHubとかの認証はPlack::Middleware::OAuthを使う？ちょっと微妙なので優先度低。
+
 * StyleでのModelはMalts::Style::Hoge::Model::* に入れる。
-- use Malts::Plugin::CSDFDefeneder;
-- use Malts::Plugin::SecurityHeaders;
-- use Malts::Web::Request::OpenSocial;
-- $c->request->requestor; とか？まだふわふわしてる
-* App::malts(別dist)
-- $ malts init Foo Template
-- $ malts new Foo Template:tag
-- git initとか出来たら良い。
