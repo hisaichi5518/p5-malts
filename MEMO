@@ -32,5 +32,3 @@
 - $ malts init Foo Template
 - $ malts new Foo Template:tag
 - git initとか出来たら良い。
-* render_string
-* argsをparamにマージ
