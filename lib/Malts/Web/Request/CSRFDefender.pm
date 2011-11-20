@@ -1,9 +1,11 @@
 package Malts::Web::Request::CSRFDefender;
 use strict;
 use warnings;
+use Malts::Util ();
 
 our $SESSION_NAME = 'csrf_token';
 our $PARAM_NAME   = 'csrf_token';
+our $RANDOM_STRING_SIZE = 16;
 
 sub Malts::Web::Request::csrf_token {
     my $req = shift;
@@ -12,7 +14,7 @@ sub Malts::Web::Request::csrf_token {
         return $token;
     }
     else {
-        my $token = "";
+        my $token = _random_string($RANDOM_STRING_SIZE);
         $req->session->set($SESSION_NAME => $token);
         return $token;
     }
@@ -29,6 +31,16 @@ sub Malts::Web::Request::validate_csrf {
         }
     }
     return 1; # good
+}
+
+sub _random_string {
+    my $length = shift;
+    my @chars = ('A'..'Z', 'a'..'z', '0'..'9', '$', '!');
+    my $ret;
+    for (1..$length) {
+        $ret .= $chars[int rand @chars];
+    }
+    return $ret;
 }
 
 1;

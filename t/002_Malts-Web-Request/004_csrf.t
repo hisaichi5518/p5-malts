@@ -18,7 +18,7 @@ subtest 'return random string if can not get csrf_token' => sub {
         'psgix.session' => {},
         'psgix.session.options' => {},
     });
-    is $req->csrf_token, "";
+    is length($req->csrf_token), 16;
 };
 
 subtest 'testing session error' => sub {
@@ -71,6 +71,14 @@ subtest 'testing local var' => sub {
         'psgix.session.options' => {},
     });
     is $req->validate_csrf, 1;
+
+    local $Malts::Web::Request::CSRFDefender::RANDOM_STRING_SIZE = 32;
+    $req = Malts::Web::Request->new({
+        QUERY_STRING => 'name=hisaichi',
+        'psgix.session' => {},
+        'psgix.session.options' => {},
+    });
+    is length($req->csrf_token), 32;
 };
 
 done_testing;
