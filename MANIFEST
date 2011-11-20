@@ -42,6 +42,7 @@ t/001_Malts-Web/003_request.t
 t/001_Malts-Web/004_response.t
 t/001_Malts-Web/005_to_app.t
 t/001_Malts-Web/008_render.t
+t/001_Malts-Web/009_render_string.t
 t/001_Malts-Web/lib/TestApp/Web.pm
 t/002_Malts-Web-Request/000_load.t
 t/002_Malts-Web-Request/001_basic.t
