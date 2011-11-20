@@ -12,15 +12,11 @@ use namespace::clean;
 
 our $VERSION = '0.01';
 
-sub startup {}
-
 sub new {
     my $class = shift;
     my %args = @_ == 1 ? %{$_[0]} : @_;
     bless {%args}, $class;
 }
-
-sub app_base_class {}
 
 # copied Amon2::Util::base_dir
 sub app_dir {
@@ -64,6 +60,10 @@ sub plugin {
 
     $plugin->init($self, $opts);
 }
+
+# hooks
+sub app_base_class {}
+sub startup {}
 
 1;
 __END__

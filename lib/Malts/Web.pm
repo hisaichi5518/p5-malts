@@ -83,9 +83,10 @@ sub render_string {
     );
 }
 
+# hooks
+sub after_dispatch {}
 sub dispatch {}
 sub view {}
-sub after_dispatch {}
 
 1;
 __END__
