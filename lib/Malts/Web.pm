@@ -70,6 +70,20 @@ sub render {
     );
 }
 
+sub render_string {
+    my ($self, $status, $decoded_str) = @_;
+    Malts::Util::DEBUG && debugf "rendering string: $decoded_str";
+
+    return $self->create_response(
+        $status,
+        [
+            'Content-Type'   => $self->html_content_type,
+            'Content-Length' => length($decoded_str),
+        ],
+        [Malts::Util::encoding()->encode($decoded_str)]
+    );
+}
+
 sub dispatch {}
 sub view {}
 sub after_dispatch {}
@@ -151,6 +165,12 @@ C< $c->render() >を使用するには、C< $c->view() >を指定している必
         state $view = Text::Xslate->new(...);
         return $view;
     }
+
+=head2 C<< $c->render_string($status, $decoded_str) -> Object >>
+
+    $res = $c->render_string(200, "ok!");
+
+Responseオブジェクトを返します。
 
 =head2 C<< $c->after_dispatch($res) >>
 
