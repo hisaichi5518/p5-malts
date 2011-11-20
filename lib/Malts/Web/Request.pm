@@ -8,6 +8,16 @@ sub args {
     $self->env->{'malts.routing_args'};
 }
 
+sub parameters {
+    my $self = shift;
+
+    $self->env->{'malts.request.merged'} ||= do {
+        my $query = $self->query_parameters;
+        my $body  = $self->body_parameters;
+        Hash::MultiValue->new($query->flatten, $body->flatten, %{$self->args || {}});
+    };
+}
+
 1;
 __END__
 
@@ -35,6 +45,14 @@ L<Plack::Request>を継承している。
     $req->args;
 
 C<$env->{'malts.routing_args'}>を返す。
+
+=head2 C<< $req->parameters() -> Object >>
+
+    $req->parameters->{$key};
+
+C<Plack::Request#parameters>とほぼ同じですが、L<Malts::Web::Request>特有のC<args>メソッドも含みます。
+
+L<Hash::MultiValue>のオブジェクトを返します。
 
 =head1 SEE ALSO
 
