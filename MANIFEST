@@ -19,6 +19,7 @@ lib/Malts/Plugin/ConfigLoader.pm
 lib/Malts/Util.pm
 lib/Malts/Web.pm
 lib/Malts/Web/Request.pm
+lib/Malts/Web/Request/CSRFDefender.pm
 lib/Malts/Web/Response.pm
 lib/Malts/Web/Router/Simple/Declare.pm
 lib/Malts/Web/View/JSON.pm
@@ -47,6 +48,8 @@ t/001_Malts-Web/lib/TestApp/Web.pm
 t/002_Malts-Web-Request/000_load.t
 t/002_Malts-Web-Request/001_basic.t
 t/002_Malts-Web-Request/002_args.t
+t/002_Malts-Web-Request/003_session.t
+t/002_Malts-Web-Request/004_csrf.t
 t/003_Malts-Web-Response/000_load.t
 t/003_Malts-Web-Response/001_basic.t
 t/004_Malts-Web-Router-Simple-Declare/000_load.t
