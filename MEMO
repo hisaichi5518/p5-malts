@@ -13,9 +13,6 @@
 
 ## TODO
 * Malts::*系
-- use Malts::Plugin::SecurityHeaders;
-- use Malts::Web::Request::OpenSocial;
-- $c->request->requestor; とか？まだふわふわしてる
 
 * App::malts(別dist)
 - $ malts init Foo Template
