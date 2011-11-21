@@ -14,7 +14,6 @@ inc/Module/Install/Metadata.pm
 inc/Module/Install/Repository.pm
 inc/Module/Install/WriteAll.pm
 lib/Malts.pm
-lib/Malts/CLI.pm
 lib/Malts/Plugin/ConfigLoader.pm
 lib/Malts/Util.pm
 lib/Malts/Web.pm
@@ -60,10 +59,6 @@ t/005_Malts-Util/001_basic.t
 t/006_Malts-Plugin/000_config_loader.t
 t/006_Malts-Plugin/config/development.pl
 t/006_Malts-Plugin/config/test.pl
-t/007_Malts-CLI/000_load.t
-t/007_Malts-CLI/001_basic.t
-t/007_Malts-CLI/002_run.t
-t/007_Malts-CLI/lib/TestApp/CLI.pm
 t/008_Malts-Web-View-JSON/000_load.t
 t/008_Malts-Web-View-JSON/001_basic.t
 t/999_Malts-Apps/001_hello-scripts.t
