@@ -22,9 +22,6 @@
 - $ malts new Foo Template:tag
 - git initとか出来たら良い。
 
-* Malts::CLIの削除
-- 今はまだサポートする余裕ない
-
 ## MEMO
 * Styleにはコーディング規約も含める
 * メソッドを生やすのはMalts::*
