@@ -8,7 +8,6 @@ use Scope::Container qw(start_scope_container);
 my $sc = start_scope_container;
 my $malts = Malts->new;
 
-
 subtest 'testing default encoding' => sub {
     my $encoding = $malts->encoding;
     ok $encoding;
