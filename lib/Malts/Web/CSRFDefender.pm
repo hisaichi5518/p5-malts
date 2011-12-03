@@ -1,31 +1,40 @@
-package Malts::Web::Request::CSRFDefender;
+package Malts::Web::CSRFDefender;
 use strict;
 use warnings;
 use Malts::Util ();
+use Log::Minimal qw(debugf croakf);
+use Exporter 'import';
 
+our @EXPORT_OK = qw(csrf_token validate_csrf_token);
 our $SESSION_NAME = 'csrf_token';
 our $PARAM_NAME   = 'csrf_token';
 our $RANDOM_STRING_SIZE = 16;
 
-sub Malts::Web::Request::csrf_token {
-    my $req = shift;
+sub csrf_token {
+    my $c = shift;
+    my $req = $c->request or croakf 'Cannot find request object.';
 
     if (my $token = $req->session->get($SESSION_NAME)) {
+        Malts::Util::DEBUG && debugf 'get session: %s', $token;
         return $token;
     }
     else {
         my $token = _random_string($RANDOM_STRING_SIZE);
+
+        Malts::Util::DEBUG && debugf 'set session: %s', $token;
         $req->session->set($SESSION_NAME => $token);
         return $token;
     }
 }
 
-sub Malts::Web::Request::validate_csrf {
-    my $req = shift;
+sub validate_csrf_token {
+    my $c = shift;
+    my $req = $c->request or croakf 'Cannot find request object.';
 
     if ($req->method && $req->method eq 'POST') {
         my $param_token   = $req->param($PARAM_NAME);
         my $session_token = $req->session->get($SESSION_NAME);
+
         if (!$param_token || !$session_token || ($param_token ne $session_token)) {
             return 0; # bad
         }
@@ -50,33 +59,30 @@ __END__
 
 =head1 NAME
 
-Malts::Web::Request - Malts用のRequestクラス
+Malts::Web::CSRFDefender - Malts用のCSRF Defender
 
 =head1 SYNOPSIS
 
-    use Malts::Web::Request;
-    use Malts::Web::Request::CSRFDefender;
-    my $env = {
-        PATH_INFO => '/',
-        'psgix.session' => {csrf_token => 'hogehoge'},
-        'psgix.session.options' => {},
-    };
-    my $req = Malts::Web::Request->new($env);
-    $req->csrf_token; # hogehoge
+    package MyApp::CSRF::Web;
+    use Malts::Web::CSRFDefender qw(csrf_token validate_csrf_token);
+
+    sub startup {
+        my $c = shift;
+        unless ($c->validate_csrf_token) {
+            ...;
+        }
+        $c->csrf_token;
+    }
 
 =head1 DESCRIPTION
 
-L<Malts::Web::Request>拡張モジュールです。
-
 =head1 METHODS
 
-以下のメソッドをL<Malts::Web::Request>に生やします。
+=head2 C<< $c->csrf_token -> Str >>
 
-=head2 C<< $req->csrf_token -> Str >>
+    $c->csrf_token;
 
-    $req->csrf_token;
-
-=head2 C<< $req->validate_csrf() -> Bool >>
+=head2 C<< $c->validate_csrf_token() -> Bool >>
 
 =head1 BASE CODE
 
@@ -84,6 +90,6 @@ L<Amon2::Plugin::Web::CSRFDefender> by tokuhirom
 
 =head1 SEE ALSO
 
-L<Plack::Request>, L<Amon2::Plugin::Web::CSRFDefender>
+L<Amon2::Plugin::Web::CSRFDefender>
 
 =cut

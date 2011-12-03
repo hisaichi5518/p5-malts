@@ -1,84 +1,95 @@
 #!perl -w
+package MyApp::Web;
+use strict;
+use warnings;
+use parent qw(Malts Malts::Web);
+use Malts::Web::CSRFDefender qw(csrf_token validate_csrf_token);
+
+package main;
 use strict;
 use Test::More;
 
-use Malts::Web::Request;
-use Malts::Web::Request::CSRFDefender;
+sub request {
+    my $env = shift;
+    my $c = MyApp::Web->new;
+    $c->create_request($env);
+    return $c;
+}
 
 subtest 'testing get csrf_token' => sub {
-    my $req = Malts::Web::Request->new({
+    my $c = request({
         'psgix.session' => {csrf_token => 'hisaichi'},
         'psgix.session.options' => {},
     });
-    is $req->csrf_token, 'hisaichi';
+    is $c->csrf_token, 'hisaichi';
 };
 
 subtest 'return random string if can not get csrf_token' => sub {
-    my $req = Malts::Web::Request->new({
+    my $c = request({
         'psgix.session' => {},
         'psgix.session.options' => {},
     });
-    is length($req->csrf_token), 16;
+    is length($c->csrf_token), 16;
 };
 
 subtest 'testing session error' => sub {
-    my $req = Malts::Web::Request->new({});
-    eval { $req->csrf_token };
+    my $c = request({});
+    eval { $c->csrf_token };
     ok $@;
 };
 
 subtest 'testing validate_csrf' => sub {
-    my $req = Malts::Web::Request->new({
+    my $c = request({
         REQUEST_METHOD => 'POST',
         QUERY_STRING => 'csrf_token=hisaichi',
         'psgix.session' => {csrf_token => 'hisaichi'},
         'psgix.session.options' => {},
     });
-    is $req->validate_csrf, 1;
+    is $c->validate_csrf_token, 1;
 };
 
 subtest 'testing validate_csrf error' => sub {
-    my $req = Malts::Web::Request->new({
+    my $c = request({
         REQUEST_METHOD => 'POST',
         QUERY_STRING => 'csrf_token=hogehoge',
         'psgix.session' => {csrf_token => 'hisaichi'},
         'psgix.session.options' => {},
     });
-    is $req->validate_csrf, 0;
+    is $c->validate_csrf_token, 0;
 
-    $req = Malts::Web::Request->new({
+    $c = request({
         REQUEST_METHOD => 'POST',
         'psgix.session' => {csrf_token => 'hisaichi'},
         'psgix.session.options' => {},
     });
-    is $req->validate_csrf, 0;
+    is $c->validate_csrf_token, 0;
 
-    $req = Malts::Web::Request->new({
+    $c = request({
         REQUEST_METHOD => 'POST',
         QUERY_STRING => 'csrf_token=hogehoge',
         'psgix.session' => {},
         'psgix.session.options' => {},
     });
-    is $req->validate_csrf, 0;
+    is $c->validate_csrf_token, 0;
 };
 
 subtest 'testing local var' => sub {
-    local $Malts::Web::Request::CSRFDefender::SESSION_NAME = 'name';
-    local $Malts::Web::Request::CSRFDefender::PARAM_NAME = 'name';
-    my $req = Malts::Web::Request->new({
+    local $Malts::Web::CSRFDefender::SESSION_NAME = 'name';
+    local $Malts::Web::CSRFDefender::PARAM_NAME = 'name';
+    my $c = request({
         QUERY_STRING => 'name=hisaichi',
         'psgix.session' => {name => 'hisaichi'},
         'psgix.session.options' => {},
     });
-    is $req->validate_csrf, 1;
+    is $c->validate_csrf_token, 1;
 
-    local $Malts::Web::Request::CSRFDefender::RANDOM_STRING_SIZE = 32;
-    $req = Malts::Web::Request->new({
+    local $Malts::Web::CSRFDefender::RANDOM_STRING_SIZE = 32;
+    $c = request({
         QUERY_STRING => 'name=hisaichi',
         'psgix.session' => {},
         'psgix.session.options' => {},
     });
-    is length($req->csrf_token), 32;
+    is length($c->csrf_token), 32;
 };
 
 done_testing;
