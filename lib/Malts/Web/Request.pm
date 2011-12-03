@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use parent 'Plack::Request';
 use Plack::Session;
-use Log::Minimal qw(croakf);
+use Log::Minimal qw(croakff);
 
 sub args {
     my $self = shift;
@@ -23,7 +23,7 @@ sub parameters {
 sub session {
     my $self = shift;
     for my $key (qw/psgix.session psgix.session.options/) {
-        croakf('Cant find $req->env->{%s}. you must use Plack::Middleware::Session.', $key)
+        croakff('Cant find $req->env->{%s}. you must use Plack::Middleware::Session.', $key)
             if not exists $self->env->{$key};
     }
 

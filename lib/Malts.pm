@@ -5,7 +5,7 @@ use warnings;
 
 use Encode ();
 use File::Spec ();
-use Log::Minimal qw(debugf croakf);
+use Log::Minimal qw(debugf croakff);
 use Malts::Util ();
 use Scope::Container qw(scope_container);
 use namespace::clean;
@@ -20,7 +20,7 @@ sub new {
 
 # copied Amon2::Util::base_dir
 sub app_dir {
-    my $path = $_[0]->app_base_class or croakf 'You MUST set MyApp#app_base_class. see Malts#app_base_class document.';
+    my $path = $_[0]->app_base_class or croakff 'You MUST set MyApp#app_base_class. see Malts#app_base_class document.';
     $path =~ s!::!/!g;
 
     if (my $libpath = $INC{"$path.pm"}) {
@@ -54,7 +54,7 @@ sub config {
 
 sub plugin {
     my ($self, $name, $opts) = @_;
-    croakf 'Cannot find plugin name.' if not $name;
+    croakff 'Cannot find plugin name.' if not $name;
     my $plugin = Plack::Util::load_class($name, 'Malts::Plugin');
     Malts::Util::DEBUG && debugf "load plugin => $plugin->init";
 

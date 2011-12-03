@@ -2,7 +2,7 @@ package Malts::Web::CSRFDefender;
 use strict;
 use warnings;
 use Malts::Util ();
-use Log::Minimal qw(debugf croakf);
+use Log::Minimal qw(debugf croakff);
 use Exporter 'import';
 
 our @EXPORT_OK = qw(csrf_token validate_csrf_token);
@@ -12,7 +12,7 @@ our $RANDOM_STRING_SIZE = 16;
 
 sub csrf_token {
     my $c = shift;
-    my $req = $c->request or croakf 'Cannot find request object.';
+    my $req = $c->request or croakff 'Cannot find request object.';
 
     if (my $token = $req->session->get($SESSION_NAME)) {
         Malts::Util::DEBUG && debugf 'get session: %s', $token;
@@ -29,7 +29,7 @@ sub csrf_token {
 
 sub validate_csrf_token {
     my $c = shift;
-    my $req = $c->request or croakf 'Cannot find request object.';
+    my $req = $c->request or croakff 'Cannot find request object.';
 
     if ($req->method && $req->method eq 'POST') {
         my $param_token   = $req->param($PARAM_NAME);

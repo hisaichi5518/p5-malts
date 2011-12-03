@@ -5,7 +5,7 @@ use warnings;
 use Malts::Web::Request;
 use Malts::Web::Response;
 use Malts::Util ();
-use Log::Minimal qw(debugf croakf);
+use Log::Minimal qw(debugf croakff);
 use namespace::clean;
 
 use Plack::Util::Accessor qw(html_content_type);
@@ -48,7 +48,7 @@ sub to_app {
         $self->after_dispatch($res);
 
         unless ($res) {
-            croakf 'You must create a response. use $c->create_response(), $c->render()!';
+            croakff 'You must create a response. use $c->create_response(), $c->render()!';
         }
         return $res->finalize;
     };
@@ -57,7 +57,7 @@ sub to_app {
 sub render {
     my ($self, $status, $template_path, $opts) = @_;
     Malts::Util::DEBUG && debugf "rendering template: $template_path";
-    $self->view or croakf 'You must create a view.';
+    $self->view or croakff 'You must create a view.';
 
     my $decoed_html = $self->view->render($template_path, $opts);
     return $self->create_response(

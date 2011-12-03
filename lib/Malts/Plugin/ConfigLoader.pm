@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 use File::Spec ();
-use Log::Minimal qw(croakf);
+use Log::Minimal qw(croakff);
 use Scope::Container qw(scope_container);
 
 sub init {
@@ -11,7 +11,7 @@ sub init {
 
     my $mode = $opts->{mode} || $ENV{PLACK_ENV} || 'development';
     my $fname = File::Spec->catfile($c->app_dir, 'config', "$mode.pl");
-    my $config = do $fname or croakf "Cannot load configuration file: $fname";
+    my $config = do $fname or croakff "Cannot load configuration file: $fname";
     scope_container(config => $config);
 }
 

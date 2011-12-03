@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use 5.10.1;
 
-use Log::Minimal qw(debugf croakf);
+use Log::Minimal qw(debugf croakff);
 use Malts::Util ();
 use Router::Simple 0.03;
 use Exporter 'import';
@@ -31,7 +31,7 @@ sub dispatch {
     my $controller = $args->{controller};
     my $namespace  = ref($c).'::Controller';
 
-    croakf "path matched route! but can't find Controller or Action!"
+    croakff "path matched route! but can't find Controller or Action!"
         if !$action || !$controller;
 
     $controller = Plack::Util::load_class($controller, $namespace);

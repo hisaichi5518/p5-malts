@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use Plack::Util ();
 use Scope::Container qw(scope_container);
-use Log::Minimal qw(croakf);
+use Log::Minimal qw(croakff);
 use Encode ();
 use constant DEBUG => (($ENV{PLACK_ENV} || 'development') eq 'development' ? 1 : 0);
 
@@ -13,7 +13,7 @@ sub encoding {
     !$encoding && $enc && return $enc;
 
     $enc = Encode::find_encoding($encoding || 'utf8')
-        or croakf "encoding '$encoding' not found";
+        or croakff "encoding '$encoding' not found";
 
     scope_container(encoding => $enc);
 }
