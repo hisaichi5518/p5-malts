@@ -20,7 +20,7 @@ sub new {
 
 # copied Amon2::Util::base_dir
 sub app_dir {
-    my $path = $_[0]->app_base_class or croakf 'You MUST set app_base_class. see Malts#app_base_class document.';
+    my $path = $_[0]->app_base_class or croakf 'You MUST set MyApp#app_base_class. see Malts#app_base_class document.';
     $path =~ s!::!/!g;
 
     if (my $libpath = $INC{"$path.pm"}) {
