@@ -54,8 +54,8 @@ sub config {
 
 sub plugin {
     my ($self, $name, $opts) = @_;
+    croakf 'Cannot find plugin name.' if not $name;
     my $plugin = Plack::Util::load_class($name, 'Malts::Plugin');
-    croakf 'Cannot find $plugin' if not defined $plugin;
     Malts::Util::DEBUG && debugf "load plugin => $plugin->init";
 
     $plugin->init($self, $opts);
