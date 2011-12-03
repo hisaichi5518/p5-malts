@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use 5.10.1;
 
-use Log::Minimal qw(debugf croakff);
+use Log::Minimal qw(debugff croakff);
 use Malts::Util ();
 use Router::Simple 0.03;
 use Exporter 'import';
@@ -24,7 +24,7 @@ sub dispatch {
     my ($class, $c) = @_;
     return unless my $args = $_ROUTER->match($c->request->env);
 
-    Malts::Util::DEBUG && debugf('match route! => %s', $args);
+    Malts::Util::DEBUG && debugff('match route! => %s', $args);
 
     $c->request->env->{'malts.routing_args'} = $args;
     my $action     = $args->{action};
@@ -36,7 +36,7 @@ sub dispatch {
 
     $controller = Plack::Util::load_class($controller, $namespace);
 
-    Malts::Util::DEBUG && debugf "Dispatching $controller->$action!";
+    Malts::Util::DEBUG && debugff "Dispatching $controller->$action!";
     return $controller->$action($c);
 }
 
