@@ -11,8 +11,8 @@ use Test::More;
 
 sub request {
     my $env = shift;
-    my $c = MyApp::Web->new;
-    $c->create_request($env);
+    my $c = new_ok('MyApp::Web');
+    ok $c->create_request($env);
     return $c;
 }
 
