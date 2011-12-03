@@ -17,4 +17,11 @@ subtest 'testing html_content_type have string' => sub {
     is $t->html_content_type, 'text/html; charset=UTF-8';
 };
 
+subtest 'set html_content_type' => sub {
+    my $t = TestApp::Web->new(html_content_type => 'text/html; charset=UTF-8');
+    is $t->html_content_type, 'text/html; charset=UTF-8';
+    is $t->html_content_type('hoge'), 'hoge';
+    is $t->html_content_type, 'hoge';
+};
+
 done_testing;
