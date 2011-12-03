@@ -32,6 +32,9 @@ subtest 'testing create request' => sub {
 };
 
 subtest 'testing return error if not defined $env' => sub {
+    eval { $t->new_request() };
+    ok $@;
+
     eval { $t->create_request() };
     ok $@;
 };
