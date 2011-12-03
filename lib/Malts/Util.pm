@@ -4,6 +4,7 @@ use warnings;
 use Plack::Util ();
 use Scope::Container qw(scope_container);
 use Log::Minimal qw(croakf);
+use Encode ();
 use constant DEBUG => (($ENV{PLACK_ENV} || 'development') eq 'development' ? 1 : 0);
 
 sub encoding {
@@ -15,7 +16,6 @@ sub encoding {
         or croakf "encoding '$encoding' not found";
 
     scope_container(encoding => $enc);
-
 }
 
 1;
