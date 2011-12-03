@@ -41,12 +41,6 @@ sub is_200 {
     is_deeply $psgi_app->[2], ['index!'], $message;
 }
 
-sub is_error {
-    my $env = shift;
-    eval{ psgi_app($env) };
-    ok $@, error_message($env);
-}
-
 sub psgi_app {
     my $env = shift;
     my $t = TestApp::Web->to_app;
