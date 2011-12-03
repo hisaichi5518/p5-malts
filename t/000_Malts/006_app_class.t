@@ -1,43 +1,47 @@
 #!perl -w
-package TestApp::Web;
+package TestApp;
 use strict;
 use warnings;
 use parent qw(Malts);
 use File::Spec ();
 
 # HACK for Malts::app_dir
-$INC{'TestApp/Web.pm'} = File::Spec->rel2abs('./lib/TestApp');
+$INC{'TestApp.pm'} = File::Spec->rel2abs('./lib/TestApp.pm');
 
 sub app_base_class { 'TestApp' }
 
-package TestApp1::Web;
+package TestApp1;
 use strict;
 use warnings;
-use parent -norequire, 'TestApp::Web';
+use parent qw(Malts);
+
+sub app_base_class { 'TestApp1' }
 
 package main;
 use strict;
 use Test::More;
-
 use Malts;
 
-subtest 'testing app_base_class' => sub {
+subtest 'testing Malts#app_base_class' => sub {
     my $c = Malts->new;
     is $c->app_base_class, undef;
 };
 
-subtest 'testing app_base_class is TestApp' => sub {
-    my $c = TestApp::Web->new;
+subtest 'testing MyApp#app_base_class ' => sub {
+    my $c = TestApp->new;
     is $c->app_base_class, 'TestApp';
+
+    $c = TestApp1->new;
+    is $c->app_base_class, 'TestApp1';
 };
 
-subtest 'testing app_dir' => sub {
-    my $c = TestApp::Web->new;
+subtest 'testing TestApp#app_dir' => sub {
+    my $c = TestApp->new;
     is $c->app_dir, test_file_dir();
 };
 
 subtest 'testing app_dir (if not defined $INC{module_name})' => sub {
-    my $c = TestApp1::Web->new;
+    my $c = TestApp1->new;
     is $c->app_dir, test_file_dir();
 };
 
