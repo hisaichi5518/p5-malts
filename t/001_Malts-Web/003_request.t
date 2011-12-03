@@ -13,6 +13,9 @@ my $req_class = 'Malts::Web::Request';
 subtest 'testing dont have request'=> sub {
     my $req = $t->request;
     ok !$req;
+
+    $req = $t->req;
+    ok !$req;
 };
 
 subtest 'testing new_request' => sub {

@@ -10,7 +10,8 @@ use namespace::clean;
 
 use Plack::Util::Accessor qw(html_content_type);
 
-sub request  { $_[0]->{request}  }
+sub request { $_[0]->{request}  }
+sub req { $_[0]->{request} }
 
 sub new_request {
     return Malts::Web::Request->new($_[1]);
@@ -128,6 +129,12 @@ Malts::Web - 次世代 Web Application Framework
     my $req = $c->request;
 
 C< $c->{request} >のショートカット
+
+=head2 C<< $c->req -> Object >>
+
+    $c->req;
+
+C<$c->request>のショートカット
 
 =head2 C<< $c->new_request(\%env) -> Object >>
 
