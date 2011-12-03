@@ -12,6 +12,7 @@ subtest '$req isa Malts::Web::Request and Plack::Request' => sub {
 subtest '$env is required' => sub {
     eval { Malts::Web::Request->new };
     ok $@;
+    like $@, qr/\$env is required/;
 };
 
 done_testing;

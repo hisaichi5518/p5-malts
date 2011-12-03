@@ -29,6 +29,7 @@ subtest 'error => utf8' => sub {
     my $sc = start_scope_container;
     eval { Malts::Util::encoding('hisaichi5518') };
     ok $@;
+    like $@, qr/encoding 'hisaichi5518' not found/;
 
     my $enc = Malts::Util::encoding();
     ok $enc;
@@ -43,6 +44,7 @@ subtest 'shift-jis => error => shift-jis' => sub {
 
     eval { Malts::Util::encoding('hisaichi5518') };
     ok $@;
+    like $@, qr/encoding 'hisaichi5518' not found/;
 
     $enc = Malts::Util::encoding();
     ok $enc;

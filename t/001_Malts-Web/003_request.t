@@ -34,9 +34,11 @@ subtest 'testing create request' => sub {
 subtest 'testing return error if not defined $env' => sub {
     eval { $t->new_request() };
     ok $@;
+    like $@, qr/\$env is required/;
 
     eval { $t->create_request() };
     ok $@;
+    like $@, qr/\$env is required/;
 };
 
 done_testing;

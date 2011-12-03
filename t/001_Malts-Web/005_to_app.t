@@ -42,6 +42,7 @@ subtest '$env is required' => sub {
     my $app = TestApp::Web->to_app;
     eval{ $app->() };
     ok $@;
+    like $@, qr/\$env is required/;
 };
 
 subtest 'no response' => sub {

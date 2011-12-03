@@ -35,6 +35,7 @@ subtest 'testing error' => sub {
     my $c = Malts->new;
     eval{ $c->plugin };
     ok $@;
+    like $@, qr/Cannot find plugin name/;
 };
 
 done_testing;
