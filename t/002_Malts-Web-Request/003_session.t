@@ -12,8 +12,16 @@ subtest 'testing session' => sub {
     is $req->session->get('name'), 'hisaichi';
 };
 
-subtest 'testing session error' => sub {
+subtest 'session error' => sub {
     my $req = Malts::Web::Request->new({});
+    eval { $req->session };
+    ok $@;
+
+    $req = Malts::Web::Request->new({'psgix.session' => { name => 'hisaichi' }});
+    eval { $req->session };
+    ok $@;
+
+    $req = Malts::Web::Request->new({'psgix.session.options' => {}});
     eval { $req->session };
     ok $@;
 };
