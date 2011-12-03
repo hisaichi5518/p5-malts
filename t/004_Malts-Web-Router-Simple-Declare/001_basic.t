@@ -12,9 +12,10 @@ subtest 'testing router' => sub {
 };
 
 subtest 'testing dispatch. return Status: 200' => sub {
-    my $psgi_app = psgi_app({PATH_INFO => '/', REQUEST_METHOD => 'GET'});
-    is $psgi_app->[0], 200;
-    is_deeply $psgi_app->[2], ['index!'];
+    is_200({PATH_INFO => '/get', REQUEST_METHOD => 'GET'});
+    is_200({PATH_INFO => '/post', REQUEST_METHOD => 'POST'});
+    is_200({PATH_INFO => '/put', REQUEST_METHOD => 'PUT'});
+    is_200({PATH_INFO => '/del', REQUEST_METHOD => 'DELETE'});
 };
 
 subtest 'testing dispatch. return Status: 404' => sub {
@@ -30,6 +31,14 @@ sub is_404 {
     my $message  = error_message($env);
     is $psgi_app->[0], 404, $message;
     is_deeply $psgi_app->[2], ['404 Not Found!'], $message;
+}
+
+sub is_200 {
+    my $env = shift;
+    my $psgi_app = psgi_app($env);
+    my $message  = error_message($env);
+    is $psgi_app->[0], 200, $message;
+    is_deeply $psgi_app->[2], ['index!'], $message;
 }
 
 sub is_error {

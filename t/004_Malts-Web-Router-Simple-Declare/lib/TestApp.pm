@@ -14,8 +14,11 @@ sub dispatch {
 package TestApp::Web::Dispatcher;
 use Malts::Web::Router::Simple::Declare;
 
-get '/' => 'Root#index';
-get '/500' => {controller => 'Root', action => 'action_500'};
+get  '/get' => 'Root#index';
+post '/post' => 'Root#index';
+put  '/put' => 'Root#index';
+del  '/del' => 'Root#index';
+get  '/500' => {controller => 'Root', action => 'action_500'};
 
 package TestApp::Web::Controller::Root;
 $INC{'TestApp/Web/Controller/Root.pm'} = __FILE__;
