@@ -3,6 +3,7 @@ use strict;
 use warnings;
 
 package MyApp::Web;
+use utf8;
 use parent qw(Malts Malts::Web);
 use Malts::Web::View::JSON qw(render_json);
 
@@ -12,19 +13,27 @@ sub dispatch {
     if ($path_info eq '/') {
         return $c->render_json(200, {user => 'hisaichi5518'});
     }
+    elsif ($path_info eq '/utf8') {
+        return $c->render_json(200, {user => 'ひさいち'});
+    }
     else {
         return $c->render_json(404, {err => 'not found!'});
     }
 }
 
 package main;
+use utf8;
 use Test::More;
 use Scope::Container qw(start_scope_container);
+
 my $sc = start_scope_container();
 
 subtest 'testing render_json' => sub {
     my $psgi = psgi_app({PATH_INFO => '/'});
     is_deeply $psgi->[2], ['{"user":"hisaichi5518"}'];
+
+    $psgi = psgi_app({PATH_INFO => '/utf8'});
+    is_deeply $psgi->[2], ['{"user":"\u3072\u3055\u3044\u3061"}']; # ひさいち
 
     $psgi = psgi_app({PATH_INFO => '/404'});
     is_deeply $psgi->[2], ['{"err":"not found!"}'];
