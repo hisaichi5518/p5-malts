@@ -4,7 +4,7 @@ use warnings;
 
 use JSON 2 qw/encode_json/;
 use Exporter 'import';
-our @EXPORT_OK = qw(render_json);
+our @EXPORT = qw(render_json);
 
 my $JSON   = JSON->new->ascii(1);
 my %ESCAPE = (

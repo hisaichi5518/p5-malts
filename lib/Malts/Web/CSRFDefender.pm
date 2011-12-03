@@ -5,7 +5,7 @@ use Malts::Util ();
 use Log::Minimal qw(debugff croakff);
 use Exporter 'import';
 
-our @EXPORT_OK = qw(csrf_token validate_csrf_token);
+our @EXPORT = qw(csrf_token validate_csrf_token);
 our $SESSION_NAME = 'csrf_token';
 our $PARAM_NAME   = 'csrf_token';
 our $RANDOM_STRING_SIZE = 16;
