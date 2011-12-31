@@ -115,7 +115,7 @@ Malts::Web - 次世代 Web Application Framework
 
 =head1 METHODS
 
-以下のメソッドは、 L<Malts> が継承されているクラスで使用される事が前提になっています。
+以下のメソッドは、 L<Malts> (または L<Malts> が継承されたクラス)が継承されているクラスで使用される事が前提になっています。
 
 =head2 C<< $c->html_content_type -> Str >>
 
