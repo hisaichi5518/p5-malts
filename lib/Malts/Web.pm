@@ -19,7 +19,7 @@ sub new_request {
 
 sub create_request {
     my ($self, $env) = @_;
-    $self->{request} = $self->new_request($env);
+    $self->{request} = Malts::Web::Request->new($env);
 
     return $self->{request};
 }
