@@ -25,6 +25,14 @@ subtest 'testing create request' => sub {
     isa_ok $t->request, $req_class;
 };
 
+subtest 'args, param shortcut' => sub {
+    my $req = $t->create_request({PATH_INFO => '/', QUERY_STRING => "foo=bar&foo=baz"});
+    is_deeply $t->args, undef;
+    is $t->param('foo'), "baz";
+    is_deeply [$t->param('foo')], [qw(bar baz)];
+    is_deeply [$t->param], ['foo'];
+};
+
 subtest 'testing return error if not defined $env' => sub {
     eval { $t->create_request() };
     ok $@;

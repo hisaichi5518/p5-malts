@@ -85,6 +85,13 @@ sub after_dispatch {}
 sub dispatch {}
 sub view {}
 
+# shortcut
+sub args { shift->request->args }
+sub param {
+    my $self = shift;
+    $self->request->param(@_);
+}
+
 1;
 __END__
 
@@ -193,6 +200,14 @@ C<dispatch>は必ずResponseオブジェクトを返さなければなりませ�
         my $c = shift;
         MyApp::Web::Dispatcher->dispatch($c) or $c->create_response(404, [], ['ERROR!']);
     }
+
+=head2 C<< $c->param([$param_name]) -> ArrayRef or Str >>
+
+L<Plack::Request>のparamメソッドへのショートカットです。
+
+=head2 C<< $c->args -> HashRef >>
+
+L<Malts::Web::Request>のargsメソッドへのショートカットです。
 
 =head1 SEE ALSO
 
