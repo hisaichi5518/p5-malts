@@ -11,6 +11,7 @@ Makefile*
 *blib
 META.yml
 MYMETA.yml
+MYMETA.json
 inc/
 *.out
 *.bak
