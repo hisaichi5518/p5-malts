@@ -38,6 +38,7 @@ requires 'Router::Simple';
 requires 'Scope::Container';
 requires 'Plack::Middleware::Scope::Container';
 requires 'namespace::clean';
+requires 'Plack::Session';
 
 test_requires 'Test::More' => '0.96';
 

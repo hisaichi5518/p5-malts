@@ -12,6 +12,7 @@ Router::Simple
 Scope::Container
 Plack::Middleware::Scope::Container
 namespace::clean
+Plack::Session
 
 # Makefile.PL
 Module::Install
