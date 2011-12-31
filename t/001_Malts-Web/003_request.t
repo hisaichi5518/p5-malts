@@ -27,10 +27,13 @@ subtest 'testing create request' => sub {
 
 subtest 'args, param shortcut' => sub {
     my $req = $t->create_request({PATH_INFO => '/', QUERY_STRING => "foo=bar&foo=baz"});
-    is_deeply $t->args, undef;
+    ok !$t->args;
+    $req->env->{'malts.routing_args'} = {name => 'hisaichi5518'};
+    is_deeply $t->args, {name => 'hisaichi5518'};
+
     is $t->param('foo'), "baz";
     is_deeply [$t->param('foo')], [qw(bar baz)];
-    is_deeply [$t->param], ['foo'];
+    is_deeply [$t->param], [qw(name foo)];
 };
 
 subtest 'testing return error if not defined $env' => sub {
