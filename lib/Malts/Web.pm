@@ -13,10 +13,6 @@ use Plack::Util::Accessor qw(html_content_type);
 sub request { $_[0]->{request}  }
 sub req { $_[0]->{request} }
 
-sub new_request {
-    return Malts::Web::Request->new($_[1]);
-}
-
 sub create_request {
     my ($self, $env) = @_;
     $self->{request} = Malts::Web::Request->new($env);
@@ -135,12 +131,6 @@ C< $c->{request} >のショートカット
     $c->req;
 
 C<$c->request>のショートカット
-
-=head2 C<< $c->new_request(\%env) -> Object >>
-
-    $req = $c->new_request({PATH_INFO => '/'});
-
-C< Malts::Web::Request >のインスタンス化を行います。
 
 =head2 C<< $c->create_request(\%env) -> Object >>
 

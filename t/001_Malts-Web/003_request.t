@@ -18,12 +18,6 @@ subtest 'testing dont have request'=> sub {
     ok !$req;
 };
 
-subtest 'testing new_request' => sub {
-    my $req = $t->new_request({ PATH_INFO => '/' });
-    isa_ok $req, $req_class;
-    ok !$t->request;
-};
-
 subtest 'testing create request' => sub {
     my $req = $t->create_request({PATH_INFO => '/'});
     isa_ok $req, $req_class;
@@ -32,10 +26,6 @@ subtest 'testing create request' => sub {
 };
 
 subtest 'testing return error if not defined $env' => sub {
-    eval { $t->new_request() };
-    ok $@;
-    like $@, qr/\$env is required/;
-
     eval { $t->create_request() };
     ok $@;
     like $@, qr/\$env is required/;
