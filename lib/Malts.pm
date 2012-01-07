@@ -8,7 +8,6 @@ use File::Spec ();
 use Log::Minimal qw(debugff croakff);
 use Malts::Util ();
 use Scope::Container qw(scope_container);
-use namespace::clean;
 
 our $VERSION = '0.01';
 

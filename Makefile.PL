@@ -27,8 +27,6 @@ all_from 'lib/Malts.pm';
 
 requires 'Encode';
 requires 'Plack';
-requires 'Data::Util';
-requires 'Class::Method::Modifiers::Fast';
 requires 'parent';
 requires 'Text::Xslate' => 1.4001;
 requires 'File::Spec';
@@ -37,7 +35,6 @@ requires 'Plack::Middleware::Log::Minimal';
 requires 'Router::Simple';
 requires 'Scope::Container';
 requires 'Plack::Middleware::Scope::Container';
-requires 'namespace::clean';
 requires 'Plack::Session';
 
 test_requires 'Test::More' => '0.96';

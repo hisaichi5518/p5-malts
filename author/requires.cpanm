@@ -1,8 +1,6 @@
 # for Malts
 Encode
 Plack
-Data::Util
-Class::Method::Modifiers::Fast
 parent
 Text::Xslate
 File::Spec
@@ -11,7 +9,6 @@ Plack::Middleware::Log::Minimal
 Router::Simple
 Scope::Container
 Plack::Middleware::Scope::Container
-namespace::clean
 Plack::Session
 
 # Makefile.PL

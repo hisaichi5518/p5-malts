@@ -38,7 +38,6 @@ package HelloApp::Web;
 use parent -norequire, 'HelloApp';
 use parent 'Malts::Web';
 use Text::Xslate;
-use Class::Method::Modifiers::Fast;
 
 sub dispatch {
     my $self = shift;
