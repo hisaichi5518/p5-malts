@@ -5,7 +5,7 @@ use warnings;
 use Malts::Web::Request;
 use Malts::Web::Response;
 use Malts::Util ();
-use Log::Minimal qw(debugff croakff);
+use Log::Minimal qw(debugf croakff);
 use Plack::Util::Accessor qw(html_content_type);
 
 sub request { $_[0]->{request}  }
@@ -36,7 +36,7 @@ sub to_app {
         );
         $self->create_request($env);
 
-        Malts::Util::DEBUG && debugff "do $class->startup!";
+        Malts::Util::DEBUG && debugf "do $class->startup!";
         $self->startup;
         my $res = $self->dispatch;
         $self->after_dispatch($res);
@@ -50,7 +50,7 @@ sub to_app {
 
 sub render {
     my ($self, $status, $template_path, $opts) = @_;
-    Malts::Util::DEBUG && debugff "rendering template: $template_path";
+    Malts::Util::DEBUG && debugf "rendering template: $template_path";
     $self->view or croakff 'You must create a view.';
 
     my $decoed_html = $self->view->render($template_path, $opts);
@@ -66,7 +66,7 @@ sub render {
 
 sub render_string {
     my ($self, $status, $decoded_str) = @_;
-    Malts::Util::DEBUG && debugff "rendering string: $decoded_str";
+    Malts::Util::DEBUG && debugf "rendering string: $decoded_str";
 
     return $self->create_response(
         $status,

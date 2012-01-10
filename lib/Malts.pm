@@ -5,7 +5,7 @@ use warnings;
 
 use Encode ();
 use File::Spec ();
-use Log::Minimal qw(debugff croakff);
+use Log::Minimal qw(debugf croakff);
 use Malts::Util ();
 use Scope::Container qw(scope_container);
 
@@ -55,7 +55,7 @@ sub plugin {
     my ($self, $name, $opts) = @_;
     croakff 'Cannot find plugin name.' if not $name;
     my $plugin = Plack::Util::load_class($name, 'Malts::Plugin');
-    Malts::Util::DEBUG && debugff "load plugin => $plugin->init";
+    Malts::Util::DEBUG && debugf "load plugin => $plugin->init";
 
     $plugin->init($self, $opts);
 }
