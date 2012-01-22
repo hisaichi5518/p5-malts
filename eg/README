@@ -1,0 +1,21 @@
+.
+├── README - このファイル
+├── hello-scripts    - Maltsを一枚スクリプトで説明します。
+│   ├── app.psgi    - 実際のアプリっぽい感じで説明します。
+│   ├── hello.psgi  - とりあえず動かします。
+│   ├── log.psgi    - ログの説明をします。
+│   ├── render.psgi - renderについて説明します。
+│   └── routes.psgi - ルーティングについて説明します。
+│
+└── myapp - eg/hello-scripts/app.psgiをファイルを分けた例
+    ├── app.psgi
+    └── lib
+        ├── HelloApp
+        │   ├── Model
+        │   │   └── Dice.pm
+        │   ├── Web
+        │   │   ├── Controller
+        │   │   │   └── Root.pm
+        │   │   └── Dispatcher.pm
+        │   └── Web.pm
+        └── HelloApp.pm
