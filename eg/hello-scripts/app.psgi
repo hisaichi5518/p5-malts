@@ -1,5 +1,6 @@
 use strict;
 use warnings;
+use 5.10.1;
 
 package HelloApp;
 use parent 'Malts';
@@ -11,14 +12,17 @@ sub startup {
 
 =pod
 
-HelloApp::Webが、Maltsを継承しているのであれば、今回は作成する必要はありませんが、
-CLIスクリプトを作成するときに便利なので、作成した方がよいでしょう。
+HelloApp::Webが、Maltsを継承している場合は作成する必要はないが、
+CLIスクリプトを作成するときに便利なので、作成した方がよい。
 
 =cut
 
 package HelloApp::Model::Dice;
 
-sub new {bless {}, shift}
+sub new {
+    my ($class, %args) = @_;
+    bless \%args, $class;
+}
 
 sub shake {
     return int(rand(5)) + 1;
@@ -26,11 +30,11 @@ sub shake {
 
 =pod
 
-Modelにはロジックを書きます。
+Modelにはロジックを書く。ロジックはどれだけ細かくてもModelに書くべき。
 
-どれだけ細かくてもModelに書くべきです。
+メリットとして、テストがしやすい・変更がしやすいなどがあげられる。
 
-メリットとして、テストがしやすい・変更がしやすいなどがあります。
+またModelはDBに関するものだけではなく、Web APIやその他色々もModelに書く。
 
 =cut
 
@@ -41,24 +45,36 @@ use Text::Xslate;
 
 sub dispatch {
     my $self = shift;
-    HelloApp::Web::Dispatcher->dispatch($self) or return $self->create_response(404, [], ['Not Found!']);
-};
+    HelloApp::Web::Dispatcher->dispatch($self) or return $self->res_404;
+}
 
 sub view {
-    Text::Xslate->new(
-        path => {'root/index.tx' => '<: $user :> DICE: <: $dice_num :>'}
+    state $view = Text::Xslate->new(
+        path => {'root/index.tx' => '<: $dice_user :> -> DICE: <: $dice_num :>'}
     );
+}
+
+sub res_200 {
+    my $self = shift;
+    $self->render(200, @_);
+}
+
+sub res_404 {
+    my ($self) = @_;
+    $self->render_string(404, 'Not Found!');
 }
 
 =pod
 
-HelloAppから継承したstartupをafterで拡張します。
+Web専用のプラグインなど呼びたい場合は、継承されたstartupメソッドを拡張します。
 
-そこでWeb専用のプラグインやviewの設定を行います。viewはTiffanyプロトコルに合ったものであればなんでも大丈夫です。
+HelloAppから継承したstartup拡張する場合は、Class::Method::Modifiers::Fast#afterなどで拡張する。
 
-Viewに$cをそのまま渡すとメモリリークします。$cを渡すとゴチャゴチャになっていいことないのでオススメしません。
+dispatchメソッドは、必ずresponseオブジェクトを返さなければなりません。
 
-NOTE: ルーティングについて変更の可能性あり
+viewはTiffanyプロトコルに合ったものであればなんでも大丈夫です。myではなくstateを使用すると効率的です。
+
+res_200, res_404は作らなくても動作しますが、作ったほうが分かりやすいので作りましょう。
 
 =cut
 
@@ -69,26 +85,27 @@ get '/' => 'Root#index';
 
 =pod
 
-routesを指定する。
+routes.psgi参照
 
 =cut
 
 package HelloApp::Web::Controller::Root;
 # HACK for Plack::Util::load_class()
+# ファイルを分けた場合は必要ないが、このサンプルの場合は分けていないので必要。
 $INC{'HelloApp/Web/Controller/Root.pm'} = __FILE__;
 
 sub index {
     my ($self, $c) = @_;
     my $dice = HelloApp::Model::Dice->new(user => 'hisaichi');
     my $dice_num = $dice->shake;
-    $c->render(200, 'root/index.tx', {user => $dice->{user}, dice_num => $dice_num});
+    $c->res_200('root/index.tx', {dice_user => $dice->{user}, dice_num => $dice_num});
 }
 
 =pod
 
-Controllerは、Modelが出した結果をViewに渡すだけと考えると分かりやすいです。
+Controllerは、Modelが出した結果をViewに渡すだけと考える。
 
-めんどくさいとControllerにロジックを書いてしまいがいちですが、それは間違いです。Modelに書きましょう。
+Controllerにロジックを書いてしまいがちだがModelに書く。
 
 =cut
 

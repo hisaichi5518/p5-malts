@@ -13,7 +13,9 @@ sub dispatch {
 
 MaltsとMalts::Webを継承している。
 
-startupでresponseを返すようにしているので高速に動作するがほぼ何も出来ない。
+dispatchでresponseを返すようにしているので高速に動作するがほぼ何も出来ない。
+
+dispatchをもっと拡張する場合は、routes.psgiを参照する。
 
 =cut
 

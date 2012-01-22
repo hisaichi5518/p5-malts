@@ -17,11 +17,24 @@ sub view {
 }
 =pod
 
-startupでviewの設定を行う。
+viewの設定は、継承されたviewメソッドの上書きで行う。
 
-バグの原因になるので、viewには$cを渡さない。
+テンプレートのファイルパスは、"$controller/$action.tx"を推奨している。
 
-テンプレートのファイルパスは、"controller/action.tx"を推奨している。
+またrenderはControllerで直接呼ぶのは推奨されていない。以下の様にres_200()やres_404()などステータス毎にメソッドを作る事が推奨されている。
+
+    package MyApp::Web;
+    use parent qw(Malts Malts::Web);
+
+    sub res_200 {
+        my $c = shift;
+        $c->render(200, @_);
+    }
+
+    sub res_404 {
+        my ($c, $message) = @_;
+        $c->render_string(404, $message || '404 Not Found!');
+    }
 
 =cut
 
@@ -34,6 +47,16 @@ builder {
 
     HelloRender::Web->to_app;
 };
+
+=pod
+
+Plack::Middleware::Scope::Containerは、$c->render()の中で使われているメソッド(encoding)で使用されているため必須。
+
+またこれは、render_stringでも同様である。
+
+=cut
+
+
 
 __END__
 

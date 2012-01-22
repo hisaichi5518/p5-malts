@@ -5,7 +5,7 @@ package HelloLog::Web;
 use parent qw(Malts Malts::Web);
 use Log::Minimal;
 
-sub startup {
+sub dispatch {
     my $self = shift;
     infof('hello logging!');
     $self->create_response(200, [], ['Hello Log::Minimal World!']);
@@ -13,7 +13,9 @@ sub startup {
 
 =pod
 
-Maltsは内部でもLog::Minimalを使用している。なのでアプリ側でもLog::Minimalを使用するのが望ましい。
+Maltsは内部でLog::Minimalを使用している。なのでアプリ側でもLog::Minimalを使用するのが望ましい。
+
+Log::Minimalをについては、 C<perldoc Log::Minimal> を参照する。
 
 =cut
 

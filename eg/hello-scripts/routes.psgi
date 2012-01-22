@@ -11,7 +11,24 @@ sub dispatch {
 
 =pod
 
-dispatch()を実行する。
+dispatch()は必ずレスポンスオブジェクトを返す。返さない場合はエラーが発生する。
+
+その逆を言うとdispatchがレスポンスオブジェクトを返せばいいだけなので、hello.psgiのようにレスポンスオブジェクトを返すだけやswitchを使って以下のような事も出来る。
+
+    use 5.10.1;
+    sub dispatch {
+        my ($c) = @_;
+        given ($c->req->path_info) {
+            when ('/') {
+                $c->create_response(200, [], ['ok']);
+            }
+            default {
+                $c->create_response(404, [], ['404']);
+            }
+        }
+    }
+
+switchについては L<http://perldoc.perl.org/perlsyn.html#Switch-statements> を参照する。
 
 =cut
 
@@ -28,15 +45,8 @@ routesを指定する。get, post, put, deleteがある。
 
 package HelloRoutes::Web::Controller::Root;
 # HACK for Plack::Util::load_class()
+# HelloRoutes/Web/Controller/Root.pmがあるならする必要はない。
 $INC{'HelloRoutes/Web/Controller/Root.pm'} = __FILE__;
-
-sub begin {
-    my ($self, $c) = @_;
-}
-
-sub end {
-    my ($self, $c) = @_;
-}
 
 sub index {
     my ($self, $c) = @_;
@@ -45,9 +55,7 @@ sub index {
 
 =pod
 
-begin・endメソッドは特別であり、そのメソッドが存在している場合に限り、actionが実行される前と後に実行される。
-
-begin, endが存在していなくてもエラーはでない。
+レスポンスオブジェクトを必ず返す。
 
 =cut
 
@@ -66,6 +74,6 @@ __END__
 
 =head1 NAME
 
-routes.psgi - ルーティングを試す
+routes.psgi - Router::Simpleを使ったルーティング例
 
 =cut
