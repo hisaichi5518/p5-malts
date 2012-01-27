@@ -12,7 +12,7 @@ sub dispatch {
 }
 
 package TestApp::Web::Dispatcher;
-use Malts::Web::Router::Simple::Declare;
+use Malts::Web::Router::Simple;
 
 get  '/get' => 'Root#index';
 post '/post' => 'Root#index';

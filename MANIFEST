@@ -6,6 +6,13 @@ eg/hello-scripts/hello.psgi
 eg/hello-scripts/log.psgi
 eg/hello-scripts/render.psgi
 eg/hello-scripts/routes.psgi
+eg/myapp/app.psgi
+eg/myapp/lib/HelloApp.pm
+eg/myapp/lib/HelloApp/Model/Dice.pm
+eg/myapp/lib/HelloApp/Web.pm
+eg/myapp/lib/HelloApp/Web/Controller/Root.pm
+eg/myapp/lib/HelloApp/Web/Dispatcher.pm
+eg/README
 inc/Module/Install.pm
 inc/Module/Install/AuthorTests.pm
 inc/Module/Install/Base.pm
@@ -20,7 +27,7 @@ lib/Malts/Web.pm
 lib/Malts/Web/CSRFDefender.pm
 lib/Malts/Web/Request.pm
 lib/Malts/Web/Response.pm
-lib/Malts/Web/Router/Simple/Declare.pm
+lib/Malts/Web/Router/Simple.pm
 lib/Malts/Web/View/JSON.pm
 Makefile.PL
 MANIFEST			This list of files
@@ -50,9 +57,9 @@ t/002_Malts-Web-Request/002_args.t
 t/002_Malts-Web-Request/003_session.t
 t/003_Malts-Web-Response/000_load.t
 t/003_Malts-Web-Response/001_basic.t
-t/004_Malts-Web-Router-Simple-Declare/000_load.t
-t/004_Malts-Web-Router-Simple-Declare/001_basic.t
-t/004_Malts-Web-Router-Simple-Declare/lib/TestApp.pm
+t/004_Malts-Web-Router-Simple/000_load.t
+t/004_Malts-Web-Router-Simple/001_basic.t
+t/004_Malts-Web-Router-Simple/lib/TestApp.pm
 t/005_Malts-Util/000_load.t
 t/005_Malts-Util/001_basic.t
 t/006_Malts-Plugin/000_config_loader.t

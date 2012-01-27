@@ -34,7 +34,7 @@ sub dispatch {
     }
     else {
         my $controller = $args->{controller};
-        $class->do_action($c, $controller => $action);
+        __PACKAGE__->do_action($c, $controller => $action);
     }
 }
 
@@ -133,6 +133,10 @@ Malts::Web::Router::Simple - MaltsでRouter::Simpleを使う為のモジュー�
         my $c = shift;
         ...;
     };
+
+=head2 C<< $class->do_action($c, $controller => $action, @args) >>
+
+    $class->do_action($c, "Root" => 'index');
 
 =head2 C<< $class->dispatch($c) >>
 
