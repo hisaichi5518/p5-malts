@@ -1,4 +1,4 @@
-package Malts::Web::Router::Simple::Declare;
+package Malts::Web::Router::Simple;
 use strict;
 use warnings;
 use 5.10.1;
@@ -27,23 +27,28 @@ sub dispatch {
     Malts::Util::DEBUG && debugf('match route! => %s', $args);
 
     $c->request->env->{'malts.routing_args'} = $args;
-    my $action     = $args->{action};
+    my $action = $args->{action};
     if (ref $action eq 'CODE') {
         Malts::Util::DEBUG && debugf "Dispatching action(CODE)!";
         return $action->($c);
     }
     else {
         my $controller = $args->{controller};
-        my $namespace  = ref($c).'::Controller';
+        $class->do_action($c, $controller => $action);
+    }
+}
 
-        croakff "path matched route! but can't find Controller or Action!"
+sub do_action {
+    my ($self, $c, $controller, $action, @args) = @_;
+    my $namespace  = (ref $c ? ref $c : $c).'::Controller';
+
+    croakff "path matched route! but can't find Controller or Action!"
         if !$action || !$controller;
 
-        $controller = Plack::Util::load_class($controller, $namespace);
+    $controller = Plack::Util::load_class($controller, $namespace);
 
-        Malts::Util::DEBUG && debugf "Dispatching $controller->$action!";
-        return $controller->$action($c);
-    }
+    Malts::Util::DEBUG && debugf "Dispatching $controller->$action!";
+    return $controller->$action($c, @args);
 }
 
 sub _connect_with_method {
@@ -80,7 +85,7 @@ Malts::Web::Router::Simple - MaltsでRouter::Simpleを使う為のモジュー�
 
 =head1 SYNOPSIS
 
-    use Malts::Web::Router::Simple::Declare;
+    use Malts::Web::Router::Simple;
 
     get  '/' => 'Root#index';
     post '/' => 'Root#post';
