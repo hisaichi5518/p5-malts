@@ -16,6 +16,8 @@ subtest 'testing dispatch. return Status: 200' => sub {
     is_200({PATH_INFO => '/post', REQUEST_METHOD => 'POST'});
     is_200({PATH_INFO => '/put', REQUEST_METHOD => 'PUT'});
     is_200({PATH_INFO => '/del', REQUEST_METHOD => 'DELETE'});
+
+    is_200({PATH_INFO => '/code', REQUEST_METHOD => 'GET'});
 };
 
 subtest 'testing dispatch. return Status: 404' => sub {

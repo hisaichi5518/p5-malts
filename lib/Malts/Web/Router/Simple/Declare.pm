@@ -28,23 +28,34 @@ sub dispatch {
 
     $c->request->env->{'malts.routing_args'} = $args;
     my $action     = $args->{action};
-    my $controller = $args->{controller};
-    my $namespace  = ref($c).'::Controller';
+    if (ref $action eq 'CODE') {
+        Malts::Util::DEBUG && debugf "Dispatching action(CODE)!";
+        return $action->($c);
+    }
+    else {
+        my $controller = $args->{controller};
+        my $namespace  = ref($c).'::Controller';
 
-    croakff "path matched route! but can't find Controller or Action!"
+        croakff "path matched route! but can't find Controller or Action!"
         if !$action || !$controller;
 
-    $controller = Plack::Util::load_class($controller, $namespace);
+        $controller = Plack::Util::load_class($controller, $namespace);
 
-    Malts::Util::DEBUG && debugf "Dispatching $controller->$action!";
-    return $controller->$action($c);
+        Malts::Util::DEBUG && debugf "Dispatching $controller->$action!";
+        return $controller->$action($c);
+    }
 }
 
 sub _connect_with_method {
     my ($method, $path, $dest, $opt) = @_;
     $opt->{method} = $method;
-    if (ref $dest) {
+    if (ref $dest eq 'HASH') {
         $_ROUTER->connect($path => $dest, $opt);
+    }
+    elsif (ref $dest eq 'CODE') {
+        $_ROUTER->connect($path => {
+            action => $dest,
+        }, $opt);
     }
     elsif (!$dest) {
         $_ROUTER->connect($path => {}, $opt);
@@ -82,21 +93,41 @@ Malts::Web::Router::Simple - MaltsでRouter::Simpleを使う為のモジュー�
 
 =head1 METHOD
 
-=head2 C<< get($path => $dist|\%dist) >>
+=head2 C<< get($path => $dist|\%dist|\&action) >>
 
     get '/path' => 'Controller#action';
+    get '/' => {controller => 'Controller', action => 'action'};
+    get '/' => sub {
+        my $c = shift;
+        ...;
+    };
 
-=head2 C<< post($path => $dist|\%dist) >>
+=head2 C<< post($path => $dist|\%dist|\&action) >>
 
     post '/path' => 'Controller#action';
+    post '/' => {controller => 'Controller', action => 'action'};
+    post '/' => sub {
+        my $c = shift;
+        ...;
+    };
 
-=head2 C<< put($path => $dist|\%dist) >>
+=head2 C<< put($path => $dist|\%dist|\&action) >>
 
     put '/path' => 'Controller#action';
+    put '/' => {controller => 'Controller', action => 'action'};
+    put '/' => sub {
+        my $c = shift;
+        ...;
+    };
 
-=head2 C<< del($path => $dist|\%dist) >>
+=head2 C<< del($path => $dist|\%dist|\&action) >>
 
     del '/path' => 'Controller#action';
+    del '/' => {controller => 'Controller', action => 'action'};
+    del '/' => sub {
+        my $c = shift;
+        ...;
+    };
 
 =head2 C<< $class->dispatch($c) >>
 

@@ -20,6 +20,11 @@ put  '/put' => 'Root#index';
 del  '/del' => 'Root#index';
 get  '/500' => {controller => 'Root', action => 'action_500'};
 
+get '/code' => sub {
+    my $c = shift;
+    $c->create_response(200, [], ['index!']);
+};
+
 package TestApp::Web::Controller::Root;
 $INC{'TestApp/Web/Controller/Root.pm'} = __FILE__;
 
