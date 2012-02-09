@@ -49,3 +49,9 @@ Web APIを叩くとかは全部モジュール + Modelでする。悩むならmo
 メソッドを生やすのはExporterを使う。=> 他のモジュールと同じような仕組みで提供する
 
 * StyleでのModelはMalts::Style::Hoge::Model::* に入れる。
+
+$cに保存するのは、アクセスする度に変更があり、かつキャッシュする必要があるもの。
+request、sessionなど。
+
+stateで保存するのは、起動すれば変更がないもの。
+app_dirやroutesmなど。
