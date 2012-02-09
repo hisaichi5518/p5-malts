@@ -19,16 +19,18 @@ sub new {
 
 # copied Amon2::Util::base_dir
 sub app_dir {
-    my $path = $_[0]->app_base_class or croakff 'You MUST set MyApp#app_base_class. see Malts#app_base_class document.';
-    $path =~ s!::!/!g;
+    state $app_dir = do {
+        my $path = $_[0]->app_base_class or croakff 'You MUST set MyApp#app_base_class. see Malts#app_base_class document.';
+        $path =~ s!::!/!g;
 
-    if (my $libpath = $INC{"$path.pm"}) {
-        $libpath =~ s!(?:blib/)?lib/+$path\.pm$!!;
-        File::Spec->rel2abs($libpath || './');
-    }
-    else {
-        File::Spec->rel2abs('./');
-    }
+        if (my $libpath = $INC{"$path.pm"}) {
+            $libpath =~ s!(?:blib/)?lib/+$path\.pm$!!;
+            File::Spec->rel2abs($libpath || './');
+        }
+        else {
+            File::Spec->rel2abs('./');
+        }
+    };
 }
 
 sub boostrap {
