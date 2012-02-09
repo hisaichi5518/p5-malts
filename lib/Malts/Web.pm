@@ -6,8 +6,9 @@ use Malts::Web::Request;
 use Malts::Web::Response;
 use Malts::Util ();
 use Log::Minimal qw(debugf croakff);
-use Plack::Util::Accessor qw(html_content_type);
 
+
+sub html_content_type { 'text/html; charset=UTF-8' }
 sub request { $_[0]->{request}  }
 sub req { $_[0]->{request} }
 
@@ -30,10 +31,7 @@ sub to_app {
     return sub {
         my $env = shift;
 
-        my $self = $class->new(
-            html_content_type => 'text/html; charset=UTF-8',
-            %args
-        );
+        my $self = $class->new(%args);
         $self->create_request($env);
 
         Malts::Util::DEBUG && debugf "do $class->startup!";
@@ -118,7 +116,8 @@ Malts::Web - 次世代 Web Application Framework
 =head2 C<< $c->html_content_type -> Str >>
 
     my $content_type = $c->html_content_type;
-    $c->html_content_type('text/html; charset=UTF-8');
+
+"text/html; charset=UTF-8"を返します。
 
 =head2 C<< $c->view -> Object >>
 
@@ -151,11 +150,9 @@ C< Malts::Web::Response >にインスタンス化を行います。
 
 =head2 C<< $class->to_app(%args) -> CodeRef >>
 
-    my $app = MyApp::Web->to_app(html_content_type => 'text/html; charset=UTF-8');
+    my $app = MyApp::Web->to_app();
 
 アプリのコードリファレンスを返します。
-
-自動で I<html_content_type> に I<text/html; charset=UTF-8> がセットされますが、上書きする事も可能です。
 
 =head2 C<< $c->render($status, $template_path[, \%args]) -> Object >>
 
