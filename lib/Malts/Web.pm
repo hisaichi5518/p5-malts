@@ -60,7 +60,7 @@ sub render {
             'Content-Type'   => $self->html_content_type,
             'Content-Length' => length($decoed_html),
         ],
-        [Malts::Util::encoding()->encode($decoed_html)]
+        [$self->encoding->encode($decoed_html)]
     );
 }
 
@@ -74,7 +74,7 @@ sub render_string {
             'Content-Type'   => $self->html_content_type,
             'Content-Length' => length($decoded_str),
         ],
-        [Malts::Util::encoding()->encode($decoded_str)]
+        [$self->encoding->encode($decoded_str)]
     );
 }
 

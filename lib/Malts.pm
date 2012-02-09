@@ -39,8 +39,8 @@ sub boostrap {
 }
 
 sub encoding {
-    my ($self, $encoding) = @_;
-    Malts::Util::encoding($encoding);
+    state $encoding = Malts::Util::find_encoding('utf8');
+    return $encoding;
 }
 
 sub config {

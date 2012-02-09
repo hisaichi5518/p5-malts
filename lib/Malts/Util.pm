@@ -2,20 +2,17 @@ package Malts::Util;
 use strict;
 use warnings;
 use Plack::Util ();
-use Scope::Container qw(scope_container);
-use Log::Minimal qw(croakff);
+use Log::Minimal qw(croakf);
 use Encode ();
-use constant DEBUG => (($ENV{PLACK_ENV} || 'development') eq 'development' ? 1 : 0);
+use constant DEBUG => (
+    ($ENV{PLACK_ENV} || 'development') eq 'development' ? 1 : 0
+);
 
-sub encoding {
+sub find_encoding {
     my ($encoding) = @_;
-    my $enc = scope_container('encoding');
-    !$encoding && $enc && return $enc;
-
-    $enc = Encode::find_encoding($encoding || 'utf8')
-        or croakff "encoding '$encoding' not found";
-
-    scope_container(encoding => $enc);
+    my $enc = Encode::find_encoding($encoding)
+        or croakf "encoding '$encoding' not found.";
+    return $enc;
 }
 
 1;
@@ -31,21 +28,25 @@ Malts::Util - Utility subroutines for Malts and Malts user
     warn 'debug!' if Malts::Util::DEBUG;
     my $class = Plack::Util::load_class('Hoge');
 
+    Malts::Util::find_encoding('utf8');
+
 =head1 Functions
 
 L<Malts::Util>の中で、L<Plack::Util>をuseしているのでL<Malts::Util>をuseするとL<Plack::Util>も使えるようになります。
 
-=head2 C<< DEBUG >>
+=head2 C<< DEBUG -> Bool >>
 
     Malts::Util::DEBUG && warn '$ENV{PLACK_ENV} is development!'
 
 $ENV{PLACK_ENV}がdevelopmentの時に1を返します。
 
-=head2 C<< encoding($encoding) >>
+=head2 C<< find_encoding($encoding) -> Object >>
 
-    Malts::Util::encoding('utf8');
+    Malts::Util::find_encoding('utf-8');
 
-C< Encode::find_encoding() >を実行してキャッシュする。
+Encode::find_encoding()したものを返す。
+
+ただし、encodingがなかった場合はC< Log::Minimal#croakf >でエラーを出す。
 
 =head1 BUGS
 
