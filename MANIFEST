@@ -21,7 +21,7 @@ inc/Module/Install/Metadata.pm
 inc/Module/Install/Repository.pm
 inc/Module/Install/WriteAll.pm
 lib/Malts.pm
-lib/Malts/Plugin/ConfigLoader.pm
+lib/Malts/ConfigLoader.pm
 lib/Malts/Util.pm
 lib/Malts/Web.pm
 lib/Malts/Web/CSRFDefender.pm
@@ -38,7 +38,6 @@ README
 t/000_Malts/000_load.t
 t/000_Malts/001_basic.t
 t/000_Malts/002_encoding.t
-t/000_Malts/003_config.t
 t/000_Malts/005_boostrap.t
 t/000_Malts/006_app_class.t
 t/000_Malts/008_plugin.t
