@@ -7,7 +7,6 @@ use Malts::Web::Response;
 use Malts::Util ();
 use Log::Minimal qw(debugf croakff);
 
-
 sub html_content_type { 'text/html; charset=UTF-8' }
 sub request { $_[0]->{request}  }
 sub req { $_[0]->{request} }
@@ -32,6 +31,7 @@ sub to_app {
         my $env = shift;
 
         my $self = $class->new(%args);
+        Malts->set_context($self);
         $self->create_request($env);
 
         Malts::Util::DEBUG && debugf "do $class->startup!";

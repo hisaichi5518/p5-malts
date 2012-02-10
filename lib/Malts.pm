@@ -11,6 +11,12 @@ use Scope::Container qw(scope_container);
 
 our $VERSION = '0.01';
 
+{
+    my $context;
+    sub context { $context }
+    sub set_context { $context = $_[1] }
+}
+
 sub new {
     my $class = shift;
     my %args = @_ == 1 ? %{$_[0]} : @_;
@@ -36,6 +42,7 @@ sub app_dir {
 sub boostrap {
     my $class = shift;
     my $self = $class->new(@_);
+    Malts->set_context($self);
     $self->startup;
     return $self;
 }

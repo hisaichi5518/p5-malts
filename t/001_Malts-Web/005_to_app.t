@@ -38,6 +38,11 @@ subtest 'testing to_app' => sub {
     is_deeply $app->({}), [200, [], ['ok']];
 };
 
+subtest 'has context' => sub {
+    my $c = Malts->context;
+    is $c->{body}, 'ok';
+};
+
 subtest '$env is required' => sub {
     my $app = TestApp::Web->to_app;
     eval{ $app->() };
