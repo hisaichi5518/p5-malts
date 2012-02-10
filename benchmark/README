@@ -2,6 +2,9 @@
 
     plackup -s Starman -E production --workers=10 -a amon/lite.psgi
     plackup -s Starman -E production --workers=10 -a malts/lite.psgi
+    plackup -s Starman -E production --workers=10 -a ark/app.psgi
+    plackup -s Starman -E production --workers=10 -a dancer/lite.psgi
+    MOJO_MODE=production  plackup -s Starman -E production --workers=10 -a mojolicious/lite.psgi
 
 ## 測る
 
