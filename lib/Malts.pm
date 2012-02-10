@@ -20,7 +20,7 @@ sub new {
 # copied Amon2::Util::base_dir
 sub app_dir {
     state $app_dir = do {
-        my $path = $_[0]->app_base_class or croakff 'You MUST set MyApp#app_base_class. see Malts#app_base_class document.';
+        my $path = $_[0]->app_base_class;
         $path =~ s!::!/!g;
 
         if (my $libpath = $INC{"$path.pm"}) {
@@ -63,7 +63,9 @@ sub plugin {
 }
 
 # hooks
-sub app_base_class {}
+sub app_base_class {
+    croakff 'Method "app_base_class" not implemented by subclass';
+}
 sub startup {}
 
 1;
@@ -125,7 +127,7 @@ C< $class >のインスタンス化を行います。
     use parent 'Malts';
     sub app_base_class { 'MyApp' }
 
-C<app_base_class>を設定しないとエラーが出るメソッドがあります。
+C<app_base_class>を上書きしないままC<app_base_class>を実行するとエラーが出ます。
 
 =head2 C<< $object->app_dir -> Str >>
 

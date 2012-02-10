@@ -24,7 +24,8 @@ use Malts;
 
 subtest 'testing Malts#app_base_class' => sub {
     my $c = Malts->new;
-    is $c->app_base_class, undef;
+    eval { $c->app_base_class };
+    ok $@;
 };
 
 subtest 'testing MyApp#app_base_class ' => sub {
