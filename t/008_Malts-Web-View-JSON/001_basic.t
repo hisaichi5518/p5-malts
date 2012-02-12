@@ -24,9 +24,6 @@ sub dispatch {
 package main;
 use utf8;
 use Test::More;
-use Scope::Container qw(start_scope_container);
-
-my $sc = start_scope_container();
 
 subtest 'testing render_json' => sub {
     my $psgi = psgi_app({PATH_INFO => '/'});

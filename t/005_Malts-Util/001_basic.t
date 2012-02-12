@@ -4,7 +4,6 @@ use warnings;
 use Test::More;
 BEGIN {$ENV{PLACK_ENV} = ''};
 use Malts::Util;
-use Scope::Container qw(start_scope_container);
 
 subtest 'can use Plack::Util' => sub {
     ok Plack::Util::TRUE;

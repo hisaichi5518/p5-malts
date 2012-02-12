@@ -33,8 +33,6 @@ requires 'File::Spec';
 requires 'Log::Minimal';
 requires 'Plack::Middleware::Log::Minimal';
 requires 'Router::Simple';
-requires 'Scope::Container';
-requires 'Plack::Middleware::Scope::Container';
 requires 'Plack::Session';
 
 test_requires 'Test::More' => '0.96';

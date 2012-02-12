@@ -7,7 +7,6 @@ use Encode ();
 use File::Spec ();
 use Log::Minimal qw(debugf croakff);
 use Malts::Util ();
-use Scope::Container qw(scope_container);
 
 our $VERSION = '0.01';
 
