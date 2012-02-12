@@ -78,7 +78,6 @@ Malts - 次世代 Web Application Framework
 
     sub startup {
         my ($self) = @_;
-        $self->plugin(...);
     }
 
     1;
