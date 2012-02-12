@@ -1,4 +1,3 @@
-.shipit
 author/requires.cpanm
 Changes
 eg/hello-scripts/app.psgi
