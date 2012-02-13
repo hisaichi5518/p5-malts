@@ -30,7 +30,31 @@ BEGIN {
 
 subtest 'testing config_loader' => sub {
     my $c = TestApp::Web->new;
-    is_deeply $c->config, {config_loader_test => 'ok'};
+    my $config = {
+        config_loader_test => 'ok',
+        array => [1, undef, 3],
+        hash => {name => 'hisaichi', null => undef},
+    };
+    is_deeply $c->config, $config;
+};
+
+subtest 'config is read-only' => sub {
+    my $c = TestApp::Web->new;
+
+    eval { $c->config->{config_loader_test} = 'err' };
+    like $@, qr/Modification of a read-only/;
+
+    eval { delete $c->config->{config_loader_test} };
+    like $@, qr/Attempt to delete readonly/;
+
+    eval { $c->config->{array}->[1] = 1 };
+    like $@, qr/Modification of a read-only/;
+
+    eval { $c->config->{hash}->{name} = 1 };
+    like $@, qr/Modification of a read-only/;
+
+    eval { $c->config->{miteigi} = [] };
+    like $@, qr/Attempt to access disallowed key/;
 };
 
 done_testing;
