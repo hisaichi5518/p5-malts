@@ -9,11 +9,16 @@ use Hash::Util ();
 
 sub load {
     my $self = shift;
+    my $config = $self->_load(@_);
+    lock_data($config);
+    return $config;
+}
+
+sub _load {
+    my $self = shift;
     my $fname = File::Spec->catfile(@_);
     Malts::Util::DEBUG && debugf "Load Config File: $fname";
     my $config = do $fname or croakff "Cannot load configuration file: $fname";
-    lock_data($config);
-    return $config;
 }
 
 sub lock_data {
