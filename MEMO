@@ -27,22 +27,33 @@
 
 * Malts::Auth(?)
 * セキュリティのあれこれ
+* PLACK_ENVがproductionの時、URLにdebugって入ってたらそのURLは無効？Basic認証？そもそも立ち上がらない？
+
+use Malts::Router::NoDebug;
+use Malts::Router::NoDebug::Die;
 
 ## 設計メモ
 
 * $cにロジックを生やすのはイケてない。ただ全部排除するのはイケてない。
-$cはショートカットを生やすのはいい。=> $c->mobile_agent; など。
+$cはショートカットを生やすのはいい。=> $c->mobile_agent; など。$cは一括でデータを持つ場所と考える。
 Web APIを叩くとかは全部モジュール + Modelでする。悩むならmodelに入れとけばいいんじゃないのか系。
 
 こういうのはモデルでする。
 
     package MyApp::Model::Mobage;
+    use 5.10.1;
+    use strict;
+    use warnings;
     use WebService::Mobage;
-    my $mobage = WebService::Mobage->new(...);
+    use MyApp::Config;
+
+    sub mobage_api {
+        state $mobage = WebService::Mobage->new(config->{'WebService::Mobage'});
+    }
 
     sub get_mobage_friends {
-        my ($user_id, $opts) = @_;
-        $mobage->get_friends($user_id => $opts);
+        my ($self, $user_id, $opts) = @_;
+        $self->mobage_api->get_friends($user_id => $opts);
     }
 
 * メソッドを生やすのはMalts::*
@@ -54,4 +65,4 @@ $cに保存するのは、アクセスする度に変更があり、かつキャ
 request、sessionなど。
 
 stateで保存するのは、起動すれば変更がないもの。
-app_dirやroutesmなど。
+app_dirやroutesなど。
