@@ -48,7 +48,7 @@ sub to_app {
 
 sub render {
     my ($self, $status, $template_path, $opts) = @_;
-    Malts::Util::DEBUG && debugf "rendering template: $template_path";
+    Malts::Util::DEBUG && debugf "Rendering template: $template_path";
     $self->view or croakf 'You must create a view.';
 
     my $decoed_html = $self->view->render($template_path, $opts);
@@ -64,7 +64,7 @@ sub render {
 
 sub render_string {
     my ($self, $status, $decoded_str) = @_;
-    Malts::Util::DEBUG && debugf "rendering string: $decoded_str";
+    Malts::Util::DEBUG && debugf "Rendering string: $decoded_str";
 
     return $self->create_response(
         $status,

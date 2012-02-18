@@ -15,13 +15,13 @@ sub csrf_token {
     my $req = $c->request or croakff 'Cannot find request object.';
 
     if (my $token = $req->session->get($SESSION_NAME)) {
-        Malts::Util::DEBUG && debugf 'get session: %s', $token;
+        Malts::Util::DEBUG && debugf 'Get session: %s', $token;
         return $token;
     }
     else {
         my $token = _random_string($RANDOM_STRING_SIZE);
 
-        Malts::Util::DEBUG && debugf 'set session: %s', $token;
+        Malts::Util::DEBUG && debugf 'Set session: %s', $token;
         $req->session->set($SESSION_NAME => $token);
         return $token;
     }
