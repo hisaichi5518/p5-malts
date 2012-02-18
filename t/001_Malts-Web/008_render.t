@@ -15,9 +15,7 @@ use utf8;
 
 use Test::More;
 use Encode qw(encode_utf8);
-use Scope::Container qw(start_scope_container);
 
-my $sc = start_scope_container;
 subtest 'testing render' => sub {
     my $res = res(200, 'ascii');
     is_deeply $res->body, ['ascii'];

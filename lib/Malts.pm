@@ -7,7 +7,6 @@ use Encode ();
 use File::Spec ();
 use Log::Minimal qw(debugf croakff);
 use Malts::Util ();
-use Scope::Container qw(scope_container);
 
 our $VERSION = '0.01';
 
@@ -45,14 +44,6 @@ sub encoding {
     return $encoding;
 }
 
-sub config {
-    my $self = shift;
-    if (my $config = scope_container('config')) {
-        return $config;
-    }
-    scope_container(config => {});
-}
-
 sub plugin {
     my ($self, $name, $opts) = @_;
     croakff 'Cannot find plugin name.' if not $name;
@@ -63,6 +54,7 @@ sub plugin {
 }
 
 # hooks
+sub config { croakff 'Method "config" not implemented by subclass' }
 sub app_base_class {
     croakff 'Method "app_base_class" not implemented by subclass';
 }
@@ -86,7 +78,6 @@ Malts - 次世代 Web Application Framework
 
     sub startup {
         my ($self) = @_;
-        $self->plugin('ConfigLoader');
     }
 
     1;
@@ -161,21 +152,26 @@ C<Malts::Util::encoding()>へのショートカット
 
 =head2 C<< $object->config -> HashRef >>
 
-L<Scope::Container>に保存された設定を返します。
-
-このメソッドは現在set・getができますが、将来的にはsetができなくなる可能性があります。
-
-設定を変更するのを設定ファイル以外で動的にするとバグの原因になるのでやめましょう。
-
     my $config = $c->config;
-
-    # set
-    $c->config->{name} = 'hisaichi5518';
 
     # get
     $c->config->{name};
 
-C<Malts::Plugin::ConfigLoader>プラグインを使って、設定ファイルを読み込む事が可能です。
+configメソッドを使うには上書きが必須です。
+L<Config::ENV>を使う事が現在推奨されています。
+
+    sub config {
+        MyApp::Config->current;
+    }
+
+C<Malts::ConfigLoader>を使って、設定ファイルを読み込む事も可能です。
+
+    sub config {
+        state $config = do {
+            my @config_path = ($_[0]->app_dir, 'config', 'development.pl');
+            Malts::ConfigLoader->load(@config_path);
+        };
+    }
 
 =head2 C<plugin>
 
