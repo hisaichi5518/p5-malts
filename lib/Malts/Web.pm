@@ -5,8 +5,7 @@ use warnings;
 use Malts::Web::Request;
 use Malts::Web::Response;
 use Malts::Util ();
-use Log::Minimal qw(debugf croakff);
-
+use Log::Minimal qw(debugf croakf);
 
 sub html_content_type { 'text/html; charset=UTF-8' }
 sub request { $_[0]->{request}  }
@@ -26,7 +25,7 @@ sub create_response {
 
 sub to_app {
     my ($class, %args) = @_;
-    croakff "Please inherited the 'Malts' in $class."
+    croakf "Please inherited the 'Malts' in $class."
         if !$class->can('new') or !$class->can('startup');
 
     return sub {
@@ -41,7 +40,7 @@ sub to_app {
         $self->after_dispatch($res);
 
         unless ($res) {
-            croakff 'You must create a response. use $c->create_response(), $c->render()!';
+            croakf 'You must create a response!';
         }
         return $res->finalize;
     };
@@ -50,7 +49,7 @@ sub to_app {
 sub render {
     my ($self, $status, $template_path, $opts) = @_;
     Malts::Util::DEBUG && debugf "rendering template: $template_path";
-    $self->view or croakff 'You must create a view.';
+    $self->view or croakf 'You must create a view.';
 
     my $decoed_html = $self->view->render($template_path, $opts);
     return $self->create_response(
