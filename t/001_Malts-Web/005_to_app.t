@@ -27,6 +27,9 @@ use parent -norequire, 'TestApp::Web';
 sub dispatch {}
 sub after_dispatch {}
 
+package TestApp2::Web;
+use parent "Malts::Web";
+
 package main;
 use strict;
 use warnings;
@@ -50,6 +53,12 @@ subtest 'no response' => sub {
     eval{ $app->({}) };
     ok $@;
     like $@, qr/You must create a response/;
+};
+
+subtest 'Please inherited the Malts' => sub {
+    eval{ TestApp2::Web->to_app };
+    ok $@;
+    like $@, qr/Please inherited the 'Malts' in/;
 };
 
 done_testing;

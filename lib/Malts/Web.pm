@@ -24,9 +24,10 @@ sub create_response {
     return Malts::Web::Response->new(@_);
 }
 
-# new, startupがない場合は、Malts.pmを継承していない
 sub to_app {
     my ($class, %args) = @_;
+    croakff "Please inherited the 'Malts' in $class."
+        if !$class->can('new') or !$class->can('startup');
 
     return sub {
         my $env = shift;
