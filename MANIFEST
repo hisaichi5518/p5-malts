@@ -21,6 +21,7 @@ inc/Module/Install/Repository.pm
 inc/Module/Install/WriteAll.pm
 lib/Malts.pm
 lib/Malts/ConfigLoader.pm
+lib/Malts/Hook.pm
 lib/Malts/Util.pm
 lib/Malts/Web.pm
 lib/Malts/Web/CSRFDefender.pm
@@ -67,6 +68,8 @@ t/008_Malts-Web-View-JSON/000_load.t
 t/008_Malts-Web-View-JSON/001_basic.t
 t/009_Malts-Web-CSRFDefender/000_load.t
 t/009_Malts-Web-CSRFDefender/001_basic.t
+t/010_Malts-Hook/000_load.t
+t/010_Malts-Hook/001_basic.t
 t/999_Malts-Apps/001_hello-scripts.t
 xt/perlcritic.t
 xt/pod.t
