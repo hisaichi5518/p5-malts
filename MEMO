@@ -25,6 +25,7 @@
 
 ## TODO
 
+* CSRF対策: formにフィルターを書けるプラグイン
 * Malts::Auth(?)
 * セキュリティのあれこれ
 * PLACK_ENVがproductionの時、URLにdebugって入ってたらそのURLは無効？Basic認証？そもそも立ち上がらない？
