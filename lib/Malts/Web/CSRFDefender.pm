@@ -64,12 +64,12 @@ Malts::Web::CSRFDefender - Malts用のCSRF Defender
 =head1 SYNOPSIS
 
     package MyApp::CSRF::Web;
-    use Malts::Web::CSRFDefender qw(csrf_token validate_csrf_token);
+    use Malts::Web::CSRFDefender;
 
     sub startup {
         my $c = shift;
         unless ($c->validate_csrf_token) {
-            ...;
+            return $c->create_response(405, [], ['ERROR!']);
         }
         $c->csrf_token;
     }
