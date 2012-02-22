@@ -4,28 +4,36 @@ use strict;
 use warnings;
 
 use parent qw(Malts Malts::Web);
+use Malts::Hook;
+
+# startupの後に実行される
+Malts::Hook->set(before_dispatch => sub {
+    my ($c, $res) = @_;
+    if ($c->{body} && $c->{body} eq 'ok') {
+        $$res = $c->create_response(200, [], [$c->{body}]);
+    }
+});
+
+
+# after_dispatchの場合、$resはレスポンスオブジェクトなのに注意
+Malts::Hook->set(after_dispatch => sub {
+    my ($c, $res) = @_;
+    $res->header('X-Malts-Test' => 'ok') if $res->body->[0] eq 'ok';
+});
 
 sub startup {
     my $c = shift;
     $c->{body} = 'ok';
 }
 
-sub dispatch {
-    my $c = shift;
-    $c->create_response(200, [], ['ng']);
-}
-
-sub after_dispatch {
-    my ($c, $res) = @_;
-    die "cannot find response." if not defined $res;
-    $res->body($c->{body});
-}
+# $c->{body}がokなのでbefore_dispatchがresponseオブジェクトを作成
+# dispatchががなくても動く。
 
 package TestApp1::Web;
 use parent -norequire, 'TestApp::Web';
 
-sub dispatch {}
-sub after_dispatch {}
+# hookは実行されるが、bodyがokではないのでdispatchが必要。
+sub startup {}
 
 package TestApp2::Web;
 use parent "Malts::Web";
@@ -38,7 +46,7 @@ use Test::More;
 subtest 'testing to_app' => sub {
     my $app = TestApp::Web->to_app;
     isa_ok $app, 'CODE';
-    is_deeply $app->({}), [200, [], ['ok']];
+    is_deeply $app->({}), [200, ['X-Malts-Test' => 'ok'], ['ok']];
 };
 
 subtest '$env is required' => sub {

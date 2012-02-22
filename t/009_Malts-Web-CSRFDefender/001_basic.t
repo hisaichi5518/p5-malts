@@ -4,6 +4,15 @@ use strict;
 use warnings;
 use parent qw(Malts Malts::Web);
 use Malts::Web::CSRFDefender qw(csrf_token validate_csrf_token);
+use Text::Xslate;
+
+sub view {
+    Text::Xslate->new(path => [{'form' => '<form action="http://example.com/" method="POST"></form>'}]);
+}
+
+sub dispatch {
+    shift->create_response(200,[],['ok']);
+}
 
 package main;
 use strict;
@@ -91,6 +100,41 @@ subtest 'testing local var' => sub {
         'psgix.session.options' => {},
     });
     is length($c->csrf_token), 32;
+};
+
+subtest 'html filter' => sub {
+    my $c = request({
+        'psgix.session' => {csrf_token => 'hisaichi'},
+        'psgix.session.options' => {},
+    });
+    like $c->render(200, 'form')->body->[0], qr/value="hisaichi"/;
+    like $c->render_string(200, '<form></form>')->body->[0], qr/value="hisaichi"/;
+};
+
+subtest 'after_dispatch: error check' => sub {
+    my $app = MyApp::Web->to_app();
+    # POSTの場合、セッションとパラメータが一緒か自動で確認
+    my $res = $app->({
+        'psgix.session' => {csrf_token => 'hisaichi'},
+        'psgix.session.options' => {},
+        'QUERY_STRING' => 'csrf_token=chigauchigau',
+        'REQUEST_METHOD' => 'POST',
+    });
+
+    is $res->[0], 403;
+};
+
+subtest 'after_dispatch: success!' => sub {
+    my $app = MyApp::Web->to_app();
+    # POSTの場合、セッションとパラメータが一緒か自動で確認
+    my $res = $app->({
+        'psgix.session' => {csrf_token => 'hisaichi'},
+        'psgix.session.options' => {},
+        'QUERY_STRING' => 'csrf_token=hisaichi',
+        'REQUEST_METHOD' => 'POST',
+    });
+
+    is $res->[0], 200;
 };
 
 done_testing;

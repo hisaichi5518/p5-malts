@@ -6,6 +6,7 @@ use Malts::Web::Request;
 use Malts::Web::Response;
 use Malts::Util ();
 use Log::Minimal qw(debugf croakf);
+use Malts::Hook;
 
 sub html_content_type { 'text/html; charset=UTF-8' }
 sub request { $_[0]->{request}  }
@@ -35,13 +36,17 @@ sub to_app {
         $self->create_request($env);
 
         Malts::Util::DEBUG && debugf "do $class->startup!";
-        $self->startup;
-        my $res = $self->dispatch;
-        $self->after_dispatch($res);
-
-        unless ($res) {
-            croakf 'You must create a response!';
+        my $res;
+        my $res_ref = \$res;
+        $self->startup($res_ref);
+        Malts::Hook->run(before_dispatch => $self, $res_ref);
+        if (!$res) {
+            $res = $self->dispatch;
+            unless ($res) {
+                croakf 'You must create a response!';
+            }
         }
+        Malts::Hook->run(after_dispatch => $self, $res);
         return $res->finalize;
     };
 }
@@ -52,6 +57,8 @@ sub render {
     $self->view or croakf 'You must create a view.';
 
     my $decoed_html = $self->view->render($template_path, $opts);
+    Malts::Hook->run(html_filter => $self, \$decoed_html);
+
     return $self->create_response(
         $status,
         [
@@ -65,6 +72,7 @@ sub render {
 sub render_string {
     my ($self, $status, $decoded_str) = @_;
     Malts::Util::DEBUG && debugf "Rendering string: $decoded_str";
+    Malts::Hook->run(html_filter => $self, \$decoded_str);
 
     return $self->create_response(
         $status,
@@ -77,7 +85,6 @@ sub render_string {
 }
 
 # hooks
-sub after_dispatch {}
 sub dispatch {}
 sub view {}
 
@@ -170,18 +177,6 @@ C< $c->render() >を使用するには、C< $c->view() >を指定している必
     $res = $c->render_string(200, "ok!");
 
 Responseオブジェクトを返します。
-
-=head2 C<< $c->after_dispatch($res) >>
-
-    $c->after_dispatch($res);
-
-上書きしてフックします。
-
-    sub after_dispatch {
-        my ($c, $res) = @_;
-        $res->body("hisaichi5518");
-        $c->plguin("Web::Hoge");
-    }
 
 =head2 C<< $c->dispatch >>
 

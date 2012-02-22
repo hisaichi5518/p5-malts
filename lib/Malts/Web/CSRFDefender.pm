@@ -3,12 +3,35 @@ use strict;
 use warnings;
 use Malts::Util ();
 use Log::Minimal qw(debugf croakff);
+use Malts::Hook ();
 use Exporter 'import';
 
 our @EXPORT = qw(csrf_token validate_csrf_token);
 our $SESSION_NAME = 'csrf_token';
 our $PARAM_NAME   = 'csrf_token';
 our $RANDOM_STRING_SIZE = 16;
+
+Malts::Hook->set('before_dispatch' => sub {
+    my ($c, $res) = @_;
+
+    if (!$c->validate_csrf_token) {
+        my @err = (403, 'Session validation failed.');
+
+        if (!$c->can('res_403')) {
+            $$res = $c->render_string(@err);
+            return 1;
+        }
+
+        $$res = $c->res_403(@err);
+    }
+});
+
+Malts::Hook->set('html_filter' => sub {
+    my ($c, $html) = @_;
+
+    my $token = $c->csrf_token;
+    $$html =~ s!(<form\s*.*?>)!$1\n<input type="hidden" name="$PARAM_NAME" value="$token" />!isg;
+});
 
 sub csrf_token {
     my $c = shift;
