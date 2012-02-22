@@ -47,13 +47,10 @@ Malts::Hook - hooks for Malts
     use warnings;
     use Malts::Hook;
 
-    sub init {
-        my ($self, $c) = @_;
-        Malts::Hook->set('after_dispatch' => sub {
-            my ($c, $res) = @_;
-            $res->body("pero-pero");
-        });
-    }
+    Malts::Hook->set(after_dispatch => sub {
+        my ($c, $res) = @_;
+        $res->body("pero-pero");
+    });
 
     1;
 
