@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use Malts::Util ();
 use Log::Minimal qw(debugf croakff);
-use Malts::Hook ();
+use Malts::Hook;
 use Exporter 'import';
 
 our @EXPORT = qw(csrf_token validate_csrf_token);
@@ -11,7 +11,7 @@ our $SESSION_NAME = 'csrf_token';
 our $PARAM_NAME   = 'csrf_token';
 our $RANDOM_STRING_SIZE = 16;
 
-Malts::Hook->set('before_dispatch' => sub {
+hook->set('before_dispatch' => sub {
     my ($c, $res) = @_;
 
     Malts::Util::DEBUG && debugf 'Validate CSRF token.';
@@ -28,7 +28,7 @@ Malts::Hook->set('before_dispatch' => sub {
     }
 });
 
-Malts::Hook->set('html_filter' => sub {
+hook->set('html_filter' => sub {
     my ($c, $html) = @_;
 
     my $token = $c->csrf_token;

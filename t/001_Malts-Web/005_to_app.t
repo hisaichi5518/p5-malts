@@ -7,7 +7,7 @@ use parent qw(Malts Malts::Web);
 use Malts::Hook;
 
 # startupの後に実行される
-Malts::Hook->set(before_dispatch => sub {
+hook->set(before_dispatch => sub {
     my ($c, $res) = @_;
     if ($c->{body} && $c->{body} eq 'ok') {
         $$res = $c->create_response(200, [], [$c->{body}]);
@@ -16,7 +16,7 @@ Malts::Hook->set(before_dispatch => sub {
 
 
 # after_dispatchの場合、$resはレスポンスオブジェクトなのに注意
-Malts::Hook->set(after_dispatch => sub {
+hook->set(after_dispatch => sub {
     my ($c, $res) = @_;
     $res->header('X-Malts-Test' => 'ok') if $res->body->[0] eq 'ok';
 });

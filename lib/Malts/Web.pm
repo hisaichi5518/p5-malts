@@ -39,14 +39,14 @@ sub to_app {
         my $res;
         my $res_ref = \$res;
         $self->startup($res_ref);
-        Malts::Hook->run(before_dispatch => $self, $res_ref);
+        hook->run(before_dispatch => $self, $res_ref);
         if (!$res) {
             $res = $self->dispatch;
             unless ($res) {
                 croakf 'You must create a response!';
             }
         }
-        Malts::Hook->run(after_dispatch => $self, $res);
+        hook->run(after_dispatch => $self, $res);
         return $res->finalize;
     };
 }
@@ -57,7 +57,7 @@ sub render {
     $self->view or croakf 'You must create a view.';
 
     my $decoed_html = $self->view->render($template_path, $opts);
-    Malts::Hook->run(html_filter => $self, \$decoed_html);
+    hook->run(html_filter => $self, \$decoed_html);
 
     return $self->create_response(
         $status,
@@ -72,7 +72,7 @@ sub render {
 sub render_string {
     my ($self, $status, $decoded_str) = @_;
     Malts::Util::DEBUG && debugf "Rendering string: $decoded_str";
-    Malts::Hook->run(html_filter => $self, \$decoded_str);
+    hook->run(html_filter => $self, \$decoded_str);
 
     return $self->create_response(
         $status,
