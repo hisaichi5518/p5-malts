@@ -1,24 +1,36 @@
 package Malts::Hook;
+use 5.10.1;
 use strict;
 use warnings;
+use Exporter 'import';
 use Malts::Util;
 use Log::Minimal qw(debugf);
+our @EXPORT = qw(hook);
 
-my $hook;
+sub hook {
+    state $hook = Malts::Hook->new;
+}
+
+sub new { bless {hooks => {}}, shift }
+
+sub hooks {
+    hook->{hooks};
+}
+
 sub set {
     my ($self, $hook_name, $hook_code) = @_;
-    if (!exists $hook->{$hook_name}) {
-        $hook->{$hook_name} = [$hook_code];
+    if (!exists hooks->{$hook_name}) {
+        hooks->{$hook_name} = [$hook_code];
         return 1;
     }
 
-    push @{$hook->{$hook_name}}, $hook_code;
+    push @{hooks->{$hook_name}}, $hook_code;
     return 1;
 }
 
 sub get {
     my ($self, $hook_name) = @_;
-    return $hook->{$hook_name};
+    return hooks->{$hook_name};
 }
 
 sub run {
@@ -47,7 +59,7 @@ Malts::Hook - hooks for Malts
     use warnings;
     use Malts::Hook;
 
-    Malts::Hook->set(after_dispatch => sub {
+    hook->set(after_dispatch => sub {
         my ($c, $res) = @_;
         $res->body("pero-pero");
     });
@@ -56,25 +68,43 @@ Malts::Hook - hooks for Malts
 
 =head1 METHODS
 
-=head2 C<< Malts::Hook->set($hook_name => \&hook_code) >>
+=head2 C<< hook() -> Object >>
 
-    Malts::Hook->set('after_dispatch' => sub {
+    $hook = hook(); #=> Malts::Hook->new();
+
+C<use Malts::Hook;>するとimportされます。
+
+=head2 C<< Malts::Hook->new() -> Object >>
+
+    $hook = Malts::Hook->new();
+
+=head2 C<< hook->hooks -> HashRef >>
+
+    hook->hooks;
+
+フックの一覧を返します。
+
+=head2 C<< hook->set($hook_name => \&hook_code) >>
+
+    hook->set('after_dispatch' => sub {
         ...;
     });
 
+フックを追加します。
+
 C<$hook_name>は、...。
 
-=head2 C<< Malts::Hook->get($hook_name) -> ArrayRef >>
+=head2 C<< hook->get($hook_name) -> ArrayRef >>
 
-    my $hook_codes = Malts::Hook->get('after_dispatch');
+    my $hook_codes = hook->get('after_dispatch');
 
-C<$hook_name>に一致するコードを返します。
+C<$hook_name>に一致するフックコードを返します。
 
-=head2 C<< Malts::Hook->run($hook_name[, @args]) >>
+=head2 C<< hook->run($hook_name[, @args]) >>
 
-    Malts::Hook->run('after_dispatch');
+    hook->run('after_dispatch');
 
-C<$hook_name>が一致するhookを実行します。
+C<$hook_name>が一致するフックを実行します。
 
 =head1 AUTHOR
 
