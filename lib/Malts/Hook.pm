@@ -11,10 +11,10 @@ sub hook {
     state $hook = Malts::Hook->new;
 }
 
-sub new { bless {hooks => {}}, shift }
+sub new { bless {}, shift }
 
 sub hooks {
-    hook->{hooks};
+    hook->{hooks} ||= {};
 }
 
 sub set {
@@ -41,6 +41,16 @@ sub run {
     for my $code (@$hook_codes) {
         $code->(@args);
     }
+}
+
+sub reset {
+    my ($self, $hook_name) = @_;
+    delete hooks->{$hook_name};
+}
+
+sub reset_all {
+    my ($self) = @_;
+    delete $self->{hooks};
 }
 
 1;
@@ -105,6 +115,14 @@ C<$hook_name>に一致するフックコードを返します。
     hook->run('after_dispatch');
 
 C<$hook_name>が一致するフックを実行します。
+
+=head2 C<< hook->reset($hook_name) >>
+
+C<$hook_name>のフックを削除する。
+
+=head2 C<< hook->reset_all() >>
+
+全てのフックを削除する。
 
 =head1 AUTHOR
 

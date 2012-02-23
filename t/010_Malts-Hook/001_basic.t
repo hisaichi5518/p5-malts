@@ -27,4 +27,17 @@ subtest 'run hooks' => sub {
     is_deeply $array, [1, 2];
 };
 
+subtest 'reset hooks' => sub {
+    ok hook->reset('run_test');
+    is_deeply hook->get('run_test'), undef;
+};
+
+subtest 'reset all hooks' => sub {
+    ok hook->set('run_test' => sub {});
+    ok hook->set('run_test' => sub {});
+
+    ok hook->reset_all;
+    is_deeply hook->hooks, {};
+};
+
 done_testing;
