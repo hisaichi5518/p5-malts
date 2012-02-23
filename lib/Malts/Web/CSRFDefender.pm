@@ -14,12 +14,14 @@ our $RANDOM_STRING_SIZE = 16;
 Malts::Hook->set('before_dispatch' => sub {
     my ($c, $res) = @_;
 
+    Malts::Util::DEBUG && debugf 'Validate CSRF token.';
     if (!$c->validate_csrf_token) {
-        my @err = (403, 'Session validation failed.');
+        my @err = (403, 'CSRF Session validation failed.');
+        Malts::Util::DEBUG && debugf $err[1];
 
         if (!$c->can('res_403')) {
             $$res = $c->render_string(@err);
-            return 1;
+            return;
         }
 
         $$res = $c->res_403(@err);
@@ -54,7 +56,7 @@ sub validate_csrf_token {
     my $c = shift;
     my $req = $c->request or croakff 'Cannot find request object.';
 
-    if ($req->method && $req->method eq 'POST') {
+    if (_is_need_validated($req->method)) {
         my $param_token   = $req->param($PARAM_NAME);
         my $session_token = $req->session->get($SESSION_NAME);
 
@@ -63,6 +65,16 @@ sub validate_csrf_token {
         }
     }
     return 1; # good
+}
+
+sub _is_need_validated {
+    my ($method) = @_;
+    return 0 if !$method;
+
+    return
+        $method eq 'POST'   ? 1 :
+        $method eq 'PUT'    ? 1 :
+        $method eq 'DELETE' ? 1 : 0;
 }
 
 sub _random_string {
