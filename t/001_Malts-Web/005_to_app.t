@@ -34,6 +34,12 @@ use parent -norequire, 'TestApp::Web';
 
 # hookは実行されるが、bodyがokではないのでdispatchが必要。
 sub startup {}
+sub dispatch {
+    my ($c) = @_;
+    if (!$c->request->env->{'malts.error_test'}) {
+        return $c->create_response(200, [], ['TestApp1']);
+    }
+}
 
 package TestApp2::Web;
 use parent "Malts::Web";
@@ -49,6 +55,12 @@ subtest 'testing to_app' => sub {
     is_deeply $app->({}), [200, ['X-Malts-Test' => 'ok'], ['ok']];
 };
 
+subtest 'dispatch' => sub {
+    my $app = TestApp1::Web->to_app;
+    isa_ok $app, 'CODE';
+    is_deeply $app->({}), [200, [], ['TestApp1']];
+};
+
 subtest '$env is required' => sub {
     my $app = TestApp::Web->to_app;
     eval{ $app->() };
@@ -58,7 +70,7 @@ subtest '$env is required' => sub {
 
 subtest 'no response' => sub {
     my $app = TestApp1::Web->to_app;
-    eval{ $app->({}) };
+    eval{ $app->({'malts.error_test' => 1}) };
     ok $@;
     like $@, qr/You must create a response/;
 };
