@@ -119,6 +119,18 @@ Malts::Web::CSRFDefender - Malts用のCSRF Defender
 
 =head2 C<< $c->validate_csrf_token() -> Bool >>
 
+=head1 HOOKS
+
+=head2 before_dispatch
+
+C<$c->validate_csrf_token>を実行し、不正が起きたと判断したら、403を返す。
+
+C<$c->res_403>があれば、それが実行される。
+
+=head2 html_filter
+
+htmlにformがあればinputタグを自動で追加する。
+
 =head1 BASE CODE
 
 L<Amon2::Plugin::Web::CSRFDefender> by tokuhirom
