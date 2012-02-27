@@ -54,7 +54,7 @@ sub plugin {
 }
 
 # hooks
-sub config { croakff 'Method "config" not implemented by subclass' }
+sub config {}
 sub app_base_class {
     croakff 'Method "app_base_class" not implemented by subclass';
 }
