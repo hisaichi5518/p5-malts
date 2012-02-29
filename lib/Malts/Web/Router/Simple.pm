@@ -32,16 +32,15 @@ sub dispatch {
     }
     else {
         my $controller = $args->{controller};
-        __PACKAGE__->do_action($c, $controller => $action);
+        croakff "matched route! but can't find Controller or Action!: controller:$controller, action:$action"
+            if !$action || !$controller;
+        return _run_action($c, $controller => $action);
     }
 }
 
-sub do_action {
-    my ($self, $c, $controller, $action, @args) = @_;
+sub _run_action {
+    my ($c, $controller, $action, @args) = @_;
     my $namespace  = (ref $c ? ref $c : $c).'::Controller';
-
-    croakff "path matched route! but can't find Controller or Action!"
-        if !$action || !$controller;
 
     $controller = Plack::Util::load_class($controller, $namespace);
 
@@ -139,10 +138,6 @@ L<Router::Simple>のオブジェクトを返す。
         my $c = shift;
         ...;
     };
-
-=head2 C<< $class->do_action($c, $controller => $action, @args) >>
-
-    $class->do_action($c, "Root" => 'index');
 
 =head2 C<< $class->dispatch($c) >>
 
