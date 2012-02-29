@@ -7,18 +7,16 @@ use Log::Minimal qw(debugf croakff);
 use Malts::Util ();
 use Router::Simple 0.03;
 use Exporter 'import';
-our @EXPORT = qw(get post put del dispatch router_as_string);
+our @EXPORT = qw(router get post put del dispatch);
 
 my $_ROUTER = Router::Simple->new;
+
+sub router { $_ROUTER }
 
 sub get  { _connect_with_method('GET', @_);  }
 sub post { _connect_with_method('POST', @_); }
 sub put  { _connect_with_method('PUT', @_);  }
 sub del  { _connect_with_method('DELETE', @_); }
-
-sub router_as_string {
-    $_ROUTER->as_string;
-}
 
 sub dispatch {
     my ($class, $c) = @_;
@@ -91,12 +89,20 @@ Malts::Web::Router::Simple - MaltsでRouter::Simpleを使う為のモジュー�
     post '/' => 'Root#post';
     put  '/' => 'Root#put';
     del '/' => 'Root#delete';
+    router->as_string;
 
 =head1 DESCRIPTION
 
-高速なRouter Class である L<Router::Simple> を L<Malts::Web> で使う為のクラス
+高速なRouter Class である L<Router::Simple> を L<Malts> で使う為のクラス
 
 =head1 METHOD
+
+=head2 C<< router() -> Object >>
+
+    router->connect('/');
+    router->as_string;
+
+L<Router::Simple>のオブジェクトを返す。
 
 =head2 C<< get($path => $dist|\%dist|\&action) >>
 
@@ -141,12 +147,6 @@ Malts::Web::Router::Simple - MaltsでRouter::Simpleを使う為のモジュー�
 =head2 C<< $class->dispatch($c) >>
 
     $class->dispatch($c);
-
-=head2 C<< router_as_string() >>
-
-    router_as_string;
-
-どのようなPATH_INFOにマッチするかを表示します。
 
 =head1 AUTHOR
 
