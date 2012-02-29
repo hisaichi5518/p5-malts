@@ -13,6 +13,10 @@ our $RANDOM_STRING_SIZE = 16;
 
 hook->set('before_dispatch' => sub {
     my ($c, $res) = @_;
+    if (my $config = $c->config) {
+        my $plugin_config = $config->{'Malts::Web::CSRFDefender'} || {};
+        return if exists $plugin_config->{no_validate_hook};
+    }
 
     Malts::Util::DEBUG && debugf 'Validate CSRF token.';
     if (!$c->validate_csrf_token) {
