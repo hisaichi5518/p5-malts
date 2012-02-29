@@ -22,12 +22,15 @@ sub parameters {
 
 sub session {
     my $self = shift;
+    return $self->{session} if $self->{session};
+
     for my $key (qw/psgix.session psgix.session.options/) {
         croakff('Cant find $req->env->{%s}. you must use Plack::Middleware::Session.', $key)
             if not exists $self->env->{$key};
     }
 
-    $self->{session} ||= Plack::Session->new($self->env);
+    $self->session_options->{change_id}++;
+    $self->{session} = Plack::Session->new($self->env);
 }
 
 1;
