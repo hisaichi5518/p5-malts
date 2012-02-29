@@ -7,16 +7,38 @@ use Log::Minimal qw(debugf croakff);
 use Malts::Util ();
 use Router::Simple 0.03;
 use Exporter 'import';
-our @EXPORT = qw(router get post put del dispatch);
+our @EXPORT = qw(router any get post put del dispatch);
 
 my $_ROUTER = Router::Simple->new;
-
 sub router { $_ROUTER }
 
-sub get  { _connect_with_method('GET', @_);  }
-sub post { _connect_with_method('POST', @_); }
-sub put  { _connect_with_method('PUT', @_);  }
-sub del  { _connect_with_method('DELETE', @_); }
+sub get  { any(['GET', 'HEAD'], @_)  }
+sub post { any('POST', @_) }
+sub put  { any('PUT', @_)  }
+sub del  { any('DELETE', @_) }
+
+sub any {
+    my ($method, $path, $dest, $opt) = @_;
+    $opt->{method} = $method;
+    if (ref $dest eq 'HASH') {
+        $_ROUTER->connect($path => $dest, $opt);
+    }
+    elsif (ref $dest eq 'CODE') {
+        $_ROUTER->connect($path => {
+            action => $dest,
+        }, $opt);
+    }
+    elsif (!$dest) {
+        $_ROUTER->connect($path => {}, $opt);
+    }
+    else {
+        my %dest;
+        my ($controller, $action) = split '#', $dest;
+        $dest{controller} = $controller;
+        $dest{action}     = $action;
+        $_ROUTER->connect($path => \%dest, $opt);
+    }
+}
 
 sub dispatch {
     my ($class, $c) = @_;
@@ -48,28 +70,6 @@ sub _run_action {
     return $controller->$action($c, @args);
 }
 
-sub _connect_with_method {
-    my ($method, $path, $dest, $opt) = @_;
-    $opt->{method} = $method;
-    if (ref $dest eq 'HASH') {
-        $_ROUTER->connect($path => $dest, $opt);
-    }
-    elsif (ref $dest eq 'CODE') {
-        $_ROUTER->connect($path => {
-            action => $dest,
-        }, $opt);
-    }
-    elsif (!$dest) {
-        $_ROUTER->connect($path => {}, $opt);
-    }
-    else {
-        my %dest;
-        my ($controller, $action) = split '#', $dest;
-        $dest{controller} = $controller;
-        $dest{action}     = $action;
-        $_ROUTER->connect($path => \%dest, $opt);
-    }
-}
 
 1;
 __END__
@@ -102,6 +102,15 @@ Malts::Web::Router::Simple - MaltsでRouter::Simpleを使う為のモジュー�
     router->as_string;
 
 L<Router::Simple>のオブジェクトを返す。
+
+=head2 C<< any(\@methods, $path => $dist|\%dist|\&action) >>
+
+    any [qw/POST GET/], '/' => 'Root#index';
+    any [qw/POST GET/], '/' => {controller => 'Controller', action => 'action'};
+    any [qw/POST GET/], '/' => sub {
+        my $c = shift;
+        ...;
+    };
 
 =head2 C<< get($path => $dist|\%dist|\&action) >>
 

@@ -13,6 +13,7 @@ subtest 'testing router' => sub {
 
 subtest 'testing dispatch. return Status: 200' => sub {
     is_200({PATH_INFO => '/get', REQUEST_METHOD => 'GET'});
+    is_200({PATH_INFO => '/get', REQUEST_METHOD => 'HEAD'});
     is_200({PATH_INFO => '/post', REQUEST_METHOD => 'POST'});
     is_200({PATH_INFO => '/put', REQUEST_METHOD => 'PUT'});
     is_200({PATH_INFO => '/del', REQUEST_METHOD => 'DELETE'});
