@@ -23,12 +23,7 @@ hook->set('before_dispatch' => sub {
         my @err = (403, 'CSRF Session validation failed.');
         Malts::Util::DEBUG && debugf $err[1];
 
-        if (!$c->can('res_403')) {
-            $$res = $c->render_string(@err);
-            return;
-        }
-
-        $$res = $c->res_403(@err);
+        $$res = $c->render_string(@err);
     }
 });
 
