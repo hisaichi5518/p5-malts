@@ -63,11 +63,16 @@ Text::Xslate->new(
 
 * 処理時間であれこれする
 
-__PACKAGE__->plugin('Web::RequestTimer' => {
-    on_finished => \&timer_callback,
-});
+use Malts::Web::RequestTimer;
 
-sub timer_callback {
+configの中で
+
+'Malts::Web::RequestTimer' => {
+    on_finished => \&MyApp::Util::request_timer_callback,
+}
+
+package MyApp::Util;
+sub request_timer_callback {
     my ($c, $start_time, $end_time, $diff_time) = @_;
     if ($diff_time > 1) {
         # ログ取ったりなんかしらする
