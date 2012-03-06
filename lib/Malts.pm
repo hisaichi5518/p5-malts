@@ -44,15 +44,6 @@ sub encoding {
     return $encoding;
 }
 
-sub plugin {
-    my ($self, $name, $opts) = @_;
-    croakff 'Cannot find plugin name.' if not $name;
-    my $plugin = Plack::Util::load_class($name, 'Malts::Plugin');
-    Malts::Util::DEBUG && debugf "load plugin => $plugin->init";
-
-    $plugin->init($self, $opts);
-}
-
 # hooks
 sub config {}
 sub app_base_class {
@@ -172,15 +163,6 @@ C<Malts::ConfigLoader>を使って、設定ファイルを読み込む事も可�
             Malts::ConfigLoader->load(@config_path);
         };
     }
-
-=head2 C<plugin>
-
-    $c->plugin($name => \%opts);
-    $c->plugin('Hoge' => {}); # Malts::Plugin::Hogeを読み込んで、initメソッドを実行する
-
-また以下のように C< $name >に+を付けるとMalts::Plugin以外のネームスペースを指定する事が出来ます。
-
-    $c->plugin('+MyApp::Plugin::Hoge');
 
 =head1 SEE ALSO
 
