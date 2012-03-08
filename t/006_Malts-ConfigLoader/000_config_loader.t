@@ -25,7 +25,7 @@ use strict;
 use Test::More;
 
 BEGIN {
-    use_ok 'Malts::Plugin::ConfigLoader';
+    use_ok 'Malts::ConfigLoader';
 }
 
 subtest 'testing config_loader' => sub {

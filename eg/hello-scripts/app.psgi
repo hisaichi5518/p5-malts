@@ -79,7 +79,7 @@ res_200, res_404は作らなくても動作しますが、作ったほうが分�
 =cut
 
 package HelloApp::Web::Dispatcher;
-use Malts::Web::Router::Simple::Declare;
+use Malts::Web::Router::Simple;
 
 get '/' => 'Root#index';
 

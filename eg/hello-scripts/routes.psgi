@@ -33,7 +33,7 @@ switchについては L<http://perldoc.perl.org/perlsyn.html#Switch-statements> 
 =cut
 
 package HelloRoutes::Web::Dispatcher;
-use Malts::Web::Router::Simple::Declare;
+use Malts::Web::Router::Simple;
 
 get '/' => 'Root#index';
 
