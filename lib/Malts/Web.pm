@@ -59,13 +59,14 @@ sub render {
     my $decoed_html = $self->view->render($template_path, $opts);
     hook->run(html_filter => $self, \$decoed_html);
 
+    my $html = $self->encoding->encode($decoed_html);
     return $self->create_response(
         $status,
         [
             'Content-Type'   => $self->html_content_type,
-            'Content-Length' => length($decoed_html),
+            'Content-Length' => length($html),
         ],
-        [$self->encoding->encode($decoed_html)]
+        [$html]
     );
 }
 
@@ -74,13 +75,14 @@ sub render_string {
     Malts::Util::DEBUG && debugf "Rendering string: $decoded_str";
     hook->run(html_filter => $self, \$decoded_str);
 
+    my $str = $self->encoding->encode($decoded_str);
     return $self->create_response(
         $status,
         [
             'Content-Type'   => $self->html_content_type,
-            'Content-Length' => length($decoded_str),
+            'Content-Length' => length($str),
         ],
-        [$self->encoding->encode($decoded_str)]
+        [$str]
     );
 }
 

@@ -22,6 +22,12 @@ subtest 'testing encoded str' => sub {
     is_deeply $res->body, [encode_utf8 '日本語'];
 };
 
+subtest 'testing encoded long str' => sub {
+    my $long_str = do { local $/; <DATA> };
+    my $res = res(200, $long_str);
+    is_deeply $res->body, [encode_utf8 $long_str];
+};
+
 subtest 'testing content_type' => sub {
     my $res = res(200, 'ok', html_content_type => 'text/html; charset=UTF-8');
     is $res->headers->{'content-type'}, 'text/html; charset=UTF-8';
@@ -36,10 +42,45 @@ sub res {
     my $text = shift;
     my $c = TestApp::Web->new(@_);
     my $res = $c->render_string($status, $text);
-    isa_ok $res, 'Malts::Web::Response', encode_utf8 "\$res(body: $text)";
-    is $res->content_length, length($text), encode_utf8 "content_length == length($text)";
+    my $encoded_text = encode_utf8 $text;
+
+    isa_ok $res, 'Malts::Web::Response', "\$res(body: $encoded_text)";
+    is $res->content_length, length($encoded_text), "content_length == length($encoded_text)";
     is $res->status, $status, "status: $status";
     return $res;
 }
 
 done_testing;
+__END__
+日本語！まじ長い！日本語！
+日本語！まじ長い！日本語！
+日本語！まじ長い！日本語！
+日本語！まじ長い！日本語！
+日本語！まじ長い！日本語！
+日本語！まじ長い！日本語！
+日本語！まじ長い！日本語！
+日本語！まじ長い！日本語！
+日本語！まじ長い！日本語！
+日本語！まじ長い！日本語！
+日本語！まじ長い！日本語！
+日本語！まじ長い！日本語！
+日本語！まじ長い！日本語！
+日本語！まじ長い！日本語！
+日本語！まじ長い！日本語！
+日本語！まじ長い！日本語！
+日本語！まじ長い！日本語！
+日本語！まじ長い！日本語！
+日本語！まじ長い！日本語！
+日本語！まじ長い！日本語！
+日本語！まじ長い！日本語！
+日本語！まじ長い！日本語！
+日本語！まじ長い！日本語！
+日本語！まじ長い！日本語！
+日本語！まじ長い！日本語！
+日本語！まじ長い！日本語！
+日本語！まじ長い！日本語！
+日本語！まじ長い！日本語！
+日本語！まじ長い！日本語！
+日本語！まじ長い！日本語！
+日本語！まじ長い！日本語！
+日本語！まじ長い！日本語！
