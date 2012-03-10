@@ -41,7 +41,6 @@ sub boostrap {
 
 sub encoding {
     state $encoding = Malts::Util::find_encoding('utf8');
-    return $encoding;
 }
 
 # hooks
