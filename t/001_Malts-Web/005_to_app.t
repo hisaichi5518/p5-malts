@@ -53,17 +53,15 @@ subtest 'testing to_app' => sub {
     my $app = TestApp::Web->to_app;
     isa_ok $app, 'CODE';
     is_deeply $app->({}), [200, ['X-Malts-Test' => 'ok'], ['ok']];
+
+    my $c = Malts->context;
+    is $c->{body}, 'ok';
 };
 
 subtest 'dispatch' => sub {
     my $app = TestApp1::Web->to_app;
     isa_ok $app, 'CODE';
     is_deeply $app->({}), [200, [], ['TestApp1']];
-};
-
-subtest 'has context' => sub {
-    my $c = Malts->context;
-    is $c->{body}, 'ok';
 };
 
 subtest '$env is required' => sub {
