@@ -33,6 +33,7 @@ sub to_app {
         my $env = shift;
 
         my $self = $class->new(%args);
+        Malts->set_context($self);
         $self->create_request($env);
 
         Malts::Util::DEBUG && debugf "do $class->startup!";
