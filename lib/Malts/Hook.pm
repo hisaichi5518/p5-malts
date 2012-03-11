@@ -11,10 +11,10 @@ sub hook {
     state $hook = Malts::Hook->new;
 }
 
-sub new { bless {}, shift }
+sub new { bless {hooks => {}}, shift }
 
 sub hooks {
-    hook->{hooks} ||= {};
+    hook->{hooks};
 }
 
 sub set {
