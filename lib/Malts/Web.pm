@@ -58,28 +58,27 @@ sub to_app {
 sub render {
     my ($self, $status, $template_path, $opts) = @_;
     Malts::Util::DEBUG && debugf "Rendering template: $template_path";
-    $self->view or croakf 'You must create a view.';
 
-    my $decoed_html = $self->view->render($template_path, $opts);
-    hook->run(html_filter => $self, \$decoed_html);
+    my $decoded_html = $self->view->render($template_path, $opts);
+    hook->run(html_filter => $self, \$decoded_html);
+    my $str = $self->encoding->encode($decoded_html);
 
-    my $html = $self->encoding->encode($decoed_html);
     return $self->create_response(
         $status,
         [
             'Content-Type'   => $self->html_content_type,
-            'Content-Length' => length($html),
+            'Content-Length' => length($str),
         ],
-        [$html]
+        [$str]
     );
 }
 
 sub render_string {
-    my ($self, $status, $decoded_str) = @_;
-    Malts::Util::DEBUG && debugf "Rendering string: $decoded_str";
-    hook->run(html_filter => $self, \$decoded_str);
+    my ($self, $status, $decoded_html) = @_;
+    Malts::Util::DEBUG && debugf "Rendering string: $decoded_html";
+    hook->run(html_filter => $self, \$decoded_html);
 
-    my $str = $self->encoding->encode($decoded_str);
+    my $str = $self->encoding->encode($decoded_html);
     return $self->create_response(
         $status,
         [
