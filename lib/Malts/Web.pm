@@ -37,16 +37,19 @@ sub to_app {
         $self->create_request($env);
 
         Malts::Util::DEBUG && debugf "do $class->startup!";
+        $self->startup();
+
+        Malts::Util::DEBUG && debugf "run before_dispatch hooks!";
         my $res;
-        my $res_ref = \$res;
-        $self->startup($res_ref);
-        hook->run(before_dispatch => $self, $res_ref);
+        hook->run(before_dispatch => $self, \$res);
         if (!$res) {
             $res = $self->dispatch;
             unless ($res) {
                 croakf 'You must create a response!';
             }
         }
+
+        Malts::Util::DEBUG && debugf "run after_dispatch hooks!";
         hook->run(after_dispatch => $self, $res);
         return $res->finalize;
     };
