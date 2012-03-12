@@ -5,7 +5,7 @@ use warnings;
 use Malts::Web::Request;
 use Malts::Web::Response;
 use Malts::Util ();
-use Log::Minimal qw(debugf croakf);
+use Log::Minimal qw(debugf croakf croakff);
 use Malts::Hook;
 
 sub html_content_type { 'text/html; charset=UTF-8' }
@@ -89,7 +89,9 @@ sub render_string {
 
 # hooks
 sub dispatch {}
-sub view {}
+sub view {
+    croakff 'Method "view" not implemented by subclass';
+}
 
 # shortcut
 sub args { shift->request->args }
