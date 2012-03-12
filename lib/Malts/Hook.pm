@@ -50,7 +50,7 @@ sub reset {
 
 sub reset_all {
     my ($self) = @_;
-    delete $self->{hooks};
+    $self->{hooks} = {};
 }
 
 1;
