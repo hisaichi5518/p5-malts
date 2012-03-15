@@ -42,21 +42,10 @@ package main;
 use Plack::Builder;
 
 builder {
-    enable "Plack::Middleware::Scope::Container";
     enable "Plack::Middleware::Log::Minimal", autodump => 1;
 
     HelloRender::Web->to_app;
 };
-
-=pod
-
-Plack::Middleware::Scope::Containerは、$c->render()の中で使われているメソッド(encoding)で使用されているため必須。
-
-またこれは、render_stringでも同様である。
-
-=cut
-
-
 
 __END__
 

@@ -113,7 +113,6 @@ package main;
 use Plack::Builder;
 
 builder {
-    enable "Plack::Middleware::Scope::Container";
     enable "Plack::Middleware::Log::Minimal", autodump => 1;
 
     HelloApp::Web->to_app;
