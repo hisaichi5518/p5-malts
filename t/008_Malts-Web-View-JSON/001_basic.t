@@ -26,22 +26,22 @@ use utf8;
 use Test::More;
 
 subtest 'testing render_json' => sub {
-    my $psgi = psgi_app({PATH_INFO => '/'});
-    is_deeply $psgi->[2], ['{"user":"hisaichi5518"}'];
+    my $res = run_app({PATH_INFO => '/'});
+    is_deeply $res->[2], ['{"user":"hisaichi5518"}'];
 
-    $psgi = psgi_app({PATH_INFO => '/utf8'});
-    is_deeply $psgi->[2], ['{"user":"\u3072\u3055\u3044\u3061"}']; # ひさいち
+    $res = run_app({PATH_INFO => '/utf8'});
+    is_deeply $res->[2], ['{"user":"\u3072\u3055\u3044\u3061"}']; # ひさいち
 
-    $psgi = psgi_app({PATH_INFO => '/404'});
-    is_deeply $psgi->[2], ['{"err":"not found!"}'];
+    $res = run_app({PATH_INFO => '/404'});
+    is_deeply $res->[2], ['{"err":"not found!"}'];
 };
 
 subtest 'Chrome and HTTP_X_REQUESTED_WITH is not "XMLHttpRequest"' => sub {
-    my $psgi = psgi_app({
+    my $res = run_app({
         HTTP_USER_AGENT => 'Chrome',
     });
 
-    is_deeply $psgi->[1], [
+    is_deeply $res->[1], [
         'Content-Length' => 20,
         'Content-Type'   => 'text/html; charset=utf-8',
         'X-Content-Type-Options' => 'nosniff'
@@ -49,12 +49,12 @@ subtest 'Chrome and HTTP_X_REQUESTED_WITH is not "XMLHttpRequest"' => sub {
 };
 
 subtest 'Chrome and HTTP_X_REQUESTED_WITH is "XMLHttpRequest"' => sub {
-    my $psgi = psgi_app({
+    my $res = run_app({
         HTTP_USER_AGENT => 'Chrome',
         HTTP_X_REQUESTED_WITH => 'XMLHttpRequest',
     });
 
-    is_deeply $psgi->[1], [
+    is_deeply $res->[1], [
         'Content-Length' => 20,
         'Content-Type'   => 'application/json; charset=utf-8',
         'X-Content-Type-Options' => 'nosniff'
@@ -62,18 +62,17 @@ subtest 'Chrome and HTTP_X_REQUESTED_WITH is "XMLHttpRequest"' => sub {
 };
 
 subtest 'Safari and encoding is utf-8' => sub {
-    my $psgi = psgi_app({
+    my $res = run_app({
         HTTP_USER_AGENT => 'Safari',
     });
 
-    is_deeply $psgi->[2], ["\xEF\xBB\xBF".'{"err":"not found!"}'];
+    is_deeply $res->[2], ["\xEF\xBB\xBF".'{"err":"not found!"}'];
 };
 
-sub psgi_app {
+sub run_app {
     my $env = shift;
     ok my $app = MyApp::Web->to_app;
-    ok my $psgi = $app->($env);
-    return $psgi;
+    $app->($env);
 }
 
 done_testing;

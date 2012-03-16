@@ -30,21 +30,21 @@ subtest 'testing dispatch. return Status: 404' => sub {
 
 sub is_404 {
     my $env = shift;
-    my $psgi_app = psgi_app($env);
-    my $message  = error_message($env);
-    is $psgi_app->[0], 404, $message;
-    is_deeply $psgi_app->[2], ['404 Not Found!'], $message;
+    my $res = run_app($env);
+    my $message = error_message($env);
+    is $res->[0], 404, $message;
+    is_deeply $res->[2], ['404 Not Found!'], $message;
 }
 
 sub is_200 {
     my $env = shift;
-    my $psgi_app = psgi_app($env);
+    my $res = run_app($env);
     my $message  = error_message($env);
-    is $psgi_app->[0], 200, $message;
-    is_deeply $psgi_app->[2], ['index!'], $message;
+    is $res->[0], 200, $message;
+    is_deeply $res->[2], ['index!'], $message;
 }
 
-sub psgi_app {
+sub run_app {
     my $env = shift;
     my $t = TestApp::Web->to_app;
     $t->($env);
