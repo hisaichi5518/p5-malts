@@ -23,7 +23,7 @@ package main;
 use Plack::Builder;
 
 builder {
-    enable "Plack::Middleware::Log::Minimal", autodump => 1;
+    enable "Plack::Middleware::Log::Minimal";
     HelloLog::Web->to_app;
 };
 

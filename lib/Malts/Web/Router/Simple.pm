@@ -44,7 +44,10 @@ sub dispatch {
     my ($class, $c) = @_;
     return unless my $args = $_ROUTER->match($c->request->env);
 
-    Malts::Util::DEBUG && debugf('match route! => %s', $args);
+    if (Malts::Util::DEBUG) {
+        local $Log::Minimal::AUTODUMP = 1;
+        debugf('match route! => %s', $args);
+    }
 
     $c->request->env->{'malts.routing_args'} = $args;
     my $action = $args->{action};
@@ -54,7 +57,7 @@ sub dispatch {
     }
     else {
         my $controller = $args->{controller};
-        croakff "matched route! but can't find Controller or Action!: controller:$controller, action:$action"
+        croakff "But can't find Controller and/or Action!: controller:'$controller', action:'$action'"
             if !$action || !$controller;
         return _run_action($c, $controller => $action);
     }

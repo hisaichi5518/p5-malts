@@ -39,7 +39,7 @@ use Plack::Builder;
 use Malts::Util;
 
 builder {
-    enable "Plack::Middleware::Log::Minimal", autodump => 1;
+    enable "Plack::Middleware::Log::Minimal";
 
     HelloMalts::Web->to_app;
 };

@@ -5,7 +5,7 @@ use Plack::Builder;
 use HelloApp::Web;
 
 builder {
-    enable "Plack::Middleware::Log::Minimal", autodump => 1;
+    enable "Plack::Middleware::Log::Minimal";
 
     HelloApp::Web->to_app;
 };

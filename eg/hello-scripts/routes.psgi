@@ -63,7 +63,7 @@ package main;
 use Plack::Builder;
 
 builder {
-    enable "Plack::Middleware::Log::Minimal", autodump => 1;
+    enable "Plack::Middleware::Log::Minimal";
 
     HelloRoutes::Web->to_app;
 };
