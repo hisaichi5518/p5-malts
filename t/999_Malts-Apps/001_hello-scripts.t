@@ -12,6 +12,10 @@ subtest "testing $dir_path/app.psgi" => sub {
     is_200('app.psgi', {PATH_INFO => '/', REQUEST_METHOD => 'GET'}, qr/DICE:/);
 };
 
+subtest "testing $dir_path/error.psgi" => sub {
+    is_500('error.psgi', {PATH_INFO => '/', REQUEST_METHOD => 'GET'}, qr/error!/);
+};
+
 subtest "testing $dir_path/hello.psgi" => sub {
     is_200('hello.psgi', {PATH_INFO => '/', REQUEST_METHOD => 'GET'}, qr/Hello Malts/);
 };
@@ -24,7 +28,7 @@ subtest "testing $dir_path/routes.psgi" => sub {
     is_200('routes.psgi', {PATH_INFO => '/', REQUEST_METHOD => 'GET'}, qr/Hello Router::Simple World/);
 };
 
-sub psgi_app {
+sub run_app {
     my ($script, $env) = @_;
     my $app = Plack::Util::load_psgi("$dir_path/$script");
     $app->($env);
@@ -32,9 +36,16 @@ sub psgi_app {
 
 sub is_200 {
     my ($script, $env, $text) = @_;
-    my $psgi = psgi_app($script, $env);
-    is $psgi->[0], 200;
-    like $psgi->[2]->[0], $text;
+    my $res = run_app($script, $env);
+    is $res->[0], 200;
+    like $res->[2]->[0], $text;
+}
+
+sub is_500 {
+    my ($script, $env, $text) = @_;
+    my $res = run_app($script, $env);
+    is $res->[0], 500;
+    like $res->[2]->[0], $text;
 }
 
 done_testing;
