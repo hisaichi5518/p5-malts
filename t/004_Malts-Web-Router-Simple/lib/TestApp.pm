@@ -25,6 +25,9 @@ get '/code' => sub {
     $c->create_response(200, [], ['index!']);
 };
 
+my $r = submapper '/submapper', {controller => 'Root'};
+$r->connect('/name', {action => 'index'}, {method => 'GET'});
+
 package TestApp::Web::Controller::Root;
 $INC{'TestApp/Web/Controller/Root.pm'} = __FILE__;
 

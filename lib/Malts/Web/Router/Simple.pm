@@ -7,7 +7,7 @@ use Log::Minimal qw(debugf croakff);
 use Malts::Util ();
 use Router::Simple 0.03;
 use Exporter 'import';
-our @EXPORT = qw(router any get post put del dispatch);
+our @EXPORT = qw(router any get post put del submapper dispatch);
 
 my $_ROUTER = Router::Simple->new;
 sub router { $_ROUTER }
@@ -16,6 +16,7 @@ sub get  { any(['GET', 'HEAD'], @_)  }
 sub post { any('POST', @_) }
 sub put  { any('PUT', @_)  }
 sub del  { any('DELETE', @_) }
+sub submapper { $_ROUTER->submapper(@_) }
 
 sub any {
     my ($method, $path, $dest, $opt) = @_;
@@ -150,6 +151,11 @@ L<Router::Simple>のオブジェクトを返す。
         my $c = shift;
         ...;
     };
+
+=head2 C<< submapper($path => $dist|\%dist|\&action) >>
+
+    my $r = submapper '/user', {controller => 'User'};
+    $r->connect('/:name', {action => 'name'});
 
 =head2 C<< $class->dispatch($c) >>
 
