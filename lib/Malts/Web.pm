@@ -7,6 +7,7 @@ use Malts::Web::Response;
 use Malts::Util ();
 use Log::Minimal qw(debugf croakf croakff);
 use Malts::Hook;
+use URI::Escape;
 
 sub html_content_type { 'text/html; charset=UTF-8' }
 sub request { $_[0]->{request}  }
@@ -87,6 +88,22 @@ sub render_string {
         ],
         [$str]
     );
+}
+
+sub uri_for {
+    my ($self, $path, $query) = @_;
+    my $root = $self->req->_uri_base;
+    $root =~ s{([^/])$}{$1/};
+    $path =~ s{^/}{};
+
+    my @q;
+    my $enc = $self->encoding;
+    for my $key (keys %$query) {
+        my $val = $query->{$key};
+        $val = URI::Escape::uri_escape($enc->encode($val));
+        push @q, "${key}=${val}";
+    }
+    $root . $path . (scalar @q ? '?' . join('&', @q) : '');
 }
 
 # hooks
