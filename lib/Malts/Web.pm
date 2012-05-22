@@ -202,6 +202,12 @@ C< $c->render() >を使用するには、C< $c->view() >を指定している必
 
 Responseオブジェクトを返します。
 
+=head2 C<< $c->uri_for($path[, \%query]) >>
+
+    $c->uri_for('/', {hoge => 1});
+
+このメソッドは、変更する可能性があります。
+
 =head2 C<< $c->dispatch >>
 
     $c->dispatch;
