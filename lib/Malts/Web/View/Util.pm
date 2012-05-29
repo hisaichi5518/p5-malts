@@ -50,14 +50,16 @@ Malts::Web::View::Util - view utilities
 
 =head1 SYNOPSIS
 
+    # Xslateでの例
     use Text::Xslate;
     use Malts::Web::View::Util;
 
     my $tx = Text::Xslate->new(
-        module => ['Malts::Web::View::Util'],
+        module => [
+            'Malts::Web::View::Util',
+            'MyApp::Web::View::Util',
+        ],
     );
-
-=head1 DESCRIPTION
 
 =head1 FUNCTIONS
 
