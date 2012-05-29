@@ -8,7 +8,7 @@ use File::Spec ();
 use Log::Minimal qw(debugf croakff);
 use Malts::Util ();
 
-our $VERSION = '0.02';
+our $VERSION = '0.05';
 
 {
     my $context;
