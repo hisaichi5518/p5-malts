@@ -4,6 +4,7 @@ Revision history for Perl extension Malts
     - removed submappper()
     - added load_controller()
     - added run_action()
+    - use Log::Minimal::ddf()
 
 0.05 2012-05-30
     - added uri_for()

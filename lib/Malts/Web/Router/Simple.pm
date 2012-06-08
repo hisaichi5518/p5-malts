@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use 5.10.1;
 
-use Log::Minimal qw(debugf croakff);
+use Log::Minimal qw(debugf croakff ddf);
 use Malts::Util ();
 use Router::Simple 0.03;
 use Exporter 'import';
@@ -45,8 +45,7 @@ sub dispatch {
     return unless my $args = $_ROUTER->match($c->request->env);
 
     if (Malts::Util::DEBUG) {
-        local $Log::Minimal::AUTODUMP = 1;
-        debugf('match route! => %s', $args);
+        debugf 'match route! => %s', ddf($args);
     }
 
     $c->request->env->{'malts.routing_args'} = $args;
