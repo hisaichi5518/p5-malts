@@ -7,8 +7,6 @@ BEGIN {
     my @devmods = qw(
         inc::Module::Install             1.00
         Module::Install::AuthorTests     0.002
-        Module::Install::Repository      0.06
-        Test::Requires                   0.06
     );
     my @not_available;
     while(my($mod, $ver) = splice @devmods, 0, 2) {
@@ -25,23 +23,18 @@ use inc::Module::Install;
 
 all_from 'lib/Malts.pm';
 
-requires 'Encode';
-requires 'Plack';
-requires 'parent';
-requires 'Text::Xslate' => 1.4001;
-requires 'File::Spec';
-requires 'Log::Minimal';
-requires 'Plack::Middleware::Log::Minimal';
-requires 'Router::Simple';
-requires 'Plack::Session';
+# parent, Plack, Log::Minimal
+requires 'Encode'         => 2.44;
+requires 'Text::Xslate'   => 1.5009;
+requires 'Router::Simple' => 0.09;
+requires 'Plack::Middleware::Session'      => 0.14;
+requires 'Plack::Middleware::Log::Minimal' => 0.06;
 
-test_requires 'Test::More' => '0.96';
-
-auto_set_repository if -e '.git';
+test_requires 'Test::More'     => 0.96;
+test_requires 'Test::Requires' => 0.06;
 
 tests_recursive;
 author_tests 'xt';
-
 
 clean_files qw(
     Malts-*
