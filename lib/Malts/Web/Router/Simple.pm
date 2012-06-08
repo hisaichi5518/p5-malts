@@ -7,7 +7,7 @@ use Log::Minimal qw(debugf croakff);
 use Malts::Util ();
 use Router::Simple 0.03;
 use Exporter 'import';
-our @EXPORT = qw(router any get post put del dispatch);
+our @EXPORT = qw(router any get post put del dispatch load_controller run_action);
 
 my $_ROUTER = Router::Simple->new;
 sub router { $_ROUTER }
@@ -59,15 +59,21 @@ sub dispatch {
         my $controller = $args->{controller};
         croakff "But can't find Controller and/or Action!: controller:'$controller', action:'$action'"
             if !$action || !$controller;
-        return _run_action($c, $controller => $action);
+
+        $controller = load_controller($c, $controller);
+        return run_action($c, $controller => $action);
     }
 }
 
-sub _run_action {
-    my ($c, $controller, $action, @args) = @_;
-    my $namespace  = (ref $c ? ref $c : $c).'::Controller';
+sub load_controller {
+    my ($c, $controller) = @_;
+    my $namespace  = (ref $c).'::Controller';
 
-    $controller = Plack::Util::load_class($controller, $namespace);
+    Plack::Util::load_class($controller, $namespace);
+}
+
+sub run_action {
+    my ($c, $controller, $action, @args) = @_;
 
     Malts::Util::DEBUG && debugf "Dispatching $controller->$action!";
     return $controller->$action($c, @args);
@@ -90,7 +96,7 @@ Malts::Web::Router::Simple - MaltsでRouter::Simpleを使う為のモジュー�
     get  '/' => 'Root#index';
     post '/' => 'Root#post';
     put  '/' => 'Root#put';
-    del '/' => 'Root#delete';
+    del  '/' => 'Root#delete';
     router->as_string;
 
 =head1 DESCRIPTION
@@ -157,13 +163,17 @@ L<Router::Simple>のオブジェクトを返す。
 
     $class->dispatch($c);
 
+=head2 C<< load_controller() >>
+
+=head2 C<< run_action() >>
+
 =head1 AUTHOR
 
 hisaichi5518 E<lt>info[at]moe-project.comE<gt>
 
 =head1 SEE ALSO
 
-L<Router::Simple>
+L<Router::Simple>, L<Class::Method::Modifire::Fast>
 
 =head1 LICENSE
 

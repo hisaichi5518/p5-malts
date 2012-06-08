@@ -8,7 +8,8 @@ package TestApp::Web;
 use parent qw(Malts Malts::Web);
 
 sub dispatch {
-    TestApp::Web::Dispatcher->dispatch(@_) or $_[0]->create_response(404, [], ['404 Not Found!']);
+    TestApp::Web::Dispatcher->dispatch(@_)
+        or $_[0]->create_response(404, [], ['404 Not Found!']);
 }
 
 package TestApp::Web::Dispatcher;
