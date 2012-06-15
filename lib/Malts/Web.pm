@@ -40,7 +40,6 @@ sub to_app {
         Malts::Util::DEBUG && debugf "do $class->startup!";
         $self->startup();
 
-        Malts::Util::DEBUG && debugf "run before_dispatch hooks!";
         my $res;
         hook->run(before_dispatch => $self, \$res);
         if (!$res) {
@@ -50,7 +49,6 @@ sub to_app {
             }
         }
 
-        Malts::Util::DEBUG && debugf "run after_dispatch hooks!";
         hook->run(after_dispatch => $self, $res);
         return $res->finalize;
     };
