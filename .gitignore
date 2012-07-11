@@ -23,4 +23,5 @@ cover_db*
 *.gcno
 *.gcov
 *.stackdump
+misc/*
 benchmark/result.txt
