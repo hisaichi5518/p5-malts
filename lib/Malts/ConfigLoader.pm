@@ -1,7 +1,6 @@
 package Malts::ConfigLoader;
 use strict;
 use warnings;
-use Exporter 'import';
 use File::Spec ();
 use Log::Minimal qw(croakff debugf);
 use Malts::Util;

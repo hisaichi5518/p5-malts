@@ -91,6 +91,8 @@ sub render_string {
 sub uri_for {
     my ($self, $path, $query) = @_;
     my $root = $self->req->_uri_base;
+
+    $path = '' if not defined $path;
     $root =~ s{([^/])$}{$1/};
     $path =~ s{^/}{};
 
