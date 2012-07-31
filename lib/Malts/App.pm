@@ -4,15 +4,16 @@ use warnings;
 
 my ($_apps, $_hooks, $_routers, $_current);
 
-sub apps    { $_apps    ||= {} }
+sub apps    { $_apps    ||= {} } # for debug
 sub hooks   { $_hooks   ||= {} }
 sub routers { $_routers ||= {} }
 
 sub new {
     my ($class, %args) = @_;
+    my $name = $args{name} or die q/can't find "name"/;
     my $self = bless \%args, $class;
 
-    $_apps->{$args{name}} = $self;
+    $_apps->{$name} = $self;
     return $self;
 }
 

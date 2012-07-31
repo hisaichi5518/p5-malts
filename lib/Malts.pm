@@ -16,8 +16,9 @@ sub context { $_context }
 
 sub boostrap {
     my ($class) = @_;
-    my $app  = Malts::App->set_running_app($class);
-    my $self = $class->new();
+    my $app   = Malts::App->set_running_app($class);
+    my $self  = $class->new();
+    $_context = $self;
 
     return ($app, $self);
 }
