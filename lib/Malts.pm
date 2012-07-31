@@ -3,190 +3,204 @@ use 5.10.1;
 use strict;
 use warnings;
 
-use Encode ();
-use File::Spec ();
-use Log::Minimal qw(debugf croakff);
-use Malts::Util ();
+use Malts::App;
+use Malts::Util;
+use Malts::Web::Request;
+use Malts::Web::Response;
 
-our $VERSION = '0.05';
+our $VERSION = '0.500';
+our $_context;
 
-{
-    my $context;
-    sub context { $context }
-    sub set_context { $context = $_[1] }
+sub new     { bless {}, shift }
+sub context { $_context }
+
+sub boostrap {
+    my ($class) = @_;
+    my $app  = Malts::App->set_running_app($class);
+    my $self = $class->new();
+
+    return ($app, $self);
 }
 
-sub new {
-    my $class = shift;
-    my %args = @_ == 1 ? %{$_[0]} : @_;
-    bless {%args}, $class;
-}
+sub to_app {
+    my ($class) = @_;
 
-# copied Amon2::Util::base_dir
-sub app_dir {
-    state $app_dir = do {
-        my $path = $_[0]->app_base_class;
-        $path =~ s!::!/!g;
+    return sub {
+        my $env  = shift;
+        my $app  = Malts::App->set_running_app($class);
+        my $self = $class->new;
+        local $_context = $self;
 
-        if (my $libpath = $INC{"$path.pm"}) {
-            $libpath =~ s!(?:blib/)?lib/+$path\.pm$!!;
-            File::Spec->rel2abs($libpath || './');
-        }
-        else {
-            File::Spec->rel2abs('./');
-        }
+        $self->create_request($env);
+        my $res = $self->dispatch;
+        return $res->finalize;
     };
 }
 
-sub boostrap {
-    my $class = shift;
-    my $self = $class->new(@_);
-    Malts->set_context($self);
-    $self->startup;
-    return $self;
+sub load_plugins {
+    my ($class, @plugins) = @_;
+
+    while(@plugins) {
+        my $plugin = shift @plugins;
+        my $opts   = ref $plugins[0] eq 'HASH' ? shift @plugins : {};
+
+        $class->load_plugin($plugin, $opts);
+    }
 }
+
+sub load_plugin {
+    my ($class, $plugin, $opts) = @_;
+    $plugin = Plack::Util::load_class($plugin, 'Malts::Plugin');
+
+    #$plugin->init($class, $opts);
+}
+
+sub controller_name {
+    my ($self) = @_;
+    my $name = Malts::App->current->name;
+    return "$name\::Controller";
+}
+
+sub dispatcher_class {
+    my ($self) = @_;
+    my $name = Malts::App->current->name;
+    return "$name\::Dispatcher";
+}
+
+sub request_class  { 'Malts::Web::Request'  }
+sub response_class { 'Malts::Web::Response' }
+
+sub dispatch {
+    my ($self) = @_;
+
+    $self->dispatcher_class->dispatch($self)
+        or $self->render_string(404, 'Page Not Found')
+}
+
+sub create_request {
+    my $self = shift;
+    $self->{request} = $self->request_class->new(@_);
+}
+
+sub create_response {
+    my $self = shift;
+    return $self->response_class->new(@_);
+}
+
+# view
+sub html_content_type { 'text/html; charset=UTF-8' }
 
 sub encoding {
-    state $encoding = Malts::Util::find_encoding('utf8');
+    my ($self) = @_;
+    $self->{encoding} ||= Malts::Util::find_encoding('utf-8');
 }
 
-# hooks
-sub config {}
-sub app_base_class {
-    croakff 'Method "app_base_class" not implemented by subclass';
+sub create_headers {
+    my ($self, $html) = @_;
+    return [
+        'Content-Type'   => $self->html_content_type,
+        'Content-Length' => length($html),
+        'X-Content-Type-Options' => 'nosniff',
+        'X-Frame-Options'        => 'DENY',
+    ];
 }
-sub startup {}
+
+sub render {
+    my ($self, $status, $temp_path, $opts) = @_;
+    my $decode_html = $self->view->render($temp_path, $opts);
+    my $html    = $self->encoding->encode($decode_html);
+    my $headers = $self->create_headers($html);
+
+    return $self->create_response($status, $headers, [$html]);
+
+}
+
+sub render_string {
+    my ($self, $status, $decode_html) = @_;
+    my $html    = $self->encoding->encode($decode_html);
+    my $headers = $self->create_headers($html);
+
+    return $self->create_response($status, $headers, [$html]);
+}
+
+# plugin
+sub add_hooks {
+    my ($class, @args) = @_;
+
+    while (my ($name, $code) = splice @args, 0, 2) {
+        $class->add_hook($name => $code);
+    }
+}
+
+sub add_hook {
+    my ($class, $name, $code) = @_;
+
+    push @{Malts::App->hooks->{$class}->{$name} ||= []}, $code;
+}
+
+sub run_hooks {
+    my ($self, $name) = @_;
+
+    my $codes = $self->get_hook_codes($name);
+    for my $code (@$codes) {
+        $code->($self);
+    }
+}
+
+sub get_hook_codes {
+    my ($self, $name) = @_;
+    my $class = ref $self ? ref $self : $self;
+
+    Malts::App->hooks->{$class}->{$name} ||= [];
+}
+
+sub add_method {
+    my ($class, $name, $code) = @_;
+
+    no strict 'refs';
+    *{"$class\::$name"} = $code;
+}
+
+# shortcut
+sub req       { shift->{request} }
+sub request   { shift->{request} }
+sub args      { shift->req->args }
+
+sub param     { shift->req->param(@_)     }
+sub flash     { shift->req->flash(@_)     }
+sub session   { shift->req->session(@_)   }
+sub raw_param { shift->req->raw_param(@_) }
+
+
+# uri
+sub uri_for {
+    my ($self, $path, $params) = @_;
+    my $uri = $self->req->base;
+
+    $uri->path($path);
+    $uri->query_form(map { $self->encoding->encode($_) } @$params) if $params;
+
+    return $uri;
+}
+
+sub uri_with {
+    my ($self, $params, $opts) = @_;
+    my $uri = $self->req->uri;
+
+    $uri->query_form(map { $self->encoding->encode($_) } @$params) if $params;
+
+    return $uri;
+}
+
+sub redirect_to {
+    my ($self, $uri) = @_;
+
+    return $self->create_response(
+        302,
+        ['Location' => "$uri"],
+        [],
+    );
+}
 
 1;
 __END__
-
-=encoding utf8
-
-=head1 NAME
-
-Malts - 次世代 Web Application Framework
-
-=head1 SYNOPSIS
-
-    package MyApp;
-    use strict;
-    use warnings;
-    use parent 'Malts';
-
-    sub startup {
-        my ($self) = @_;
-    }
-
-    1;
-
-=head1 DESCRIPTION
-
-B<Maltsは、まだ不安定です。大きな変更が告知なしで実行される段階です。使用は控えてください。>
-
-Maltsは、必要最低限の機能のみを実装したウェブアプリケーションフレームワークです。
-
-とても小さく、分かりやすいがMaltsのコンセプトです。
-
-Maltsをもっと便利に使いたい場合は、L<Malts::Style>, L<拡張について|https://github.com/malts/p5-malts/wiki/%E6%8B%A1%E5%BC%B5%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6> を参照してください。
-
-=head1 METHODS
-
-C< $class >はMaltsを継承したクラスとして説明していきます。
-
-C< $object >はC< $class->new() >で作成されたオブジェクトです。
-
-=head2 C<< $class->new(%args|\%args) -> Object >>
-
-    my $object = $class->new;
-    $object = $class->new(%args);
-    $object = $class->new(\%args);
-
-C< $class >のインスタンス化を行います。
-
-=head2 C<< $object->app_base_class >>
-
-    my $app_base_class = $c->app_base_class;
-
-アプリケーションのベースクラスを返します。しかし、そのままでは使用する事が出来ず、アプリケーション側で設定する必要があります。
-
-設定は、メソッドを上書きする事で出来ます。
-
-    package MyApp;
-    use parent 'Malts';
-    sub app_base_class { 'MyApp' }
-
-C<app_base_class>を上書きしないままC<app_base_class>を実行するとエラーが出ます。
-
-=head2 C<< $object->app_dir -> Str >>
-
-    my $app_dir = $c->app_dir;
-
-アプリケーションディレクトリを返します。
-
-=head2 C<< $object->startup >>
-
-    sub startup {
-        my ($object) = @_;
-        $object->app_dir;
-    }
-
-アプリケーションにおける主要フックです。アプリケーション開始時に呼び出されます。
-
-=head2 C<< $class->boostrap(%args|\%args) -> Object >>
-
-    my $object = $class->boostrap;
-    $object = $class->boostrap(%args);
-    $object = $class->boostrap(\%args);
-
-C< $class >をインスタンス化したあとにstartupを実行します。
-
-=head2 C<< $object->encoding($encoding) -> Object >>
-
-    my $encoding = $object->encoding;
-    $encoding = $object->encoding($encoding);
-
-C<Malts::Util::encoding()>へのショートカット
-
-=head2 C<< $object->config -> HashRef >>
-
-    my $config = $c->config;
-
-    # get
-    $c->config->{name};
-
-configメソッドを使うには上書きが必須です。
-L<Config::ENV>を使う事が現在推奨されています。
-
-    sub config {
-        MyApp::Config->current;
-    }
-
-C<Malts::ConfigLoader>を使って、設定ファイルを読み込む事も可能です。
-
-    sub config {
-        state $config = do {
-            my @config_path = ($_[0]->app_dir, 'config', 'development.pl');
-            Malts::ConfigLoader->load(@config_path);
-        };
-    }
-
-=head1 SEE ALSO
-
-L<Plack>, L<Amon2>, L<Mojolicious>
-
-=head1 Repository
-
-  http://github.com/hisaichi5518/p5-malts
-
-=head1 AUTHOR
-
-hisaichi5518 E<lt>info[at]moe-project.comE<gt>
-
-=head1 LICENSE AND COPYRIGHT
-
-Copyright (c) 2011, hisaichi5518. All rights reserved.
-
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself.
-
-=cut
