@@ -169,7 +169,7 @@ sub args      { shift->req->args }
 sub param     { shift->req->param(@_)     }
 sub flash     { shift->req->flash(@_)     }
 sub session   { shift->req->session(@_)   }
-sub raw_param { shift->req->raw_param(@_) }
+sub param_raw { shift->req->param_raw(@_) }
 
 
 # uri
