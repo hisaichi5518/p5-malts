@@ -16,14 +16,34 @@ sub _router {
     Malts::App->routers->{$name} ||= Router::Simple->new();
 }
 
-sub get  { any(['GET', 'HEAD'], @_)  }
-sub post { any('POST',   @_) }
-sub put  { any('PUT',    @_) }
-sub del  { any('DELETE', @_) }
+sub get {
+    my $caller = caller(0);
+    __PACKAGE__->_add_router($caller, ['GET', 'HEAD'], @_);
+}
+
+sub post {
+    my $caller = caller(0);
+    __PACKAGE__->_add_router($caller, 'POST', @_);
+}
+
+sub put {
+    my $caller = caller(0);
+    __PACKAGE__->_add_router($caller, 'PUT', @_);
+}
+
+sub del {
+    my $caller = caller(0);
+    __PACKAGE__->_add_router($caller, 'DELETE', @_);
+}
 
 sub any {
-    my ($method, $path, $dest, $opt) = @_;
-    my $router = __PACKAGE__->_router(caller(1)); # use Malts::Web::Router::Simple;した場所
+    my $caller = caller(0);
+    __PACKAGE__->_add_router($caller, @_);
+}
+
+sub _add_router {
+    my ($class, $caller, $method, $path, $dest, $opt) = @_;
+    my $router = __PACKAGE__->_router($caller); # use Malts::Web::Router::Simple;した場所
 
     # 初期化
     $opt->{method} = $method;
