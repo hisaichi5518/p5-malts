@@ -53,7 +53,7 @@ sub load_plugin {
     my ($class, $plugin, $opts) = @_;
     $plugin = Plack::Util::load_class($plugin, 'Malts::Plugin');
 
-    #$plugin->init($class, $opts);
+    $plugin->init($class, $opts);
 }
 
 sub controller_name {
