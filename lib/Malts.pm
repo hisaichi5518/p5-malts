@@ -185,7 +185,7 @@ sub uri_for {
 }
 
 sub uri_with {
-    my ($self, $params, $opts) = @_;
+    my ($self, $params) = @_;
     my $uri = $self->req->uri;
 
     $uri->query_form(map { $self->encoding->encode($_) } @$params) if $params;
@@ -195,6 +195,13 @@ sub uri_with {
 
 sub redirect_to {
     my ($self, $uri) = @_;
+
+    if (ref $uri eq 'ARRAY') {
+        $uri = $self->uri_with($uri);
+    }
+    elsif ($uri =~ m/^\//) {
+        $uri = $self->uri_for($uri);
+    }
 
     return $self->create_response(
         302,
