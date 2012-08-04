@@ -177,6 +177,7 @@ sub param_raw { shift->req->param_raw(@_) }
 sub uri_for {
     my ($self, $path, $params) = @_;
     my $uri = $self->req->base;
+    $path = $uri->path eq '/' ? $path : $uri->path.$path;
 
     $uri->path($path);
     $uri->query_form(map { $self->encoding->encode($_) } @$params) if $params;
