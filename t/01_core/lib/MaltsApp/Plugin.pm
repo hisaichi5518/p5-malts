@@ -25,18 +25,16 @@ package MaltsApp::Plugin::Dispatcher;
 use Malts::Web::Router::Simple;
 use Test::More;
 
-get '/run_hooks' => sub {
+get '/run_tests' => sub {
     my $c = shift;
+
+    # run_hooks
     $c->run_hooks('run_test');
-
-    note 'M::M::P::Test1';
     is $c->{hook_count}, 2;
-    $c->render_string(200, 'ok');
-};
 
-get '/add_method' => sub {
-    my $c = shift;
+    # add_hooks
     can_ok $c, 'test5';
+
     $c->render_string(200, 'ok');
 };
 

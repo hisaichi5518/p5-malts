@@ -12,12 +12,9 @@ my $app = MaltsApp::Plugin->to_app;
 
 test_psgi $app, sub {
     my $cb  = shift;
-    my $res = $cb->(GET '/run_hooks');
+    my $res = $cb->(GET '/run_tests');
     is $res->code, 200;
     is $res->content, 'ok';
-
-    $res = $cb->(GET '/add_method');
-    is $res->code, 200;
 };
 
 done_testing;
