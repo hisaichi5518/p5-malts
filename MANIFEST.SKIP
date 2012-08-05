@@ -1,3 +1,7 @@
+^misc
+.perltidyrc
+.proverc
+
 
 #!start included /Users/hisaichi5518/perl5/perlbrew/perls/5.12.3/lib/5.12.3/ExtUtils/MANIFEST.SKIP
 # Avoid version control files.
