@@ -31,9 +31,15 @@ get '/run_tests' => sub {
     # run_hooks
     $c->run_hooks('run_test');
     is $c->{hook_count}, 2;
+    my $codes = $c->get_hook_codes('run_test');
+    is scalar(@$codes), 2;
 
-    # add_hooks
+    # add_method
     can_ok $c, 'test5';
+
+    $c->add_hooks(run_test => sub {});
+    $codes = $c->get_hook_codes('run_test');
+    is scalar(@$codes), 3;
 
     $c->render_string(200, 'ok');
 };

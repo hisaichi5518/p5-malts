@@ -7,6 +7,7 @@ use Malts::App;
 use Malts::Util;
 use Malts::Web::Request;
 use Malts::Web::Response;
+use Scalar::Util qw(blessed);
 
 our $VERSION = '0.500';
 our $_context;
@@ -136,7 +137,12 @@ sub add_hooks {
 sub add_hook {
     my ($class, $name, $code) = @_;
 
-    push @{Malts::App->hooks->{$class}->{$name} ||= []}, $code;
+    if (blessed $class) {
+        push @{$class->{_hooks}->{$name}}, $code;
+    }
+    else {
+        push @{Malts::App->hooks->{$class}->{$name} ||= []}, $code;
+    }
 }
 
 sub run_hooks {
@@ -152,7 +158,10 @@ sub get_hook_codes {
     my ($self, $name) = @_;
     my $class = ref $self ? ref $self : $self;
 
-    Malts::App->hooks->{$class}->{$name} ||= [];
+    my $codes = Malts::App->hooks->{$class}->{$name} ||= [];
+    push @$codes, @{$self->{_hooks}->{$name} || []} if blessed $self;
+
+    return $codes;
 }
 
 sub add_method {
