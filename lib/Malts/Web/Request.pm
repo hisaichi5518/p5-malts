@@ -19,7 +19,6 @@ sub session {
             if not exists $self->env->{$key};
     }
 
-    $self->session_options->{change_id}++;
     $self->{session} = Plack::Session->new($self->env);
 }
 
