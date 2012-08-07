@@ -34,7 +34,11 @@ sub to_app {
         local $_context = $self;
 
         $self->create_request($env);
-        my $res = $self->dispatch;
+
+        my $res;
+        $self->run_hooks('before_dispatch', \$res);
+        $res = $self->dispatch if !$res;
+        $self->run_hooks('after_dispatch', \$res);
         return $res->finalize;
     };
 }
@@ -146,11 +150,11 @@ sub add_hook {
 }
 
 sub run_hooks {
-    my ($self, $name) = @_;
+    my ($self, $name, @args) = @_;
 
     my $codes = $self->get_hook_codes($name);
     for my $code (@$codes) {
-        $code->($self);
+        $code->($self, @args);
     }
 }
 
