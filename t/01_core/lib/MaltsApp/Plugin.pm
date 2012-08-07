@@ -21,11 +21,7 @@ __PACKAGE__->load_plugins(
     '+MaltsApp::Plugin::Test5' # add_method
 );
 
-package MaltsApp::Plugin::Dispatcher;
-use Malts::Web::Router::Simple;
-use Test::More;
-
-get '/run_tests' => sub {
+sub dispatch {
     my $c = shift;
 
     # run_hooks
@@ -42,6 +38,6 @@ get '/run_tests' => sub {
     is scalar(@$codes), 3;
 
     $c->render_string(200, 'ok');
-};
+}
 
-1;
+__PACKAGE__->to_app;

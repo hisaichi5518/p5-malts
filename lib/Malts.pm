@@ -7,7 +7,8 @@ use Malts::App;
 use Malts::Util;
 use Malts::Web::Request;
 use Malts::Web::Response;
-use Scalar::Util qw(blessed);
+use Scalar::Util ();
+use Carp ();
 
 our $VERSION = '0.500';
 our $_context;
@@ -43,24 +44,6 @@ sub to_app {
     };
 }
 
-sub load_plugins {
-    my ($class, @plugins) = @_;
-
-    while(@plugins) {
-        my $plugin = shift @plugins;
-        my $opts   = ref $plugins[0] eq 'HASH' ? shift @plugins : {};
-
-        $class->load_plugin($plugin, $opts);
-    }
-}
-
-sub load_plugin {
-    my ($class, $plugin, $opts) = @_;
-    $plugin = Plack::Util::load_class($plugin, 'Malts::Plugin');
-
-    $plugin->init($class, $opts);
-}
-
 sub controller_name {
     my ($self) = @_;
     my $name = Malts::App->current->name;
@@ -92,6 +75,7 @@ sub create_response {
     my $self = shift;
     return $self->response_class->new(@_);
 }
+
 
 # view
 sub html_content_type { 'text/html; charset=UTF-8' }
@@ -129,7 +113,26 @@ sub render_string {
     return $self->create_response($status, $headers, [$html]);
 }
 
+
 # plugin
+sub load_plugins {
+    my ($class, @plugins) = @_;
+
+    while(@plugins) {
+        my $plugin = shift @plugins;
+        my $opts   = ref $plugins[0] eq 'HASH' ? shift @plugins : {};
+
+        $class->load_plugin($plugin, $opts);
+    }
+}
+
+sub load_plugin {
+    my ($class, $plugin, $opts) = @_;
+    $plugin = Plack::Util::load_class($plugin, 'Malts::Plugin');
+
+    $plugin->init($class, $opts);
+}
+
 sub add_hooks {
     my ($class, @args) = @_;
 
@@ -141,8 +144,8 @@ sub add_hooks {
 sub add_hook {
     my ($class, $name, $code) = @_;
 
-    if (blessed $class) {
-        push @{$class->{_hooks}->{$name}}, $code;
+    if (ref $class) {
+        push @{$class->{_hooks}->{$name} ||= []}, $code;
     }
     else {
         push @{Malts::App->hooks->{$class}->{$name} ||= []}, $code;
@@ -160,20 +163,22 @@ sub run_hooks {
 
 sub get_hook_codes {
     my ($self, $name) = @_;
-    my $class = ref $self ? ref $self : $self;
+    my $class = Scalar::Util::blessed $self ? Scalar::Util::blessed $self : $self;
 
-    my $codes = Malts::App->hooks->{$class}->{$name} ||= [];
-    push @$codes, @{$self->{_hooks}->{$name} || []} if blessed $self;
-
-    return $codes;
+    return [
+        (@{Malts::App->hooks->{$class}->{$name} || []}),
+        (Scalar::Util::blessed($self) ? @{$self->{_hooks}->{$name} || []} : ()),
+    ];
 }
 
 sub add_method {
     my ($class, $name, $code) = @_;
+    $class = ref $class ? ref $class : $class;
 
     no strict 'refs';
     *{"$class\::$name"} = $code;
 }
+
 
 # shortcut
 sub req       { shift->{request} }
