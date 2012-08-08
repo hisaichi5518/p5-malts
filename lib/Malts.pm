@@ -212,7 +212,7 @@ sub uri_with {
     return $uri;
 }
 
-sub redirect_to {
+sub redirect {
     my ($self, $uri) = @_;
 
     if (ref $uri eq 'ARRAY') {
