@@ -19,7 +19,7 @@ my $app = do {
     __PACKAGE__->to_app;
 };
 
-apptest(
+test_app
     impl     => 'MockHTTP',
     app_name => 'MaltsApp::Test',
     app      => $app,
@@ -30,7 +30,7 @@ apptest(
         isa_ok $res, 'HTTP::Response';
         isa_ok $c, 'MaltsApp::Test';
         isa_ok $c, 'Malts';
-    },
-);
+    }
+;
 
 done_testing;

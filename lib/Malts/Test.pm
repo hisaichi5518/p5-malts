@@ -5,11 +5,11 @@ use Exporter 'import';
 use Plack::Test;
 use Carp;
 
-our @EXPORT = qw(apptest);
+our @EXPORT = qw(test_app);
 
 my $added_hook = {};
 my $c;
-sub apptest {
+sub test_app {
     my (%args) = @_;
     my $app      = $args{app}      or croak 'app needed';
     my $client   = $args{client}   or croak 'client test code needed';
@@ -44,9 +44,9 @@ __END__
 
 =head1 METHODS
 
-=head2 C<< apptest >>
+=head2 C<< test_app >>
 
-    apptest
+    test_app
         app => MyApp->to_app,
         app_name => 'MyApp',
         client   => sub {
