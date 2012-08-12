@@ -34,7 +34,7 @@ test_app
         is $c->uri_with([page => 1]), 'http://localhost/?page=1';
         is $c->uri_with([hello => 'こんにちは']), 'http://localhost/?hello=%E3%81%93%E3%82%93%E3%81%AB%E3%81%A1%E3%81%AF';
 
-        my $res = $c->redirect($c->uri_for('/'));
+        $res = $c->redirect($c->uri_for('/'));
         is $res->headers->header('Location'), 'http://localhost/';
 
         $res = $c->redirect('http://localhost/');
@@ -68,7 +68,7 @@ test_app
         is $c->uri_with([page => 1]), 'http://localhost/mount/?page=1';
         is $c->uri_with([hello => 'こんにちは']), 'http://localhost/mount/?hello=%E3%81%93%E3%82%93%E3%81%AB%E3%81%A1%E3%81%AF';
 
-        my $res = $c->redirect($c->uri_for('/'));
+        $res = $c->redirect($c->uri_for('/'));
         is $res->headers->header('Location'), 'http://localhost/mount/';
 
         $res = $c->redirect('http://localhost/');
