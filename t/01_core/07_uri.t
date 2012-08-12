@@ -47,6 +47,10 @@ test_app
         # use uri_with
         $res = $c->redirect([page => 1]);
         is $res->headers->header('Location'), 'http://localhost/?page=1';
+
+        # use status
+        $res = $c->redirect('/', 301);
+        is $res->code, 301;
     }
 ;
 

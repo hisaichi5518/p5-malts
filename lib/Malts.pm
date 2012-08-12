@@ -213,7 +213,7 @@ sub uri_with {
 }
 
 sub redirect {
-    my ($self, $uri) = @_;
+    my ($self, $uri, $status) = @_;
 
     if (ref $uri eq 'ARRAY') {
         $uri = $self->uri_with($uri);
@@ -223,7 +223,7 @@ sub redirect {
     }
 
     return $self->create_response(
-        302,
+        $status || 302,
         ['Location' => "$uri"],
         [],
     );
