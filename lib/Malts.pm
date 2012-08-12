@@ -76,6 +76,7 @@ sub create_response {
     return $self->response_class->new(@_);
 }
 
+sub config {}
 
 # view
 sub html_content_type { 'text/html; charset=UTF-8' }
