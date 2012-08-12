@@ -181,6 +181,17 @@ sub add_method {
     *{"$class\::$name"} = $code;
 }
 
+sub add_methods {
+    my ($class, %args) = @_;
+    $class = ref $class ? ref $class : $class;
+
+    no strict 'refs';
+    for my $name (keys %args) {
+        my $code = $args{$name};
+        *{"$class\::$name"} = $code;
+    }
+}
+
 
 # shortcut
 sub req       { shift->{request} }

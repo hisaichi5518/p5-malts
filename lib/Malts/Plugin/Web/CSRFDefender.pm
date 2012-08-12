@@ -15,10 +15,8 @@ sub init {
         before_dispatch => \&_before_dispatch,
         html_filter     => \&_html_filter,
     );
-    $c->add_method(
+    $c->add_methods(
         csrf_token => \&_csrf_token,
-    );
-    $c->add_method(
         validate_csrf_token => \&_validate_csrf_token,
     );
 }
