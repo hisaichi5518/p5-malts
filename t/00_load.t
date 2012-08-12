@@ -13,7 +13,7 @@ subtest 'load all Malts modules' => sub {
         Malts::Web::Response
         Malts::Web::Flash
         Malts::Web::Router::Simple
-        Malts::Web::View::JSON
+        Malts::Plugin::Web::View::JSON
         Malts::Web::View::Util
     );
     require_ok $_ for @modules;

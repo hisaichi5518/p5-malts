@@ -49,6 +49,4 @@ test_app
     }
 ;
 
-
-
 done_testing;
