@@ -6,15 +6,13 @@ subtest 'load all Malts modules' => sub {
     my @modules = qw(
         Malts
         Malts::App
-        Malts::ConfigLoader
         Malts::Util
-        Malts::Web::CSRFDefender
         Malts::Web::Request
         Malts::Web::Response
-        Malts::Web::Flash
         Malts::Web::Router::Simple
-        Malts::Plugin::Web::View::JSON
         Malts::Web::View::Util
+        Malts::Plugin::Web::CSRFDefender
+        Malts::Plugin::Web::View::JSON
     );
     require_ok $_ for @modules;
 };
