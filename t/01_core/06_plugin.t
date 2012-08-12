@@ -3,7 +3,7 @@ use warnings;
 use FindBin;
 use Test::More;
 
-my $app = do {
+{
     package MaltsApp::Plugin::Test;
     my $count;
     sub init  { $count++ }
