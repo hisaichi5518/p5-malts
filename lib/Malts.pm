@@ -15,6 +15,7 @@ our $_context;
 
 sub new     { bless {}, shift }
 sub context { $_context }
+sub app     { Malts::App->current }
 
 sub boostrap {
     my ($class) = @_;
@@ -46,13 +47,13 @@ sub to_app {
 
 sub controller_name {
     my ($self) = @_;
-    my $name = Malts::App->current->name;
+    my $name = $self->app->name;
     return "$name\::Controller";
 }
 
 sub dispatcher_class {
     my ($self) = @_;
-    my $name = Malts::App->current->name;
+    my $name = $self->app->name;
     return "$name\::Dispatcher";
 }
 
