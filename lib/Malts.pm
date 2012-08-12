@@ -101,6 +101,7 @@ sub render {
     my $html    = $self->encoding->encode($decode_html);
     my $headers = $self->create_headers($html);
 
+    $self->run_hooks('html_filter', \$html);
     return $self->create_response($status, $headers, [$html]);
 
 }
@@ -110,6 +111,7 @@ sub render_string {
     my $html    = $self->encoding->encode($decode_html);
     my $headers = $self->create_headers($html);
 
+    $self->run_hooks('html_filter', \$html);
     return $self->create_response($status, $headers, [$html]);
 }
 
