@@ -9,7 +9,7 @@ our @EXPORT = qw(test_app);
 
 my $added_hook = {};
 my $count = 0;
-my ($c, $path_info, $script_name);
+our ($_c, $_path_info, $_script_name);
 
 sub test_app {
     my (%args) = @_;
@@ -17,13 +17,14 @@ sub test_app {
     my $client   = $args{client}   or croak 'client test code needed';
     my $app_name = $args{app_name} or croak 'app_name needed';
     my $impl     = $args{impl};
+    local ($_c, $_path_info, $_script_name);
 
     if (!$added_hook->{$app_name}) {
         $app_name->add_hooks(before_dispatch => sub {
             my ($context) = @_;
-            $c = $context;
-            $path_info   = $c->req->path_info;
-            $script_name = $c->req->script_name;
+            $_c           = $context;
+            $_path_info   = $_c->req->path_info;
+            $_script_name = $_c->req->script_name;
         });
         $added_hook->{$app_name}++;
     }
@@ -36,10 +37,10 @@ sub test_app {
 
             # for mount
             # mountはresponse_cbで元のenvに書き換えるので
-            $c->req->env->{PATH_INFO}   = $path_info;
-            $c->req->env->{SCRIPT_NAME} = $script_name;
+            $_c->req->env->{PATH_INFO}   = $_path_info   if $_c && $_path_info;
+            $_c->req->env->{SCRIPT_NAME} = $_script_name if $_c && $_script_name;
 
-            return ($res, $c);
+            return ($res, $_c);
         };
 
         $client->($cb)

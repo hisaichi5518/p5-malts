@@ -35,6 +35,17 @@ test_app
     }
 ;
 
+test_app
+    app_name => 'MaltsApp::Test',
+    app      => sub { die },
+    client   => sub {
+        my ($app) = @_;
+        my ($res, $c);
+        ($res, $c) = $app->(GET '/');
+        ok !$c;
+    }
+;
+
 
 $app = builder {mount '/mount' => $app};
 
