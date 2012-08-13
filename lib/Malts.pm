@@ -18,10 +18,11 @@ sub context { $_context }
 sub app     { Malts::App->current }
 
 sub boostrap {
-    my ($class) = @_;
+    my ($class, $env) = @_;
     my $app   = Malts::App->set_running_app($class);
     my $self  = $class->new();
     $_context = $self;
+    $self->create_request($env) if $env;
 
     return ($app, $self);
 }

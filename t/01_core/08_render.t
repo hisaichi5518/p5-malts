@@ -30,24 +30,19 @@ my $app = do {
     __PACKAGE__->to_app;
 };
 
-test_app
-    app_name => 'MaltsApp::Render',
-    app      => $app,
-    client   => sub {
-        my ($cb) = @_;
-        my ($res, $c) = $cb->(GET '/');
+subtest 'render, render_string' => sub {
+    my $c = MaltsApp::Render->boostrap;
+    my $message = 'こんにちは';
+    my $raw_message = encode_utf8 $message;
+    my $res;
 
-        my $message = 'こんにちは';
-        my $raw_message = encode_utf8 $message;
+    $res = $c->render(200, 'index.tx', {message => $message});
+    is $res->code, 200;
+    like $res->body->[0], qr/$raw_message/;
 
-        $res = $c->render(200, 'index.tx', {message => $message});
-        is $res->code, 200;
-        like $res->body->[0], qr/$raw_message/;
-
-        $res = $c->render_string(200, $message);
-        is $res->code, 200;
-        like $res->body->[0], qr/$raw_message/;
-    },
-;
+    $res = $c->render_string(200, $message);
+    is $res->code, 200;
+    like $res->body->[0], qr/$raw_message/;
+};
 
 done_testing;
