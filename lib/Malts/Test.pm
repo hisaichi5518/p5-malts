@@ -7,8 +7,7 @@ use Carp;
 
 our @EXPORT = qw(test_app);
 
-my $added_hook = {};
-my $count = 0;
+my $_added_hook = {};
 our ($_c, $_path_info, $_script_name);
 
 sub test_app {
@@ -19,14 +18,14 @@ sub test_app {
     my $impl     = $args{impl};
     local ($_c, $_path_info, $_script_name);
 
-    if (!$added_hook->{$app_name}) {
+    if (!$_added_hook->{$app_name}) {
         $app_name->add_hooks(before_dispatch => sub {
             my ($context) = @_;
             $_c           = $context;
             $_path_info   = $_c->req->path_info;
             $_script_name = $_c->req->script_name;
         });
-        $added_hook->{$app_name}++;
+        $_added_hook->{$app_name}++;
     }
 
     $args{client} = sub {
