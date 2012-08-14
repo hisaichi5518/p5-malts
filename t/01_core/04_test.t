@@ -36,13 +36,19 @@ test_app
 ;
 
 test_app
-    app_name => 'MaltsApp::Test',
-    app      => sub { die },
-    client   => sub {
+    app_name => 'MaltsApp::Test::Die',
+    app => do {
+        package MaltsApp::Test::Die;
+        use parent qw/Malts/;
+        __PACKAGE__->add_hooks(before_dispatch => sub { die });
+        __PACKAGE__->to_app;
+    },
+    client => sub {
         my ($app) = @_;
         my ($res, $c);
         ($res, $c) = $app->(GET '/');
-        ok !$c;
+        is $res->code, 500;
+        ok $c;
     }
 ;
 

@@ -19,12 +19,14 @@ sub test_app {
     local ($_c, $_path_info, $_script_name);
 
     if (!$_added_hook->{$app_name}) {
-        $app_name->add_hooks(before_dispatch => sub {
+        # 一番まえに入れる
+        my $hooks = Malts::App->hooks->{$app_name} ||= {};
+        unshift @{$hooks->{before_dispatch} ||= []}, sub {
             my ($context) = @_;
             $_c           = $context;
             $_path_info   = $_c->req->path_info;
             $_script_name = $_c->req->script_name;
-        });
+        };
         $_added_hook->{$app_name}++;
     }
 
