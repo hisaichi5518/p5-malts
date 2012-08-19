@@ -2,8 +2,8 @@ package Malts::Util;
 use strict;
 use warnings;
 use Plack::Util ();
-use Log::Minimal qw(croakf);
 use Encode ();
+use Carp ();
 use constant DEBUG => (
     ($ENV{PLACK_ENV} || 'development') eq 'development' ? 1 : 0
 );
@@ -11,7 +11,8 @@ use constant DEBUG => (
 sub find_encoding {
     my ($encoding) = @_;
     my $enc = Encode::find_encoding($encoding)
-        or croakf "encoding '$encoding' not found.";
+        or Carp::croak("encoding '$encoding' not found.");
+
     return $enc;
 }
 
@@ -45,8 +46,6 @@ $ENV{PLACK_ENV}がdevelopmentの時に1を返します。
     Malts::Util::find_encoding('utf-8');
 
 Encode::find_encoding()したものを返す。
-
-ただし、encodingがなかった場合はC< Log::Minimal#croakf >でエラーを出す。
 
 =head1 BUGS
 

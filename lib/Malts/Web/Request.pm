@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use parent 'Plack::Request';
 use Plack::Session;
-use Log::Minimal qw(croakff);
+use Carp ();
 
 sub args {
     my $self = shift;
@@ -15,8 +15,9 @@ sub session {
     return $self->{session} if $self->{session};
 
     for my $key (qw/psgix.session psgix.session.options/) {
-        croakff('Cant find $req->env->{%s}. you must use Plack::Middleware::Session.', $key)
-            if not exists $self->env->{$key};
+        if (!exists $self->env->{$key}) {
+            Carp::croak(sprintf 'Cant find $env->{%s}', $key);
+        }
     }
 
     $self->{session} = Plack::Session->new($self->env);
@@ -89,7 +90,6 @@ sub _decode_parameters {
     return Hash::MultiValue->new(@decoded);
 }
 
-# TODO: flashはどこに書こう, argsはどうしよう
 1;
 __END__
 

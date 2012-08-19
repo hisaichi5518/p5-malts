@@ -51,7 +51,7 @@ subtest 'testing session error' => sub {
     my $c = request({});
     eval { $c->csrf_token };
     ok $@;
-    like $@, qr/you must use Plack::Middleware::Session/;
+    like $@, qr/psgix\.session/;
 };
 
 subtest 'testing validate_csrf' => sub {
