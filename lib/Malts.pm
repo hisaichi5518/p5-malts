@@ -202,7 +202,6 @@ sub request   { shift->{request} }
 sub args      { shift->req->args }
 
 sub param     { shift->req->param(@_)     }
-sub flash     { shift->req->flash(@_)     }
 sub session   { shift->req->session(@_)   }
 sub param_raw { shift->req->param_raw(@_) }
 
