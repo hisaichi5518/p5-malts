@@ -11,6 +11,7 @@ inc/Module/Install/Metadata.pm
 inc/Module/Install/WriteAll.pm
 lib/Malts.pm
 lib/Malts/App.pm
+lib/Malts/ConfigLoader.pm
 lib/Malts/Plugin/Web/CSRFDefender.pm
 lib/Malts/Plugin/Web/View/JSON.pm
 lib/Malts/Test.pm
@@ -38,6 +39,8 @@ t/01_core/lib/MaltsApp/Plugin/Tests.pm
 t/01_core/lib/MaltsApp/Router.pm
 t/02_plugin/00_json.t
 t/02_plugin/01_csrf.t
+t/02_plugin/02_config.t
+t/02_plugin/config.pl
 xt/perlcritic.t
 xt/pod.t
 xt/podcoverage.t
