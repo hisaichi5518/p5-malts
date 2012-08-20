@@ -73,10 +73,25 @@ Malts::App -
 =head1 SYNOPSIS
 
     my $app = Malts::App->set_running_app('MyApp');
-       $app = Malts::App->current;
 
-このクラスのC<$self->{$hoge}>に残せるのは、アプリが永続的に持っていてもおかしくないもののみ。
+=head1 METHODS
 
-ex)ルーティング、hook, base_dir
+=head2 C<< $class->apps -> HashRef >>
+
+=head2 C<< $class->hooks -> HashRef >>
+
+=head2 C<< $class->routers -> HashRef >>
+
+=head2 C<< $class->new -> Object >>
+
+=head2 C<< $class->set_running_app -> Object >>
+
+=head2 C<< $class->current -> Object >>
+
+=head2 C<< $class->get -> Object >>
+
+=head2 C<< $class->name -> Str >>
+
+=head2 C<< $class->base_dir -> Str >>
 
 =cut

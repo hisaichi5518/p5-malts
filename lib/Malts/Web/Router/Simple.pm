@@ -91,3 +91,23 @@ sub dispatch {
 
 1;
 __END__
+
+=encoding utf8
+
+=head1 FUNCTIONS
+
+=head2 C<< get >>
+
+=head2 C<< post >>
+
+=head2 C<< put >>
+
+=head2 C<< del >>
+
+=head2 C<< any >>
+
+=head1 METHODS
+
+=head2 C<< $class->dispatch >>
+
+=cut

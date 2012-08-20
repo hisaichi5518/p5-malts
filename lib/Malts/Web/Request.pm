@@ -114,27 +114,21 @@ L<Plack::Request>を継承している。
 
 =head2 C<< $req->args -> HashRef >>
 
-    $req->args;
-
-C<$env->{'malts.routing_args'}>を返す。
-
 =head2 C<< $req->parameters() -> Object >>
-
-    $req->parameters->{$key};
-
-C<Plack::Request#parameters>とほぼ同じですが、L<Malts::Web::Request>特有のC<args>メソッドも含みます。
-
-L<Hash::MultiValue>のオブジェクトを返します。
 
 =head2 C<< $req->session() -> Object >>
 
-    $req->session();
+=head2 C<< $req->body_parameters >>
 
-L<Plack::Session>のオブジェクトを返す。
+=head2 C<< $req->query_parameters >>
 
-またC<$env->{'psgix.session'}>, C<$env->{'psgix.session.options'}>がないとエラーを吐く。
+=head2 C<< $req->body_parameters_raw >>
 
-これはL<Plack::Middleware::Session>を使用すれば避けられる。
+=head2 C<< $req->query_parameters_raw >>
+
+=head2 C<< $req->parameters_raw >>
+
+=head2 C<< $req->param_raw >>
 
 =head1 SEE ALSO
 

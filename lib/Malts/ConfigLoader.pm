@@ -14,3 +14,11 @@ sub load {
 
 1;
 __END__
+
+=encoding utf8
+
+=head1 METHODS
+
+=head2 C<< $req->load >>
+
+=cut

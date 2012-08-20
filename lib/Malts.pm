@@ -246,3 +246,85 @@ sub redirect {
 
 1;
 __END__
+
+=encoding utf8
+
+=head1 METHODS
+
+=head2 C<< $class->new >>
+
+=head2 C<< $class->context >>
+
+=head2 C<< $class->app >>
+
+=head2 C<< $class->boostrap([$env:ArrayRef]) -> Object >>
+
+=head2 C<< $class->to_app >>
+
+=head2 C<< $self->controller_name -> Str >>
+
+=head2 C<< $self->dispatcher_class -> Str >>
+
+=head2 C<< $self->request_class -> Str >>
+
+=head2 C<< $self->response_class -> Str >>
+
+=head2 C<< $self->dispatch -> Object >>
+
+=head2 C<< $self->create_request -> Object >>
+
+=head2 C<< $self->create_response -> Object >>
+
+=head2 C<< $self->config >>
+
+=head2 C<< $self->html_content_type -> Str >>
+
+=head2 C<< $self->encoding -> Object >>
+
+=head2 C<< $self->create_headers -> ArrayRef >>
+
+=head2 C<< $self->render -> Object >>
+
+=head2 C<< $self->render_string -> Object >>
+
+=head2 C<< $class->load_plugins(@plugins) >>
+
+    $class->load_plugins(
+        'Hoge',         # Malts::Plugin::Hoge->init($class);
+        '+MyApp::Fuga', # MyApp::Fuga->init($class);
+        'Piyo' => {},   # Malts::Plugin::Piyo->init($class, {});
+    );
+
+=head2 C<< $class->load_plugin() >>
+
+=head2 C<< $class->add_hooks() >>
+
+=head2 C<< $class->add_hook() >>
+
+=head2 C<< $class->run_hooks() >>
+
+=head2 C<< $class->get_hook_codes() -> ArrayRef >>
+
+=head2 C<< $class->add_method() >>
+
+=head2 C<< $class->add_methods() >>
+
+=head2 C<< $self->req -> Object >>
+
+=head2 C<< $self->request -> Object >>
+
+=head2 C<< $self->args -> HashRef >>
+
+=head2 C<< $self->param() >>
+
+=head2 C<< $self->session() >>
+
+=head2 C<< $self->param_raw() >>
+
+=head2 C<< $self->uri_for() >>
+
+=head2 C<< $self->uri_with() >>
+
+=head2 C<< $self->redirect() >>
+
+=cut

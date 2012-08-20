@@ -12,10 +12,10 @@ my %ESCAPE = (
 
 sub init {
     my ($class, $c) = @_;
-    $c->add_method(render_json => \&render_json);
+    $c->add_method(render_json => \&_render_json);
 }
 
-sub render_json {
+sub _render_json {
     my ($c, $status, $stuff) = @_;
     my $output   = $JSON->encode($stuff);
     my $res      = $c->create_response($status);
@@ -47,6 +47,15 @@ sub render_json {
 
 1;
 __END__
+
+=encoding utf8
+
+=head1 FUNCTIONS
+
+=head2 C<< $class->init >>
+
+=head1 SEE ALSO
+
 # Amon2からほぼコピペ
 # * IE7 JSON venularity.
 # http://www.atmarkit.co.jp/fcoding/articles/webapp/05/webapp05a.html
@@ -56,5 +65,4 @@ __END__
 # http://d.hatena.ne.jp/a666666/20090310/1236664380
 # http://suika.fam.cx/~wakaba/wiki/sw/n/application+json
 
-
-
+=cut
