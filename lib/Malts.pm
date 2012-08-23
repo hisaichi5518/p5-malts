@@ -410,19 +410,19 @@ Return a request object.
 
 =head2 C<< $self->args -> HashRef >>
 
-Return routing args.
+Shortcut to I<$self->req->args()>.
 
 =head2 C<< $self->param() >>
 
-Return a param.
+Shortcut to I<$self->req->param()>.
 
 =head2 C<< $self->session() >>
 
-Return a session object.
+Shortcut to I<$self->req->session()>.
 
 =head2 C<< $self->param_raw() >>
 
-Return a raw param.
+Shortcut to I<$self->req->param_raw()>.
 
 =head2 C<< $self->uri_for() >>
 
