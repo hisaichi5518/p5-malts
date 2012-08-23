@@ -249,45 +249,122 @@ __END__
 
 =encoding utf8
 
+=head1 NAME
+
+Malts - web application framework
+
+=head1 SYNOPSIS
+
+    my $app = do {
+        package MyApp::Dispatcher;
+        use Malts::Web::Router::Simple;
+
+        get '/' => sub {
+            my ($c) = @_;
+            my $name = $c->param('name');
+            $c->render_string(200, sprintf 'Hello %s!', $name);
+        };
+
+        package MyApp;
+        use parent 'Malts';
+
+        __PACKAGE__->to_app;
+    };
+
+=head1 DESCRIPTION
+
+TODO
+
 =head1 METHODS
 
 =head2 C<< $class->new >>
 
+Creates a new context object of whatever is based on Malts.
+
 =head2 C<< $class->context >>
+
+Get the context object.
 
 =head2 C<< $class->app >>
 
+Get the app object.
+
 =head2 C<< $class->boostrap([$env:ArrayRef]) -> Object >>
+
+Create a new context object and set it to global context.
+
+run the I<create_request> if there is I<$env>.
 
 =head2 C<< $class->to_app >>
 
+Create a instance of PSGI application.
+
 =head2 C<< $self->controller_name -> Str >>
+
+Get the controller name.
+
+    my $c = MyApp->boostrap;
+    print $c->controller_name; #=> print "MyApp::Controller"
 
 =head2 C<< $self->dispatcher_class -> Str >>
 
+Get the dispatcher class.
+
+    my $c = MyApp->boostrap;
+    print $c->dispatcher_class; #=> print "MyApp::Dispatcher"
+
 =head2 C<< $self->request_class -> Str >>
 
+Get the request class. defaults to a I<Malts::Web::Request>.
+
 =head2 C<< $self->response_class -> Str >>
+
+Get the response class. defaults to a I<Malts::Web::Response>.
 
 =head2 C<< $self->dispatch -> Object >>
 
 =head2 C<< $self->create_request -> Object >>
 
+Create a new request object.
+
 =head2 C<< $self->create_response -> Object >>
+
+Create a new response object.
 
 =head2 C<< $self->config >>
 
+Exists but does nothing.
+
+This is so you won't have to write a config if you don't want to.
+
 =head2 C<< $self->html_content_type -> Str >>
+
+Get the contet type. defaults to a "text/html; charset=UTF-8".
 
 =head2 C<< $self->encoding -> Object >>
 
+Create a encoding object using Encode::find_encoding().
+
 =head2 C<< $self->create_headers -> ArrayRef >>
+
+Create headers.
+
+    Content-Type   : $self->html_content_type()
+    Content-Length : Num
+    X-Content-Type-Options : 'nosniff'
+    X-Frame-Options        : 'DENY'
 
 =head2 C<< $self->render -> Object >>
 
+Create a response object.
+
 =head2 C<< $self->render_string -> Object >>
 
+Create a response object.
+
 =head2 C<< $class->load_plugins(@plugins) >>
+
+Load plugins.
 
     $class->load_plugins(
         'Hoge',         # Malts::Plugin::Hoge->init($class);
@@ -297,34 +374,66 @@ __END__
 
 =head2 C<< $class->load_plugin() >>
 
+Load a plugin.
+
 =head2 C<< $class->add_hooks() >>
+
+Add hooks.
 
 =head2 C<< $class->add_hook() >>
 
+Add a hook.
+
 =head2 C<< $class->run_hooks() >>
+
+run hooks.
 
 =head2 C<< $class->get_hook_codes() -> ArrayRef >>
 
+Get hook codes.
+
 =head2 C<< $class->add_method() >>
+
+Add a method.
 
 =head2 C<< $class->add_methods() >>
 
+Add methods.
+
 =head2 C<< $self->req -> Object >>
+
+Return a request object.
 
 =head2 C<< $self->request -> Object >>
 
+Return a request object.
+
 =head2 C<< $self->args -> HashRef >>
+
+Return routing args.
 
 =head2 C<< $self->param() >>
 
+Return a param.
+
 =head2 C<< $self->session() >>
+
+Return a session object.
 
 =head2 C<< $self->param_raw() >>
 
+Return a raw param.
+
 =head2 C<< $self->uri_for() >>
+
+Create a C<URI> object.
 
 =head2 C<< $self->uri_with() >>
 
+Create a C<URI> object.
+
 =head2 C<< $self->redirect() >>
+
+Create a response object.
 
 =cut
