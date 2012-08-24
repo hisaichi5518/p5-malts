@@ -283,11 +283,11 @@ Creates a new context object of whatever is based on Malts.
 
 =head2 C<< $class->context >>
 
-Get the context object.
+Returns the context object.
 
 =head2 C<< $class->app >>
 
-Get the app object.
+Returns the app object.
 
 =head2 C<< $class->boostrap([$env:ArrayRef]) -> Object >>
 
@@ -295,31 +295,31 @@ Create a new context object and set it to global context.
 
 run the I<create_request> if there is I<$env>.
 
-=head2 C<< $class->to_app >>
+=head2 C<< $class->to_app -> CodeRef >>
 
-Create a instance of PSGI application.
+Create thw instance of PSGI application.
 
 =head2 C<< $self->controller_name -> Str >>
 
-Get the controller name.
+Returns the controller name.
 
     my $c = MyApp->boostrap;
     print $c->controller_name; #=> print "MyApp::Controller"
 
 =head2 C<< $self->dispatcher_class -> Str >>
 
-Get the dispatcher class.
+Returns the dispatcher class.
 
     my $c = MyApp->boostrap;
     print $c->dispatcher_class; #=> print "MyApp::Dispatcher"
 
 =head2 C<< $self->request_class -> Str >>
 
-Get the request class. defaults to a I<Malts::Web::Request>.
+Returns the request class. defaults to a I<Malts::Web::Request>.
 
 =head2 C<< $self->response_class -> Str >>
 
-Get the response class. defaults to a I<Malts::Web::Response>.
+Returns the response class. defaults to a I<Malts::Web::Response>.
 
 =head2 C<< $self->dispatch -> Object >>
 
@@ -339,7 +339,7 @@ This is so you won't have to write a config if you don't want to.
 
 =head2 C<< $self->html_content_type -> Str >>
 
-Get the contet type. defaults to a "text/html; charset=UTF-8".
+Returns the contet type. defaults to a "text/html; charset=UTF-8".
 
 =head2 C<< $self->encoding -> Object >>
 
@@ -386,11 +386,11 @@ Add a hook.
 
 =head2 C<< $class->run_hooks() >>
 
-run hooks.
+Run hooks.
 
 =head2 C<< $class->get_hook_codes() -> ArrayRef >>
 
-Get hook codes.
+Returns hook codes.
 
 =head2 C<< $class->add_method() >>
 
@@ -402,11 +402,11 @@ Add methods.
 
 =head2 C<< $self->req -> Object >>
 
-Return a request object.
+Returns a request object.
 
 =head2 C<< $self->request -> Object >>
 
-Return a request object.
+Returns a request object.
 
 =head2 C<< $self->args -> HashRef >>
 
@@ -426,11 +426,11 @@ Shortcut to I<$self->req->param_raw()>.
 
 =head2 C<< $self->uri_for() >>
 
-Create a C<URI> object.
+Create an C<URI> object.
 
 =head2 C<< $self->uri_with() >>
 
-Create a C<URI> object.
+Create an C<URI> object.
 
 =head2 C<< $self->redirect() >>
 
