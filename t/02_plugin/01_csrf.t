@@ -26,7 +26,7 @@ my $app = do {
 
 sub request {
     my $env = shift;
-    my ($app, $c) = MyApp::Web->boostrap;
+    my $c = MyApp::Web->boostrap;
     ok $c->create_request($env);
     return $c;
 }

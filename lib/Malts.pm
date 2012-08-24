@@ -24,7 +24,7 @@ sub boostrap {
     $_context = $self;
     $self->create_request($env) if $env;
 
-    return ($app, $self);
+    return $self;
 }
 
 sub to_app {
