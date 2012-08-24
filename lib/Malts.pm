@@ -13,16 +13,20 @@ use Carp ();
 our $VERSION = '0.500';
 our $_context;
 
-sub new     { bless {}, shift }
+sub new {
+    my $class = shift;
+    my %args = ref $_[0] ? %{$_[0]} : @_;
+    bless \%args, $class;
+}
+
 sub context { $_context }
 sub app     { Malts::App->current }
 
 sub boostrap {
-    my ($class, $env) = @_;
+    my ($class, %args) = @_;
     my $app   = Malts::App->set_running_app($class);
-    my $self  = $class->new();
+    my $self  = $class->new(%args);
     $_context = $self;
-    $self->create_request($env) if $env;
 
     return $self;
 }
@@ -33,10 +37,10 @@ sub to_app {
     return sub {
         my $env  = shift;
         my $app  = Malts::App->set_running_app($class);
-        my $self = $class->new;
+        my $self = $class->new(
+            request => $class->create_request($env),
+        );
         local $_context = $self;
-
-        $self->create_request($env);
 
         my $res;
         $self->run_hooks('before_dispatch', \$res);
@@ -70,7 +74,7 @@ sub dispatch {
 
 sub create_request {
     my $self = shift;
-    $self->{request} = $self->request_class->new(@_);
+    return $self->request_class->new(@_);
 }
 
 sub create_response {
@@ -289,7 +293,7 @@ Returns the context object.
 
 Returns the app object.
 
-=head2 C<< $class->boostrap([$env:ArrayRef]) -> Object >>
+=head2 C<< $class->boostrap(%args) -> Object >>
 
 Create a new context object and set it to global context.
 
@@ -297,7 +301,7 @@ run the I<create_request> if there is I<$env>.
 
 =head2 C<< $class->to_app -> CodeRef >>
 
-Create thw instance of PSGI application.
+Create an instance of PSGI application.
 
 =head2 C<< $self->controller_name -> Str >>
 

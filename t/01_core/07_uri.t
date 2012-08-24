@@ -17,7 +17,9 @@ my $app = do {
 };
 
 subtest 'not mount' => sub {
-    my $c = MaltsApp::URI->boostrap({HTTP_HOST => 'localhost'});
+    my $c = MaltsApp::URI->boostrap(
+        request => MaltsApp::URI->create_request({HTTP_HOST => 'localhost'}),
+    );
     my $res;
 
     is $c->uri_for('/'), 'http://localhost/';
@@ -48,11 +50,14 @@ subtest 'not mount' => sub {
 };
 
 subtest 'mount' => sub {
-    my $c = MaltsApp::URI->boostrap({
+    my $env = {
         HTTP_HOST   => 'localhost',
         SCRIPT_NAME => '/mount',
         PATH_INFO   => '/',
-    });
+    };
+    my $c = MaltsApp::URI->boostrap(
+        request => MaltsApp::URI->create_request($env),
+    );
     my $res;
         is $c->uri_for('/'), 'http://localhost/mount/';
         is $c->uri_for('/tests'), 'http://localhost/mount/tests';
