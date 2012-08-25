@@ -1,51 +1,24 @@
 use strict;
 use warnings;
 
-package HelloRender::Web;
-use parent qw(Malts Malts::Web);
+package HelloApp::Render;
+use parent qw(Malts);
 use Text::Xslate;
 
 sub dispatch {
     my $self = shift;
-    $self->render(200, 'index', {type => 'Xslate'});
+    $self->render(200, 'root/index.tx', {type => 'Xslate'});
 }
 
+my $view;
 sub view {
-    Text::Xslate->new(path => {
-        index => 'Hello <: $type :> World!'
+    $view ||= Text::Xslate->new(path => {
+        'root/index.tx' => '<body>Hello <: $type :> World!</body>'
     });
 }
-=pod
-
-viewの設定は、継承されたviewメソッドの上書きで行う。
-
-テンプレートのファイルパスは、"$controller/$action.tx"を推奨している。
-
-またrenderはControllerで直接呼ぶのは推奨されていない。以下の様にres_200()やres_404()などステータス毎にメソッドを作る事が推奨されている。
-
-    package MyApp::Web;
-    use parent qw(Malts Malts::Web);
-
-    sub res_200 {
-        my $c = shift;
-        $c->render(200, @_);
-    }
-
-    sub res_404 {
-        my ($c, $message) = @_;
-        $c->render_string(404, $message || '404 Not Found!');
-    }
-
-=cut
 
 package main;
-use Plack::Builder;
-
-builder {
-    enable "Plack::Middleware::Log::Minimal";
-
-    HelloRender::Web->to_app;
-};
+HelloApp::Render->to_app;
 
 __END__
 

@@ -1,5 +1,9 @@
 Revision history for Perl extension Malts
 
+!!!WARNING!!!: 互換性が保たれていない変更があります
+0.500 2012-08-05
+    - Malts.pmに集約
+
 0.06 2012-06-08
     - removed submappper()
     - added load_controller()

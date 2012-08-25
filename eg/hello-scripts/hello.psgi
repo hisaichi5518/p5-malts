@@ -1,8 +1,8 @@
 use strict;
 use warnings;
 
-package HelloMalts::Web;
-use parent qw(Malts Malts::Web);
+package HelloMalts;
+use parent qw(Malts);
 
 sub dispatch {
     my $self = shift;
@@ -11,22 +11,13 @@ sub dispatch {
 
 =pod
 
-MaltsとMalts::Webを継承している。
-
-dispatchでresponseを返すようにしているので高速に動作するがほぼ何も出来ない。
-
-dispatchをもっと拡張する場合は、routes.psgiを参照する。
+dispatchメソッドでresponseオブジェクトを返すだけ。
 
 =cut
 
 package main;
-use Plack::Builder;
 
-builder {
-    enable "Plack::Middleware::Log::Minimal";
-
-    HelloMalts::Web->to_app;
-};
+HelloMalts->to_app;
 
 __END__
 

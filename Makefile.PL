@@ -23,12 +23,11 @@ use inc::Module::Install;
 
 all_from 'lib/Malts.pm';
 
-# parent, Plack, Log::Minimal
+# parent, Plack
 requires 'Encode'         => 2.44;
 requires 'Text::Xslate'   => 1.5009;
 requires 'Router::Simple' => 0.09;
 requires 'Plack::Middleware::Session'      => 0.14;
-requires 'Plack::Middleware::Log::Minimal' => 0.06;
 
 test_requires 'Test::More'     => 0.96;
 test_requires 'Test::Requires' => 0.06;

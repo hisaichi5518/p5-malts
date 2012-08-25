@@ -26,6 +26,11 @@ sub uri_for {
     return $c->uri_for(@_);
 }
 
+sub uri_with {
+    my $c = Malts->context;
+    return $c->uri_with(@_);
+}
+
 sub args {
     my $c = Malts->context;
     return $c->req->args(@_);
@@ -72,6 +77,8 @@ Malts::Web::View::Util - view utilities
 =head2 C<< param() >>
 
 =head2 C<< uri_for() >>
+
+=head2 C<< uri_with() >>
 
 =head2 C<< args() >>
 

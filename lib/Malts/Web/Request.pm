@@ -3,11 +3,38 @@ use strict;
 use warnings;
 use parent 'Plack::Request';
 use Plack::Session;
-use Log::Minimal qw(croakff);
+use Carp ();
 
 sub args {
     my $self = shift;
     $self->env->{'malts.routing_args'};
+}
+
+sub session {
+    my $self = shift;
+    return $self->{session} if $self->{session};
+
+    for my $key (qw/psgix.session psgix.session.options/) {
+        if (!exists $self->env->{$key}) {
+            Carp::croak(sprintf 'Cant find $env->{%s}', $key);
+        }
+    }
+
+    $self->{session} = Plack::Session->new($self->env);
+}
+
+
+# baseはAmon2::Web::Request
+sub body_parameters {
+    my ($self) = @_;
+    $self->{'malts.body_parameters'} ||=
+        $self->_decode_parameters($self->SUPER::body_parameters());
+}
+
+sub query_parameters {
+    my ($self) = @_;
+    $self->{'malts.query_parameters'} ||=
+        $self->_decode_parameters($self->SUPER::query_parameters());
 }
 
 sub parameters {
@@ -16,21 +43,51 @@ sub parameters {
     $self->env->{'malts.request.merged'} ||= do {
         my $query = $self->query_parameters;
         my $body  = $self->body_parameters;
-        Hash::MultiValue->new($query->flatten, $body->flatten, %{$self->args || {}});
+
+        Hash::MultiValue->new($query->flatten, $body->flatten);
     };
 }
 
-sub session {
-    my $self = shift;
-    return $self->{session} if $self->{session};
+sub body_parameters_raw {
+    shift->SUPER::body_parameters();
+}
 
-    for my $key (qw/psgix.session psgix.session.options/) {
-        croakff('Cant find $req->env->{%s}. you must use Plack::Middleware::Session.', $key)
-            if not exists $self->env->{$key};
+sub query_parameters_raw {
+    shift->SUPER::query_parameters();
+}
+
+sub parameters_raw {
+    my $self = shift;
+
+    $self->env->{'plack.request.merged'} ||= do {
+        my $query = $self->SUPER::query_parameters();
+        my $body  = $self->SUPER::body_parameters();
+
+        Hash::MultiValue->new($query->flatten, $body->flatten);
+    };
+}
+
+sub param_raw {
+    my $self = shift;
+
+    return keys %{ $self->parameters_raw } if @_ == 0;
+
+    my $key = shift;
+    return $self->parameters_raw->{$key} unless wantarray;
+    return $self->parameters_raw->get_all($key);
+}
+
+sub _decode_parameters {
+    my ($self, $stuff) = @_;
+    my $encoding = Malts->context->encoding;
+    my @flatten = $stuff->flatten;
+    my @decoded;
+
+    while (my ($k, $v) = splice @flatten, 0, 2) {
+        push @decoded, $encoding->decode($k), $encoding->decode($v);
     }
 
-    $self->session_options->{change_id}++;
-    $self->{session} = Plack::Session->new($self->env);
+    return Hash::MultiValue->new(@decoded);
 }
 
 1;
@@ -57,27 +114,21 @@ L<Plack::Request>を継承している。
 
 =head2 C<< $req->args -> HashRef >>
 
-    $req->args;
-
-C<$env->{'malts.routing_args'}>を返す。
-
 =head2 C<< $req->parameters() -> Object >>
-
-    $req->parameters->{$key};
-
-C<Plack::Request#parameters>とほぼ同じですが、L<Malts::Web::Request>特有のC<args>メソッドも含みます。
-
-L<Hash::MultiValue>のオブジェクトを返します。
 
 =head2 C<< $req->session() -> Object >>
 
-    $req->session();
+=head2 C<< $req->body_parameters >>
 
-L<Plack::Session>のオブジェクトを返す。
+=head2 C<< $req->query_parameters >>
 
-またC<$env->{'psgix.session'}>, C<$env->{'psgix.session.options'}>がないとエラーを吐く。
+=head2 C<< $req->body_parameters_raw >>
 
-これはL<Plack::Middleware::Session>を使用すれば避けられる。
+=head2 C<< $req->query_parameters_raw >>
+
+=head2 C<< $req->parameters_raw >>
+
+=head2 C<< $req->param_raw >>
 
 =head1 SEE ALSO
 
