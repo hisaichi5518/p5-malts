@@ -82,7 +82,7 @@ sub dispatch {
     }
     else {
         my $controller = $args->{controller};
-        my $namespace  = $c->controller_name;
+        my $namespace  = $c->controller_base_name;
 
         $controller = Plack::Util::load_class($controller, $namespace);
         return $controller->$action($c);

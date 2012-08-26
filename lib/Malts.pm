@@ -50,7 +50,7 @@ sub to_app {
     };
 }
 
-sub controller_name {
+sub controller_base_name {
     my ($self) = @_;
     my $name = $self->app->name;
     return "$name\::Controller";
@@ -303,12 +303,12 @@ run the I<create_request> if there is I<$env>.
 
 Create an instance of PSGI application.
 
-=head2 C<< $self->controller_name -> Str >>
+=head2 C<< $self->controller_base_name -> Str >>
 
 Returns the controller name.
 
     my $c = MyApp->boostrap;
-    print $c->controller_name; #=> print "MyApp::Controller"
+    print $c->controller_base_name; #=> print "MyApp::Controller"
 
 =head2 C<< $self->dispatcher_class -> Str >>
 
