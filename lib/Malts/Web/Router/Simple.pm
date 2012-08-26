@@ -56,10 +56,6 @@ sub _add_router {
             action => $dest,
         }, $opt);
     }
-    elsif (!$dest) {
-        # for debug
-        $router->connect($path => {}, $opt);
-    }
     else {
         my %dest;
         my ($controller, $action) = split '#', $dest;
