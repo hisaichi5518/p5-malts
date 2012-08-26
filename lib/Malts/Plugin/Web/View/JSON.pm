@@ -52,6 +52,8 @@ __END__
 
 =head1 FUNCTIONS
 
+=head2 C<< $c->render_json($status, $stuff) >>
+
 =head2 C<< $class->init >>
 
 =head1 SEE ALSO

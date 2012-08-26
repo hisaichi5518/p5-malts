@@ -112,23 +112,31 @@ L<Plack::Request>を継承している。
 
 =head1 METHODS
 
-=head2 C<< $req->args -> HashRef >>
+=head2 C<< $self->args -> HashRef >>
 
-=head2 C<< $req->parameters() -> Object >>
+Returns routing args.
 
-=head2 C<< $req->session() -> Object >>
+=head2 C<< $self->session() -> Object >>
 
-=head2 C<< $req->body_parameters >>
+Create/Get a Plack::Session object.
 
-=head2 C<< $req->query_parameters >>
+=head2 C<< $self->parameters >>
 
-=head2 C<< $req->body_parameters_raw >>
+=head2 C<< $self->body_parameters >>
 
-=head2 C<< $req->query_parameters_raw >>
+=head2 C<< $self->query_parameters >>
 
-=head2 C<< $req->parameters_raw >>
+Returns the decoded value. See C<Plack::Request>.
 
-=head2 C<< $req->param_raw >>
+=head2 C<< $self->body_parameters_raw >>
+
+=head2 C<< $self->query_parameters_raw >>
+
+=head2 C<< $self->parameters_raw >>
+
+=head2 C<< $self->param_raw >>
+
+Returns the not decoded value. See C<Plack::Request>.
 
 =head1 SEE ALSO
 

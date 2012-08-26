@@ -62,7 +62,6 @@ Malts::Web::View::Util - view utilities
     my $tx = Text::Xslate->new(
         module => [
             'Malts::Web::View::Util',
-            'MyApp::Web::View::Util',
         ],
     );
 

@@ -25,9 +25,18 @@ sub _before_dispatch {
     my ($c, $res) = @_;
 
     if (!$c->validate_csrf_token) {
-        my @err = (403, 'CSRF Session validation failed.');
+        my $body = <<'__403__';
+<html>
+    <head>
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Cache-Control" content="no-cache">
+        <meta http-equiv="Expires" content="Thu, 01 Dec 1994 16:00:00 GMT">
+    </head>
+    <body>CSRF Session validation failed.</body>
+</html>
+__403__
 
-        $$res = $c->render_string(@err);
+        $$res = $c->render_string(403, $body); # 400?
     }
 }
 
@@ -95,6 +104,16 @@ __END__
 
 =head1 METHODS
 
-=head2 C<< $req->init >>
+=head2 C<< $c->csrf_token -> Str >>
+
+=head2 C<< $c->validate_csrf_token -> Bool >>
+
+=head2 C<< $class->init >>
+
+=head1 HOOKS
+
+=head2 before_dispatch
+
+=head2 html_filter
 
 =cut

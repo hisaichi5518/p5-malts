@@ -68,30 +68,53 @@ __END__
 
 =head1 NAME
 
-Malts::App -
+Malts::App - for malts app.
 
 =head1 SYNOPSIS
 
     my $app = Malts::App->set_running_app('MyApp');
+    print $app->name; # print "MyApp"
 
 =head1 METHODS
 
 =head2 C<< $class->apps -> HashRef >>
 
+Returns app objects.
+
 =head2 C<< $class->hooks -> HashRef >>
+
+Returns hooks.
 
 =head2 C<< $class->routers -> HashRef >>
 
-=head2 C<< $class->new -> Object >>
+Returns routers.
 
-=head2 C<< $class->set_running_app -> Object >>
+=head2 C<< $class->new(%args) -> Object >>
+
+Create a new app object.
+
+    my $app = Malts::App->new(
+        name => 'MyApp',
+    );
+
+=head2 C<< $class->set_running_app($app_name) -> Object >>
+
+Create a new app object and set it to global.
 
 =head2 C<< $class->current -> Object >>
 
-=head2 C<< $class->get -> Object >>
+Returns a current app object.
 
-=head2 C<< $class->name -> Str >>
+=head2 C<< $class->get($app_name) -> Object >>
 
-=head2 C<< $class->base_dir -> Str >>
+Returns a app object.
+
+=head2 C<< $self->name -> Str >>
+
+Returns the app name.
+
+=head2 C<< $self->base_dir -> Str >>
+
+Returns the base directory.
 
 =cut

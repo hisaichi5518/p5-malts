@@ -54,17 +54,42 @@ sub test_app {
 1;
 __END__
 
-=head1 METHODS
+=head1 NAME
 
-=head2 C<< test_app >>
+Malts::Test - functions for malts app test.
+
+=head1 SYNOPSIS
+
+    use Malts::Test;
+    use Test::More;
+    use HTTP::Request::Common;
+
+    my $app = do {
+        package MyApp;
+        use parent 'Malts';
+
+        sub dispatch {
+            my ($c) = @_;
+            my $text = 'hello world!';
+
+            $c->{text} = $text;
+            $c->render_string(200, $text);
+        }
+
+        __PACKAGE__->to_app;
+    };
 
     test_app
-        app => MyApp->to_app,
         app_name => 'MyApp',
+        app      => $app,
         client   => sub {
-        my ($cb) = @_;
-        my ($res, $c) = $cb->(GET '/');
-        ...;
-    };
+            my ($cb) = @_;
+            my ($res, $c) = $cb->(GET '/');
+            is $c->{text}, 'hello world!';
+        };
+
+=head1 FUNCTIONS
+
+=head2 C<< test_app >>
 
 =cut

@@ -3,7 +3,6 @@ use strict;
 use warnings;
 
 use File::Spec ();
-use Malts::App;
 use Carp ();
 
 sub load {
@@ -17,8 +16,21 @@ __END__
 
 =encoding utf8
 
+=head1 NAME
+
+Malts::ConfigLoader - config loader for malts.
+
 =head1 METHODS
 
-=head2 C<< $req->load >>
+=head2 C<< $class->load(@paths) -> HashRef >>
+
+    package MyApp;
+    use parent 'Malts';
+
+    sub config {
+        my $self  = shift;
+        my @paths = ($self->app->base_dir, 'config', 'config.pl');
+        $self->{config} ||= Malts::ConfigLoader->load(@paths);
+    }
 
 =cut
