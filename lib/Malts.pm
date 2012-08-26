@@ -180,14 +180,6 @@ sub get_hook_codes {
     ];
 }
 
-sub add_method {
-    my ($class, $name, $code) = @_;
-    $class = ref $class ? ref $class : $class;
-
-    no strict 'refs';
-    *{"$class\::$name"} = $code;
-}
-
 sub add_methods {
     my ($class, %args) = @_;
     $class = ref $class ? ref $class : $class;
@@ -197,6 +189,14 @@ sub add_methods {
         my $code = $args{$name};
         *{"$class\::$name"} = $code;
     }
+}
+
+sub add_method {
+    my ($class, $name, $code) = @_;
+    $class = ref $class ? ref $class : $class;
+
+    no strict 'refs';
+    *{"$class\::$name"} = $code;
 }
 
 
@@ -281,23 +281,21 @@ TODO
 
 =head1 METHODS
 
-=head2 C<< $class->new >>
+=head2 C<< $class->new(%args | \%args) -> Object >>
 
 Creates a new context object of whatever is based on Malts.
 
-=head2 C<< $class->context >>
+=head2 C<< $class->context -> Object >>
 
 Returns the context object.
 
-=head2 C<< $class->app >>
+=head2 C<< $class->app -> Object >>
 
 Returns the app object.
 
 =head2 C<< $class->boostrap(%args) -> Object >>
 
 Create a new context object and set it to global context.
-
-run the I<create_request> if there is I<$env>.
 
 =head2 C<< $class->to_app -> CodeRef >>
 
@@ -327,11 +325,11 @@ Returns the response class. defaults to a I<Malts::Web::Response>.
 
 =head2 C<< $self->dispatch -> Object >>
 
-=head2 C<< $self->create_request -> Object >>
+=head2 C<< $self->create_request(\%env) -> Object >>
 
 Create a new request object.
 
-=head2 C<< $self->create_response -> Object >>
+=head2 C<< $self->create_response($status, \@headers, $body) -> Object >>
 
 Create a new response object.
 
@@ -347,7 +345,7 @@ Returns the contet type. defaults to a "text/html; charset=UTF-8".
 
 =head2 C<< $self->encoding -> Object >>
 
-Create a encoding object using Encode::find_encoding().
+Create/Get a encoding object using Encode::find_encoding('utf-8').
 
 =head2 C<< $self->create_headers -> ArrayRef >>
 
@@ -358,11 +356,11 @@ Create headers.
     X-Content-Type-Options : 'nosniff'
     X-Frame-Options        : 'DENY'
 
-=head2 C<< $self->render -> Object >>
+=head2 C<< $self->render($status, $template_path) -> Object >>
 
 Create a response object.
 
-=head2 C<< $self->render_string -> Object >>
+=head2 C<< $self->render_string($status, $body) -> Object >>
 
 Create a response object.
 
@@ -376,33 +374,33 @@ Load plugins.
         'Piyo' => {},   # Malts::Plugin::Piyo->init($class, {});
     );
 
-=head2 C<< $class->load_plugin() >>
+=head2 C<< $class->load_plugin($plugin => $config) >>
 
 Load a plugin.
 
-=head2 C<< $class->add_hooks() >>
+=head2 C<< $class->add_hooks($hook_name => \&hook_code) >>
 
 Add hooks.
 
-=head2 C<< $class->add_hook() >>
+=head2 C<< $class->add_hook($hook_name => \&hook_code) >>
 
 Add a hook.
 
-=head2 C<< $class->run_hooks() >>
+=head2 C<< $class->run_hooks($hook_name) >>
 
 Run hooks.
 
-=head2 C<< $class->get_hook_codes() -> ArrayRef >>
+=head2 C<< $class->get_hook_codes($hook_name) -> ArrayRef >>
 
 Returns hook codes.
 
-=head2 C<< $class->add_method() >>
-
-Add a method.
-
-=head2 C<< $class->add_methods() >>
+=head2 C<< $class->add_methods($method_name => \&method_code) >>
 
 Add methods.
+
+=head2 C<< $class->add_method($method_name => \&method_code) >>
+
+Add a method.
 
 =head2 C<< $self->req -> Object >>
 
@@ -414,29 +412,29 @@ Returns a request object.
 
 =head2 C<< $self->args -> HashRef >>
 
-Shortcut to I<$self->req->args()>.
+Shortcut to $self->req->args().
 
-=head2 C<< $self->param() -> Str >>
+=head2 C<< $self->param($param_name) -> Str >>
 
-Shortcut to I<$self->req->param()>.
+Shortcut to $self->req->param().
 
-=head2 C<< $self->session() -> Str >>
+=head2 C<< $self->session -> Str >>
 
-Shortcut to I<$self->req->session()>.
+Shortcut to $self->req->session().
 
-=head2 C<< $self->param_raw() -> Str >>
+=head2 C<< $self->param_raw($param_name) -> Str >>
 
-Shortcut to I<$self->req->param_raw()>.
+Shortcut to $self->req->param_raw().
 
-=head2 C<< $self->uri_for() -> Object >>
-
-Create an C<URI> object.
-
-=head2 C<< $self->uri_with() -> Object >>
+=head2 C<< $self->uri_for($path, \@params) -> Object >>
 
 Create an C<URI> object.
 
-=head2 C<< $self->redirect() -> Object >>
+=head2 C<< $self->uri_with(\@params) -> Object >>
+
+Create an C<URI> object.
+
+=head2 C<< $self->redirect($uri, $status) -> Object >>
 
 Create a response object.
 
