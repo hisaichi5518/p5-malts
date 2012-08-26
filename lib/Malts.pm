@@ -416,27 +416,27 @@ Returns a request object.
 
 Shortcut to I<$self->req->args()>.
 
-=head2 C<< $self->param() >>
+=head2 C<< $self->param() -> Str >>
 
 Shortcut to I<$self->req->param()>.
 
-=head2 C<< $self->session() >>
+=head2 C<< $self->session() -> Str >>
 
 Shortcut to I<$self->req->session()>.
 
-=head2 C<< $self->param_raw() >>
+=head2 C<< $self->param_raw() -> Str >>
 
 Shortcut to I<$self->req->param_raw()>.
 
-=head2 C<< $self->uri_for() >>
+=head2 C<< $self->uri_for() -> Object >>
 
 Create an C<URI> object.
 
-=head2 C<< $self->uri_with() >>
+=head2 C<< $self->uri_with() -> Object >>
 
 Create an C<URI> object.
 
-=head2 C<< $self->redirect() >>
+=head2 C<< $self->redirect() -> Object >>
 
 Create a response object.
 
