@@ -4,6 +4,7 @@ use warnings;
 use Plack::Util ();
 use Encode ();
 use Carp ();
+use Plack::MIME;
 use constant DEBUG => (
     ($ENV{PLACK_ENV} || 'development') eq 'development' ? 1 : 0
 );
@@ -14,6 +15,13 @@ sub find_encoding {
         or Carp::croak("encoding '$encoding' not found.");
 
     return $enc;
+}
+
+# Plack::App::DataSection
+sub is_binary {
+    my ($file_name) = @_;
+    my $type = Plack::MIME->mime_type($file_name) or return;
+    $type !~ /\b(?:text|xml|javascript|json)\b/;
 }
 
 1;
@@ -38,5 +46,9 @@ Returns 1 if I<$ENV{PLACK_ENV}> is development.
 =head2 C<< find_encoding($encoding) -> Object >>
 
 Create a encoding object using Encode::find_encoding($encoding).
+
+=head2 C<< is_binary($file_name) -> Bool >>
+
+Returns true if I<$file_name> is binary.
 
 =cut

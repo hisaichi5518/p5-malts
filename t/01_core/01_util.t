@@ -12,4 +12,9 @@ subtest 'find_encoding error' => sub {
     ok $@;
 };
 
+subtest 'is_binary' => sub {
+    ok +Malts::Util::is_binary('.jpg');
+    ok !+Malts::Util::is_binary('.txt');
+};
+
 done_testing;
