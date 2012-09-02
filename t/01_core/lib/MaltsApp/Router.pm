@@ -8,6 +8,7 @@ sub to_app {
     my ($self) = @_;
     return sub {
         local $INC{'MaltsApp/Router/Controller/Root.pm'} = __FILE__;
+        local $INC{'MaltsApp/Router/Dispatcher.pm'} = __FILE__;
         $self->SUPER::to_app->(@_);
     };
 }

@@ -5,6 +5,7 @@ use warnings;
 
 use Malts::App;
 use Malts::Util;
+use Plack::Util;
 use Malts::Web::Request;
 use Malts::Web::Response;
 use Scalar::Util ();
@@ -68,6 +69,7 @@ sub response_class { 'Malts::Web::Response' }
 sub dispatch {
     my ($self) = @_;
 
+    Plack::Util::load_class($self->dispatcher_class);
     $self->dispatcher_class->dispatch($self)
         or $self->render_string(404, 'Page Not Found')
 }
