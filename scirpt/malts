@@ -1,0 +1,6 @@
+#!perl
+use strict;
+use warnings;
+use Malts::Setup;
+
+Malts::Setup->run(@ARGV);
