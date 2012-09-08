@@ -34,6 +34,7 @@ test_requires 'Test::Requires' => 0.06;
 
 tests_recursive;
 author_tests 'xt';
+install_script 'script/malts';
 
 clean_files qw(
     Malts-*
