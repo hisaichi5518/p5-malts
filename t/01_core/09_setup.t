@@ -34,7 +34,7 @@ subtest 'build_template_files' => sub {
     );
 
     my $files = $module->build_template_files;
-    ok $files->{'TestApp/README.md'};
+    ok $files->{'TestApp/app.psgi'};
     #use Data::Dumper;warn Dumper [keys $files];
 };
 
@@ -64,7 +64,7 @@ subtest 'init->run' => sub {
 };
 
 subtest '_data_section_single' => sub {
-    my $base_dir = 't/template/test';
+    my $base_dir = 't/01_core/template/test';
     my $file = file($base_dir, 'MyApp.pm');
     my $content = Malts::Setup::Command::new_template->_data_section_single($file, $base_dir);
     #use Data::Dumper;warn Dumper $content;
