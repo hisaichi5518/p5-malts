@@ -8,12 +8,20 @@ inc/Module/Install/AuthorTests.pm
 inc/Module/Install/Base.pm
 inc/Module/Install/Makefile.pm
 inc/Module/Install/Metadata.pm
+inc/Module/Install/Scripts.pm
 inc/Module/Install/WriteAll.pm
 lib/Malts.pm
 lib/Malts/App.pm
 lib/Malts/ConfigLoader.pm
 lib/Malts/Plugin/Web/CSRFDefender.pm
 lib/Malts/Plugin/Web/View/JSON.pm
+lib/Malts/Setup.pm
+lib/Malts/Setup/Command.pm
+lib/Malts/Setup/Command/init.pm
+lib/Malts/Setup/Command/new_template.pm
+lib/Malts/Setup/Module.pm
+lib/Malts/Setup/Template.pm
+lib/Malts/Setup/Template/Default.pm
 lib/Malts/Test.pm
 lib/Malts/Util.pm
 lib/Malts/Web/Request.pm
@@ -24,6 +32,7 @@ Makefile.PL
 MANIFEST			This list of files
 MANIFEST.SKIP
 META.yml
+script/malts
 t/00_load.t
 t/01_core/00_app.t
 t/01_core/01_util.t
@@ -34,9 +43,11 @@ t/01_core/05_router.t
 t/01_core/06_plugin.t
 t/01_core/07_uri.t
 t/01_core/08_render.t
+t/01_core/09_setup.t
 t/01_core/lib/MaltsApp/Plugin.pm
 t/01_core/lib/MaltsApp/Plugin/Tests.pm
 t/01_core/lib/MaltsApp/Router.pm
+t/01_core/template/test/MyApp.pm
 t/02_plugin/00_json.t
 t/02_plugin/01_csrf.t
 t/02_plugin/02_config.t
