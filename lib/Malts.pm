@@ -107,12 +107,8 @@ sub create_headers {
 sub render {
     my ($self, $status, $temp_path, $opts) = @_;
     my $decode_html = $self->view->render($temp_path, $opts);
-    my $html    = $self->encoding->encode($decode_html);
-    my $headers = $self->create_headers($html);
 
-    $self->run_hooks('html_filter', \$html);
-    return $self->create_response($status, $headers, [$html]);
-
+    $self->render_string($status, $decode_html);
 }
 
 sub render_string {
