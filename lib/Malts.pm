@@ -90,8 +90,7 @@ sub config {}
 sub html_content_type { 'text/html; charset=UTF-8' }
 
 sub encoding {
-    my ($self) = @_;
-    $self->{encoding} ||= Malts::Util::find_encoding('utf-8');
+    state $enc = Malts::Util::find_encoding('utf-8');
 }
 
 sub create_headers {
