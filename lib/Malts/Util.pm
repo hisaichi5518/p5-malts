@@ -24,6 +24,13 @@ sub is_binary {
     $type !~ /\b(?:text|xml|javascript|json)\b/;
 }
 
+sub remove_error_line {
+    my ($message) = @_;
+
+    $message =~ s/(?:.+ called)? at .+? line \d+\.?\n?//g;
+    return $message;
+}
+
 1;
 __END__
 
@@ -50,5 +57,11 @@ Create a encoding object using Encode::find_encoding($encoding).
 =head2 C<< is_binary($file_name) -> Bool >>
 
 Returns true if I<$file_name> is binary.
+
+=head2 C<< remove_error_line($error_message) >>
+
+Remove error line.
+
+    print remove_error_line('ERROR at lib/Malts.pm line 5.'); #=> prints "ERROR"
 
 =cut
