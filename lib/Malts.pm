@@ -25,11 +25,7 @@ sub app     { Malts::App->current }
 
 sub boostrap {
     my ($class, %args) = @_;
-    my $app   = Malts::App->set_running_app($class);
-    my $self  = $class->new(%args);
-    $_context = $self;
-
-    return $self;
+    $_context = $class->setup(%args);
 }
 
 sub to_app {
@@ -37,10 +33,7 @@ sub to_app {
 
     return sub {
         my $env  = shift;
-        my $app  = Malts::App->set_running_app($class);
-        my $self = $class->new(
-            request => $class->create_request($env),
-        );
+        my $self = $class->setup(env => $env);
         local $_context = $self;
 
         my $res;
@@ -49,6 +42,17 @@ sub to_app {
         $self->run_hooks('after_dispatch', \$res);
         return $res->finalize;
     };
+}
+
+sub setup {
+    my ($class, %args) = @_;
+    Malts::App->set_running_app($class);
+
+    if (my $env = $args{env}) {
+        $args{request} = $class->create_request($env);
+    }
+
+    return $class->new(%args);
 }
 
 sub controller_base_name {
@@ -297,6 +301,12 @@ Create a new context object and set it to global context.
 =head2 C<< $class->to_app -> CodeRef >>
 
 Create an instance of PSGI application.
+
+=head2 C<< $class->setup(%args) -> Object >>
+
+Create a new context object.
+
+    $class->setup(env => \%env); # Create request object from env.
 
 =head2 C<< $self->controller_base_name -> Str >>
 
