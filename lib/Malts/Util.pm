@@ -24,7 +24,7 @@ sub is_binary {
     $type !~ /\b(?:text|xml|javascript|json)\b/;
 }
 
-sub remove_error_line {
+sub remove_fileline {
     my ($message) = @_;
 
     $message =~ s/(?:.+ called)? at .+? line \d+\.?\n?//g;
@@ -58,7 +58,7 @@ Create a encoding object using Encode::find_encoding($encoding).
 
 Returns true if I<$file_name> is binary.
 
-=head2 C<< remove_error_line($error_message) >>
+=head2 C<< remove_fileline($error_message) >>
 
 Remove error line.
 
