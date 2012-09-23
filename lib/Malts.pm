@@ -36,7 +36,11 @@ sub to_app {
         my $self = $class->setup(env => $env);
         local $_context = $self;
 
-        return $self->_dispatch->finalize;
+        my $res;
+        $self->run_hooks('before_dispatch', \$res);
+        $res = $self->dispatch if !$res;
+        $self->run_hooks('after_dispatch', \$res);
+        return $res->finalize;
     };
 }
 
@@ -72,17 +76,6 @@ sub dispatch {
     Plack::Util::load_class($self->dispatcher_class);
     $self->dispatcher_class->dispatch($self)
         or $self->render_string(404, 'Page Not Found')
-}
-
-sub _dispatch {
-    my ($self) = @_;
-
-    my $res;
-    $self->run_hooks('before_dispatch', \$res);
-    $res = $self->dispatch if !$res;
-    $self->run_hooks('after_dispatch', \$res);
-
-    return $res;
 }
 
 sub create_request {
