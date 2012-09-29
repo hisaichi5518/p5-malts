@@ -50,6 +50,10 @@ test_psgi $app, sub {
     $res = $cb->(GET '/args/hisaichi5518');
     is $res->code, 200;
     is $res->content, 'hisaichi5518';
+
+    $res = $cb->(GET '/bridge');
+    is $res->code, 200;
+    is $res->content, 'Root#index';
     # 404
     $res = $cb->(POST '/get');
     is $res->code, 404;

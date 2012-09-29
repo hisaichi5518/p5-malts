@@ -5,11 +5,11 @@ package MaltsApp::Router;
 use parent qw(Malts);
 
 sub to_app {
-    my ($self) = @_;
+    my ($class) = @_;
     return sub {
         local $INC{'MaltsApp/Router/Controller/Root.pm'} = __FILE__;
         local $INC{'MaltsApp/Router/Dispatcher.pm'} = __FILE__;
-        $self->SUPER::to_app->(@_);
+        $class->SUPER::to_app->(@_);
     };
 }
 
@@ -29,15 +29,25 @@ get '/hash' => {controller => 'Root', action => 'index'};
 get '/str'  => 'Root#index';
 get '/args/:name' => 'Root#args';
 
+get '/bridge' => ['Root#auth' => 'Root#index'];
+
 package MaltsApp::Router::Controller::Root;
 
+sub auth {
+    my ($class, $c) = @_;
+    # ここでレスポンスオブジェクトを返すとそのレスポンスオブジェクトが返る
+    # return $c->render_string(403, 'out!') if 1;
+
+    return; # なにもせず次のactionへ行く
+}
+
 sub index {
-    my ($self, $c) = @_;
+    my ($class, $c) = @_;
     $c->render_string(200, 'Root#index');
 }
 
 sub args {
-    my ($self, $c) = @_;
+    my ($class, $c) = @_;
     $c->render_string(200, $c->args->{name});
 }
 
