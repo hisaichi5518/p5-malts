@@ -55,6 +55,10 @@ test_psgi $app, sub {
     is $res->code, 200;
     is $res->content, 'Root#index';
 
+    $res = $cb->(GET '/bridge/fail');
+    is $res->code, 403;
+    is $res->content, 'fail';
+
     $res = $cb->(GET '/mount/1');
     is $res->code, 200;
     is $res->content, 'mount!!';

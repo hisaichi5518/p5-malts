@@ -45,7 +45,9 @@ get '/hash' => {controller => 'Root', action => 'index'};
 get '/str'  => 'Root#index';
 get '/args/:name' => 'Root#args';
 
-get '/bridge' => ['Root#auth' => 'Root#index'];
+get '/bridge'      => ['Root#auth' => 'Root#index'];
+get '/bridge/fail' => ['Root#fail' => 'Root#index'];
+
 
 mount '/mount/:id' => 'Mount';
 
@@ -53,10 +55,15 @@ package MaltsApp::Router::Controller::Root;
 
 sub auth {
     my ($class, $c) = @_;
-    # ここでレスポンスオブジェクトを返すとそのレスポンスオブジェクトが返る
-    # return $c->render_string(403, 'out!') if 1;
-
     return; # なにもせず次のactionへ行く
+}
+
+sub fail {
+    my ($class, $c) = @_;
+
+    return $c->render_string(403, 'fail') if 1;
+
+    return
 }
 
 sub index {
