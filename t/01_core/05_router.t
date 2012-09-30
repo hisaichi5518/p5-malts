@@ -54,6 +54,23 @@ test_psgi $app, sub {
     $res = $cb->(GET '/bridge');
     is $res->code, 200;
     is $res->content, 'Root#index';
+
+    $res = $cb->(GET '/mount/1');
+    is $res->code, 200;
+    is $res->content, 'mount!!';
+
+    $res = $cb->(GET '/mount/1/');
+    is $res->code, 200;
+    is $res->content, 'mount!!';
+
+    $res = $cb->(GET '/mount/1/mount');
+    is $res->code, 200;
+    is $res->content, 'mount!!!';
+
+    $res = $cb->(GET '/mount/1/404');
+    is $res->code, 404;
+    is $res->content, 'Page Not Found';
+
     # 404
     $res = $cb->(POST '/get');
     is $res->code, 404;

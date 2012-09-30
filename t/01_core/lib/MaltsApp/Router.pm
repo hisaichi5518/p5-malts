@@ -7,11 +7,27 @@ use parent qw(Malts);
 sub to_app {
     my ($class) = @_;
     return sub {
-        local $INC{'MaltsApp/Router/Controller/Root.pm'} = __FILE__;
-        local $INC{'MaltsApp/Router/Dispatcher.pm'} = __FILE__;
+        local $INC{'MaltsApp/Router/Controller/Root.pm'}  = __FILE__;
+        local $INC{'MaltsApp/Router/Dispatcher.pm'}       = __FILE__;
+
         $class->SUPER::to_app->(@_);
     };
 }
+
+
+package MaltsApp::Router::Dispatcher::Mount;
+use Malts::Web::Router::Simple;
+$INC{'MaltsApp/Router/Dispatcher/Mount.pm'} = __FILE__;
+
+get '/' => sub {
+    my ($c) = @_;
+    $c->render_string(200, 'mount!!');
+};
+
+get '/mount' => sub {
+    my ($c) = @_;
+    $c->render_string(200, 'mount!!!');
+};
 
 package MaltsApp::Router::Dispatcher;
 use Malts::Web::Router::Simple;
@@ -30,6 +46,8 @@ get '/str'  => 'Root#index';
 get '/args/:name' => 'Root#args';
 
 get '/bridge' => ['Root#auth' => 'Root#index'];
+
+mount '/mount/:id' => 'Mount';
 
 package MaltsApp::Router::Controller::Root;
 

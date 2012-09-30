@@ -7,7 +7,7 @@ use Exporter 'import';
 use Router::Simple;
 use Malts::App;
 
-our @EXPORT = qw(any get post put del dispatch);
+our @EXPORT = qw(any get post put del dispatch mount);
 my $pkg = __PACKAGE__;
 
 
@@ -42,7 +42,12 @@ sub mount {
     my $klass  = "$caller\::$name";
     Plack::Util::load_class($klass);
 
-    $pkg->_router($caller)->{mount}->{$prefix} = $klass;
+    my $router = $pkg->_router($caller);
+    $router->connect(
+        $prefix.'{mount_path:(?:/(?:.+)?)?}'
+            => {mount => $klass},
+    );
+
 }
 
 sub _add_route {
@@ -87,8 +92,15 @@ sub _build_dest {
 sub dispatch {
     my ($class, $c) = @_;
     my $router = $pkg->_router($class);
+    my %env    = %{$c->req->env};
+    my ($args, $route) = $router->routematch(\%env);
+    if ($args && $args->{mount}) {
+        $router = $pkg->_router($args->{mount});
+        $env{PATH_INFO} = $args->{mount_path};
+        $env{PATH_INFO} ||= '/';
 
-    my $args = $router->match($c->request->env);
+        $args = $router->match(\%env);
+    }
 
     return unless $args;
     $c->request->env->{'malts.routing_args'} = $args;
