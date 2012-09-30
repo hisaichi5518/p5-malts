@@ -75,6 +75,10 @@ test_psgi $app, sub {
     is $res->code, 404;
     is $res->content, 'Page Not Found';
 
+    $res = $cb->(GET '/captures/test/1.txt');
+    is $res->code, 200;
+    is $res->content, 'Root#index';
+
     # 404
     $res = $cb->(POST '/get');
     is $res->code, 404;

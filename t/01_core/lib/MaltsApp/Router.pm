@@ -14,7 +14,6 @@ sub to_app {
     };
 }
 
-
 package MaltsApp::Router::Dispatcher::Mount;
 use Malts::Web::Router::Simple;
 $INC{'MaltsApp/Router/Dispatcher/Mount.pm'} = __FILE__;
@@ -48,6 +47,7 @@ get '/args/:name' => 'Root#args';
 get '/bridge'      => ['Root#auth' => 'Root#index'];
 get '/bridge/fail' => ['Root#fail' => 'Root#index'];
 
+get '/captures/:test/*.*' => 'Root#index';
 
 mount '/mount/:id' => 'Mount';
 

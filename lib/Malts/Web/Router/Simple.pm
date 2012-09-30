@@ -39,14 +39,22 @@ sub any {
 sub mount {
     my ($prefix, $name) = @_;
     my $caller = caller(0);
-    my $klass  = "$caller\::$name";
-    Plack::Util::load_class($klass);
+    $pkg->_mount($caller, $prefix, $name);
+}
 
-    my $router = $pkg->_router($caller);
+sub _mount {
+    my ($class, $caller, $prefix, $name) = @_;
+
+    my $klass  = Plack::Util::load_class($name, $caller);
+    my $router = $class->_router($caller);
+
+    $router->{mount}->{$name} = $prefix;
+
     $router->connect(
-        $prefix.'{mount_path:(?:/(?:.+)?)?}'
+        $prefix.'{_mount_path:(?:/(?:.+)?)?}'
             => {mount => $klass},
     );
+}
 
 }
 
@@ -94,26 +102,54 @@ sub dispatch {
     my $router = $pkg->_router($class);
     my %env    = %{$c->req->env};
     my ($args, $route) = $router->routematch(\%env);
+    my $captures = [$pkg->_build_captures($args, $route)];
+
+    return if !$args;
+    # XXX: ＼(^o^)／
     if ($args && $args->{mount}) {
         $router = $pkg->_router($args->{mount});
-        $env{PATH_INFO} = $args->{mount_path};
+        $env{PATH_INFO} = $args->{_mount_path};
         $env{PATH_INFO} ||= '/';
 
-        $args = $router->match(\%env);
+        my ($_args, $_route) = $router->routematch(\%env);
+        return if !$_args;
+
+        $captures = [@$captures, $pkg->_build_captures($_args, $_route)];
+        $args     = {%$args, %$_args};
+        $route    = $_route;
     }
 
-    return unless $args;
     $c->request->env->{'malts.routing_args'} = $args;
-
-    $pkg->_run_action($c, $args);
+    $pkg->_run_action($c, $args, $route, $captures);
 }
 
+sub _build_captures {
+    my ($class, $args, $route) = @_;
+    my @captures;
+    my $splat = 0;
+
+    for my $capture (@{$route->{capture}}) {
+        my $value = $args->{$capture};
+        next if $capture eq '_mount_path';
+
+        if ($capture eq '__splat__') {
+            $value = $args->{splat}->[$splat];
+            $splat++;
+        }
+        push @captures, $value;
+    }
+
+    return @captures;
+}
+
+
 sub _run_action {
-    my ($class, $c, $args) = @_;
+    my ($class, $c, $args, $route, $captures) = @_;
 
     my $action = $args->{action};
+
     if (ref $action eq 'CODE') {
-        return $action->($c);
+        return $action->($c, @$captures);
     }
     elsif (ref $action eq 'ARRAY') {
         my @actions = @$action;
@@ -127,7 +163,7 @@ sub _run_action {
         my $namespace  = $c->controller_base_name;
 
         $controller = Plack::Util::load_class($controller, $namespace);
-        return $controller->$action($c);
+        return $controller->$action($c, @$captures);
     }
 }
 
