@@ -71,6 +71,10 @@ test_psgi $app, sub {
     is $res->code, 200;
     is $res->content, 'mount!!!';
 
+    $res = $cb->(GET '/fuga/hoge');
+    is $res->code, 200;
+    is $res->content, 'fuga hoge!!';
+
     $res = $cb->(GET '/mount/1/404');
     is $res->code, 404;
     is $res->content, 'Page Not Found';

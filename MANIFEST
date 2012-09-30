@@ -47,6 +47,7 @@ t/01_core/09_setup.t
 t/01_core/lib/MaltsApp/Plugin.pm
 t/01_core/lib/MaltsApp/Plugin/Tests.pm
 t/01_core/lib/MaltsApp/Router.pm
+t/01_core/lib/MaltsApp/Router/Dispatcher/Fuga/Hoge.pm
 t/01_core/template/test/MyApp.pm
 t/02_plugin/00_json.t
 t/02_plugin/01_csrf.t

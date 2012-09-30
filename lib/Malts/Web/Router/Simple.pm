@@ -6,8 +6,11 @@ use warnings;
 use Exporter 'import';
 use Router::Simple;
 use Malts::App;
+use String::CamelCase qw(decamelize);
+use Module::Find qw(findallmod);
 
-our @EXPORT = qw(any get post put del dispatch mount);
+
+our @EXPORT = qw(any get post put del dispatch mount auto_mount);
 my $pkg = __PACKAGE__;
 
 
@@ -56,6 +59,19 @@ sub _mount {
     );
 }
 
+sub auto_mount {
+    my $caller  = caller(0);
+    my @modules = map { (split $caller.'::', $_)[1] } findallmod $caller;
+
+
+    for my $mod (@modules) {
+        next if $pkg->_router($caller)->{mount}->{$mod};
+
+        my $path = $mod;
+        $path =~ s{::}{/}g;
+
+        $pkg->_mount($caller, '/'.decamelize($path) => $mod);
+    }
 }
 
 sub _add_route {
@@ -186,6 +202,8 @@ __END__
 =head2 C<< any >>
 
 =head2 C<< mount >>
+
+=head2 C<< auto_mount >>
 
 =head1 METHODS
 

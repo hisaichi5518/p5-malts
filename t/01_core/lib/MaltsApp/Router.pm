@@ -50,6 +50,7 @@ get '/bridge/fail' => ['Root#fail' => 'Root#index'];
 get '/captures/:test/*.*' => 'Root#index';
 
 mount '/mount/:id' => 'Mount';
+auto_mount;
 
 package MaltsApp::Router::Controller::Root;
 
