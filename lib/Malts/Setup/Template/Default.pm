@@ -4,6 +4,22 @@ use warnings;
 
 sub distribution {
     return <<'__DIST__';
+@@ .maltsconfig
+{
+    app_name => '<:: $module.name ::>',
+    template_name => 'Default',
+    tags => {
+        controller => {
+                files => [
+                    'lib/<:: $module.name ::>/Web/Controller/Root.pm',
+                ],
+
+                module_path => qr/Root/,
+                module_name => qr/Root/,
+        },
+    },
+}
+
 @@ .proverc
 --exec "perl -Ilib -MTest::Name::FromLine -MTest::Flatten"
 --color

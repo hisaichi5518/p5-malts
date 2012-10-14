@@ -5,17 +5,14 @@ use Text::Xslate;
 
 sub new {
     my ($class, %args) = @_;
-    die "!! Can't find module name."     if !$args{name};
-    die "!! Can't find template object." if !$args{template};
+    die "!! Can't find module name." if !$args{name};
 
     bless {
-        name     => $args{name},
-        template => $args{template},
+        name => $args{name},
     }, $class;
 }
 
-sub name     { shift->{name}     }
-sub template { shift->{template} }
+sub name { shift->{name} }
 
 sub path {
     my ($self) = @_;
@@ -38,14 +35,13 @@ sub dist {
 }
 
 sub build_template_files {
-    my ($self) = @_;
+    my ($self, $template_files) = @_;
 
-    my $template_files = $self->template->files;
     my $view = Text::Xslate->new(
         path => {
             %{$template_files},
             map {
-                $self->dist."/".$_ => $self->dist."/".$_
+                $self->dist."/".$_ => $_
             } keys %$template_files,
         },
         line_start => '::',

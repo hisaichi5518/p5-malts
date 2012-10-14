@@ -9,6 +9,7 @@ use Malts::Setup::Template;
 use Malts::Setup::Module;
 use Malts::Setup::Command;
 use Malts::Setup::Command::init;
+use Malts::Setup::Command::new;
 use Malts::Setup::Command::new_template;
 
 subtest 'build_files' => sub {
@@ -29,13 +30,12 @@ testtest
 subtest 'build_template_files' => sub {
     my $template = Malts::Setup::Template->new(name => 'Default');
     my $module   = Malts::Setup::Module->new(
-        name     => 'TestApp',
-        template => $template
+        name => 'TestApp',
     );
 
-    my $files = $module->build_template_files;
-    ok $files->{'TestApp/app.psgi'};
-    #use Data::Dumper;warn Dumper [keys $files];
+    my $files = $module->build_template_files($template->files);
+    ok $files->{'app.psgi'};
+    # use Data::Dumper;warn Dumper [keys $files];
 };
 
 subtest 'create_files' => sub {
@@ -72,6 +72,21 @@ subtest '_data_section_single' => sub {
     like $content, qr/package <:: \$module.name ::>;/;
     like $content, qr/あいうえお/;
 };
+
+subtest 'new->run' => sub {
+    Malts::Setup::Command::init->run(qw/
+        Hoge
+    /);
+    chdir 'Hoge';
+    "Malts::Setup::Command::new"->run(qw/
+        --tag=controller Post
+    /);
+
+    ok -e 'lib/Hoge/Web/Controller/Post.pm', 'no exist lib/Hoge/Web/Controller/Post.pm';
+    chdir '..';
+    ok rmtree('Hoge'), $!;
+};
+
 
 done_testing;
 __DATA__

@@ -11,14 +11,14 @@ sub run {
 
     my $template = Malts::Setup::Template->new(name => $args[1]);
     my $module   = Malts::Setup::Module->new(
-        name     => $args[0],
-        template => $template,
+        name => $args[0],
     );
 
     die "!! exists ".$module->dist if -e $module->dist && !$opts->{force};
 
-    my $files = $module->build_template_files;
+    my $files = $module->build_template_files($template->files);
     $class->create_files($files, {
+        prefix  => $module->name,
         dry_run => $opts->{'dry-run'},
     });
 }
