@@ -13,21 +13,6 @@ use Malts::Setup::Command::new;
 use Malts::Setup::Command::new_template;
 
 subtest 'build_files' => sub {
-    my $files = Malts::Setup::Flavor->build_files(<<'...');
-@@ README
-test
-@@ README.pod
-testtest
-...
-
-    is_deeply $files, {
-        README => "test\n",
-        'README.pod' => "testtest\n",
-    };
-
-};
-
-subtest 'build_files' => sub {
     my $template = Malts::Setup::Flavor->new(name => 'Default');
     my $module   = Malts::Setup::Module->new(
         name => 'TestApp',
@@ -63,12 +48,12 @@ subtest 'init->run' => sub {
     ok rmtree('Hoge'), $!;
 };
 
-subtest '_data_section_single' => sub {
+subtest '_build_template' => sub {
     my $base_dir = 't/01_core/template/test';
     my $file = file($base_dir, 'MyApp.pm');
-    my $content = Malts::Setup::Command::new_template->_data_section_single($file, $base_dir);
+    my $content = Malts::Setup::Command::new_template->_build_template($file, $base_dir);
     #use Data::Dumper;warn Dumper $content;
-    like $content, qr/@@ <:: \$module.path ::>\.pm/;
+    like $content, qr/<:: \$module.path ::>\.pm/;
     like $content, qr/package <:: \$module.name ::>;/;
     like $content, qr/あいうえお/;
 };

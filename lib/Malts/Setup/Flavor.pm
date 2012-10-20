@@ -9,24 +9,9 @@ sub new {
     my $self = bless {name => $name}, $class;
 
     $self->{class} = Plack::Util::load_class($self->name, 'Malts::Setup::Flavor');
-    $self->{files} = $self->build_files($self->class->distribution);
+    $self->{files} = $self->class->build_files;
 
     return $self;
-}
-
-sub build_files {
-    my ($self, $content) = @_;
-
-    my @data = split /^@@\s+(.+?)\s*\r?\n/m, $content;
-    shift @data; # trailing whitespaces
-
-    my $all = {};
-    while (@data) {
-        my ($name, $content) = splice @data, 0, 2;
-        $all->{$name} = $content;
-    }
-
-    return $all;
 }
 
 sub name  { shift->{name}  }
@@ -39,8 +24,6 @@ __END__
 =head1 METHODS
 
 =head2 C<< $class->new(%args) >>
-
-=head2 C<< $self->build_files($content) >>
 
 =head2 C<< $self->name >>
 

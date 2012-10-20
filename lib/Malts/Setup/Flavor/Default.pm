@@ -2,9 +2,9 @@ package Malts::Setup::Flavor::Default;
 use strict;
 use warnings;
 
-sub distribution {
-    return <<'__DIST__';
-@@ .maltsconfig
+sub build_files {
+    my $files = {};
+    $files->{'.maltsconfig'} = <<'__TEMPLATE__';
 {
     app_name => '<:: $module.name ::>',
     template_name => 'Default',
@@ -20,13 +20,15 @@ sub distribution {
     },
 }
 
-@@ .proverc
+__TEMPLATE__
+    $files->{'.proverc'} = <<'__TEMPLATE__';
 --exec "perl -Ilib -MTest::Name::FromLine -MTest::Flatten"
 --color
 --timer
 -w
 
-@@ app.psgi
+__TEMPLATE__
+    $files->{'app.psgi'} = <<'__TEMPLATE__';
 use strict;
 use warnings;
 
@@ -40,7 +42,8 @@ builder {
     <:: $module.name ::>::Web->to_app;
 };
 
-@@ Makefile.PL
+__TEMPLATE__
+    $files->{'Makefile.PL'} = <<'__TEMPLATE__';
 use strict;
 use warnings;
 BEGIN {
@@ -100,7 +103,8 @@ config ::
 
 WriteAll(check_nmake => 0);
 
-@@ lib/<:: $module.path ::>.pm
+__TEMPLATE__
+    $files->{'lib/<:: $module.path ::>.pm'} = <<'__TEMPLATE__';
 package <:: $module.name ::>;
 use strict;
 use warnings;
@@ -108,7 +112,8 @@ our $VERSION = '0.01';
 
 1;
 
-@@ t/00_compile.t
+__TEMPLATE__
+    $files->{'t/00_compile.t'} = <<'__TEMPLATE__';
 use strict;
 use warnings;
 use utf8;
@@ -126,7 +131,8 @@ BEGIN {
 
 done_testing;
 
-@@ t/Util.pm
+__TEMPLATE__
+    $files->{'t/Util.pm'} = <<'__TEMPLATE__';
 package t::Util;
 use strict;
 use warnings;
@@ -157,7 +163,8 @@ sub test_app (&) {
 
 1;
 
-@@ xt/perlcritic.t
+__TEMPLATE__
+    $files->{'xt/perlcritic.t'} = <<'__TEMPLATE__';
 use strict;
 use warnings;
 use Test::More;
@@ -182,7 +189,8 @@ equivalent_modules = Mouse Mouse::Role Mouse::Exporter Mouse::Util Mouse::Util::
 [TestingAndDebugging::RequireUseWarnings]
 equivalent_modules = Mouse Mouse::Role Mouse::Exporter Mouse::Util Mouse::Util::TypeConstraints Moose Moose::Role Moose::Exporter Moose::Util::TypeConstraints Any::Moose
 
-@@ lib/<:: $module.path ::>/Web.pm
+__TEMPLATE__
+    $files->{'lib/<:: $module.path ::>/Web.pm'} = <<'__TEMPLATE__';
 package <:: $module.name ::>::Web;
 use 5.10.1;
 use strict;
@@ -201,21 +209,24 @@ sub view {
 
 1;
 
-@@ templates/layout/base.tx
+__TEMPLATE__
+    $files->{'templates/layout/base.tx'} = <<'__TEMPLATE__';
 <!DOCTYPE html>
 <html>
   <head><title><: $title :></title></head>
   <body><: block content -> {} :></body>
 </html>
 
-@@ templates/root/index.tx
+__TEMPLATE__
+    $files->{'templates/root/index.tx'} = <<'__TEMPLATE__';
 : cascade layout::base {title => 'トップページ'}
 
 : around content -> {
 <p>Hello World!<p>
 : }
 
-@@ lib/<:: $module.path ::>/Web/Dispatcher.pm
+__TEMPLATE__
+    $files->{'lib/<:: $module.path ::>/Web/Dispatcher.pm'} = <<'__TEMPLATE__';
 package <:: $module.name ::>::Web::Dispatcher;
 use strict;
 use warnings;
@@ -225,7 +236,8 @@ get '/' => 'Root#index';
 
 1;
 
-@@ lib/<:: $module.path ::>/Web/Controller/Root.pm
+__TEMPLATE__
+    $files->{'lib/<:: $module.path ::>/Web/Controller/Root.pm'} = <<'__TEMPLATE__';
 package <:: $module.name ::>::Web::Controller::Root;
 use strict;
 use warnings;
@@ -238,7 +250,8 @@ sub index {
 
 1;
 
-__DIST__
+__TEMPLATE__
+    return $files;
 }
 
 1;
@@ -246,6 +259,6 @@ __END__
 
 =head1 METHODS
 
-=head2 C<< $class->distribution >>
+=head2 C<< $class->build_files >>
 
 =cut
