@@ -68,7 +68,7 @@ sub _build_template {
     $content =~ s/MyApp/<:: \$module.name ::>/g;
     $content =~ s/my_app/<:: \$module.camelized_name ::>/g;
 
-    $data_section .= $content."\n";
+    $data_section .= $content;
     $data_section .= '__TEMPLATE__';
 
     return decode_utf8 $data_section;

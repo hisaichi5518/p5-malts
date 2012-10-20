@@ -22,14 +22,12 @@ sub build_files {
         },
     },
 }
-
 __TEMPLATE__
     $files->{'.proverc'} = <<'__TEMPLATE__';
 --exec "perl -Ilib -MTest::Name::FromLine -MTest::Flatten"
 --color
 --timer
 -w
-
 __TEMPLATE__
     $files->{'app.psgi'} = <<'__TEMPLATE__';
 use strict;
@@ -44,7 +42,6 @@ use <:: $module.name ::>::Web;
 builder {
     <:: $module.name ::>::Web->to_app;
 };
-
 __TEMPLATE__
     $files->{'Makefile.PL'} = <<'__TEMPLATE__';
 use strict;
@@ -105,7 +102,6 @@ config ::
 }
 
 WriteAll(check_nmake => 0);
-
 __TEMPLATE__
     $files->{'lib/<:: $module.path ::>.pm'} = <<'__TEMPLATE__';
 package <:: $module.name ::>;
@@ -114,7 +110,6 @@ use warnings;
 our $VERSION = '0.01';
 
 1;
-
 __TEMPLATE__
     $files->{'t/00_compile.t'} = <<'__TEMPLATE__';
 use strict;
@@ -133,7 +128,6 @@ BEGIN {
 };
 
 done_testing;
-
 __TEMPLATE__
     $files->{'t/Util.pm'} = <<'__TEMPLATE__';
 package t::Util;
@@ -165,7 +159,6 @@ sub test_app (&) {
 }
 
 1;
-
 __TEMPLATE__
     $files->{'xt/perlcritic.t'} = <<'__TEMPLATE__';
 use strict;
@@ -191,7 +184,6 @@ equivalent_modules = Mouse Mouse::Role Mouse::Exporter Mouse::Util Mouse::Util::
 
 [TestingAndDebugging::RequireUseWarnings]
 equivalent_modules = Mouse Mouse::Role Mouse::Exporter Mouse::Util Mouse::Util::TypeConstraints Moose Moose::Role Moose::Exporter Moose::Util::TypeConstraints Any::Moose
-
 __TEMPLATE__
     $files->{'lib/<:: $module.path ::>/Web.pm'} = <<'__TEMPLATE__';
 package <:: $module.name ::>::Web;
@@ -211,7 +203,6 @@ sub view {
 
 
 1;
-
 __TEMPLATE__
     $files->{'templates/layout/base.tx'} = <<'__TEMPLATE__';
 <!DOCTYPE html>
@@ -219,7 +210,6 @@ __TEMPLATE__
   <head><title><: $title :></title></head>
   <body><: block content -> {} :></body>
 </html>
-
 __TEMPLATE__
     $files->{'templates/root/index.tx'} = <<'__TEMPLATE__';
 : cascade layout::base {title => 'トップページ'}
@@ -227,7 +217,6 @@ __TEMPLATE__
 : around content -> {
 <p>Hello World!<p>
 : }
-
 __TEMPLATE__
     $files->{'lib/<:: $module.path ::>/Web/Dispatcher.pm'} = <<'__TEMPLATE__';
 package <:: $module.name ::>::Web::Dispatcher;
@@ -238,7 +227,6 @@ use Malts::Web::Router::Simple;
 get '/' => 'Root#index';
 
 1;
-
 __TEMPLATE__
     $files->{'lib/<:: $module.path ::>/Web/Controller/Root.pm'} = <<'__TEMPLATE__';
 package <:: $module.name ::>::Web::Controller::Root;
@@ -252,7 +240,6 @@ sub index {
 }
 
 1;
-
 __TEMPLATE__
     return $files;
 }
