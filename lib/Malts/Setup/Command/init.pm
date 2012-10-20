@@ -9,14 +9,14 @@ sub run {
     my $class = shift;
     my ($opts, @args) = $class->parse_options(@_);
 
-    my $template = Malts::Setup::Flavor->new(name => $args[1]);
-    my $module   = Malts::Setup::Module->new(
+    my $flavor = Malts::Setup::Flavor->new(name => $args[1]);
+    my $module = Malts::Setup::Module->new(
         name => $args[0],
     );
 
     die "!! exists ".$module->dist if -e $module->dist && !$opts->{force};
 
-    my $files = $module->build_template_files($template->files);
+    my $files = $module->build_files($flavor->files);
     $class->create_files($files, {
         prefix  => $module->name,
         dry_run => $opts->{'dry-run'},

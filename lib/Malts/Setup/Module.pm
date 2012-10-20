@@ -54,7 +54,7 @@ sub dist {
     $self->{dist} = $dist;
 }
 
-sub build_template_files {
+sub build_files {
     my ($self, $template_files) = @_;
 
     my $view = Text::Xslate->new(
@@ -100,6 +100,6 @@ __END__
 
 =head2 C<< $self->dist >>
 
-=head2 C<< $self->build_template_files >>
+=head2 C<< $self->build_files >>
 
 =cut

@@ -27,13 +27,13 @@ testtest
 
 };
 
-subtest 'build_template_files' => sub {
+subtest 'build_files' => sub {
     my $template = Malts::Setup::Flavor->new(name => 'Default');
     my $module   = Malts::Setup::Module->new(
         name => 'TestApp',
     );
 
-    my $files = $module->build_template_files($template->files);
+    my $files = $module->build_files($template->files);
     ok $files->{'app.psgi'};
     # use Data::Dumper;warn Dumper [keys $files];
 };

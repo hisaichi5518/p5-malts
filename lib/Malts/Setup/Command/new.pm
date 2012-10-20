@@ -22,7 +22,7 @@ sub run {
         name => $config->{app_name},
     );
 
-    my $files = $module->build_template_files($flavor->files);
+    my $files = $module->build_files($flavor->files);
 
     my $tagged_files = {};
     for my $template_name (keys %{$files}) {
@@ -51,7 +51,7 @@ sub run {
         name => $args[0],
     );
 
-    $files = $module->build_template_files($tagged_files);
+    $files = $module->build_files($tagged_files);
 
     $class->create_files($files, {
         dry_run => $opts->{'dry-run'},
