@@ -7,7 +7,7 @@ sub build_files {
     $files->{'.maltsconfig'} = <<'__TEMPLATE__';
 {
     app_name => '<:: $module.name ::>',
-    template_name => 'Default',
+    flavor_name => 'Default',
     tags => {
         controller => {
                 files => [
