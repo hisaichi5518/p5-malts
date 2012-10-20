@@ -10,5 +10,7 @@ get '/' => sub {
 
 package MyApp;
 use parent qw(Malts);
+# XXX: ファイルを読み込み済みという事にする。
+$INC{'MyApp/Dispatcher.pm'} = 1;
 
 __PACKAGE__->to_app;
