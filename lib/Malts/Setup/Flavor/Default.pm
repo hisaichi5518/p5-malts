@@ -10,12 +10,15 @@ sub build_files {
     flavor_name => 'Default',
     tags => {
         controller => {
-                files => [
-                    'lib/<:: $module.name ::>/Web/Controller/Root.pm',
-                ],
+            files => [
+                'lib/<:: $module.name ::>/Web/Controller/Root.pm',
+                'templates/root/index.tx',
+            ],
 
-                module_path => qr/Root/,
-                module_name => qr/Root/,
+            module_path => qr/Root/,
+            module_name => qr/Root/,
+            module_camelized_path => qr/root/,
+            module_camelized_name => qr/root/,
         },
     },
 }

@@ -2,7 +2,7 @@ package Malts::Setup::Module;
 use strict;
 use warnings;
 use Text::Xslate;
-use String::CamelCase;
+use String::CamelCase qw/decamelize/;
 
 sub new {
     my ($class, %args) = @_;
@@ -30,8 +30,9 @@ sub camelized_name {
     return $self->{camelized_name} if $self->{camelized_name};
 
     my $name = $self->name;
+    $name =~ s/::/_/g;
 
-    $self->{camelized_name} = camelize($name);
+    $self->{camelized_name} = decamelize($name);
 }
 
 sub camelized_path {
@@ -40,7 +41,7 @@ sub camelized_path {
 
     my $path = $self->path;
 
-    $self->{camelized_path} = camelize($path);
+    $self->{camelized_path} = decamelize($path);
 }
 
 
