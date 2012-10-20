@@ -1,4 +1,4 @@
-package Malts::Setup::Template;
+package Malts::Setup::Flavor;
 use strict;
 use warnings;
 use Plack::Util;
@@ -8,7 +8,7 @@ sub new {
     my $name = $args{name} || 'Default';
     my $self = bless {name => $name}, $class;
 
-    $self->{class} = Plack::Util::load_class($self->name, 'Malts::Setup::Template');
+    $self->{class} = Plack::Util::load_class($self->name, 'Malts::Setup::Flavor');
     $self->{files} = $self->build_files($self->class->distribution);
 
     return $self;

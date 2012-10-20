@@ -3,13 +3,13 @@ use strict;
 use warnings;
 use parent 'Malts::Setup::Command';
 use Malts::Setup::Module;
-use Malts::Setup::Template;
+use Malts::Setup::Flavor;
 
 sub run {
     my $class = shift;
     my ($opts, @args) = $class->parse_options(@_);
 
-    my $template = Malts::Setup::Template->new(name => $args[1]);
+    my $template = Malts::Setup::Flavor->new(name => $args[1]);
     my $module   = Malts::Setup::Module->new(
         name => $args[0],
     );

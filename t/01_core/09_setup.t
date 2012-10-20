@@ -5,7 +5,7 @@ use Test::More;
 use File::Path qw/rmtree/;
 use Path::Class;
 
-use Malts::Setup::Template;
+use Malts::Setup::Flavor;
 use Malts::Setup::Module;
 use Malts::Setup::Command;
 use Malts::Setup::Command::init;
@@ -13,7 +13,7 @@ use Malts::Setup::Command::new;
 use Malts::Setup::Command::new_template;
 
 subtest 'build_files' => sub {
-    my $files = Malts::Setup::Template->build_files(<<'...');
+    my $files = Malts::Setup::Flavor->build_files(<<'...');
 @@ README
 test
 @@ README.pod
@@ -28,7 +28,7 @@ testtest
 };
 
 subtest 'build_template_files' => sub {
-    my $template = Malts::Setup::Template->new(name => 'Default');
+    my $template = Malts::Setup::Flavor->new(name => 'Default');
     my $module   = Malts::Setup::Module->new(
         name => 'TestApp',
     );

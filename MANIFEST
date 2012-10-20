@@ -20,8 +20,8 @@ lib/Malts/Setup/Command.pm
 lib/Malts/Setup/Command/init.pm
 lib/Malts/Setup/Command/new_template.pm
 lib/Malts/Setup/Module.pm
-lib/Malts/Setup/Template.pm
-lib/Malts/Setup/Template/Default.pm
+lib/Malts/Setup/Flavor.pm
+lib/Malts/Setup/Flavor/Default.pm
 lib/Malts/Test.pm
 lib/Malts/Util.pm
 lib/Malts/Web/Request.pm

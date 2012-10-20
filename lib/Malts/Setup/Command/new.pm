@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use parent 'Malts::Setup::Command';
 use Malts::Setup::Module;
-use Malts::Setup::Template;
+use Malts::Setup::Flavor;
 
 sub run {
     my $class = shift;
@@ -16,7 +16,7 @@ sub run {
     my $tag_config = $config->{tags}->{$opts->{tag}}
         or die "!! Can't find tags.@{[$opts->{tag}]} in .maltsconfig.";
 
-    my $template = Malts::Setup::Template->new(
+    my $template = Malts::Setup::Flavor->new(
         name => $args[1] || $config->{template_name},
     );
     my $module = Malts::Setup::Module->new(

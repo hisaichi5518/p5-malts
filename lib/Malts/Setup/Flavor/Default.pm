@@ -1,4 +1,4 @@
-package Malts::Setup::Template::Default;
+package Malts::Setup::Flavor::Default;
 use strict;
 use warnings;
 
