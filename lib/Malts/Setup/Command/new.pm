@@ -15,16 +15,15 @@ sub run {
     my $tag_config = $config->{tags}->{$opts->{tag}}
         or die "!! Can't find tags.@{[$opts->{tag}]} in .maltsconfig.";
 
-    my $flavor = Malts::Setup::Flavor->new(
-        name => $args[1] || $config->{template_name},
-    );
-    my $module = Malts::Setup::Module->new(
-        name => $config->{app_name},
-    );
+    my $flavor_name = $args[1] || $config->{flavor_name}
+        or die "!! Can't find flavor_name in .maltsconfig.";
+
+    my $flavor = Malts::Setup::Flavor->new(name => $flavor_name);
+    my $module = Malts::Setup::Module->new(name => $app_name);
 
     my $files = $module->build_files($flavor->files);
-
     my $tagged_files = {};
+
     for my $template_name (keys %{$files}) {
         next if !($template_name ~~ $tag_config->{files});
 
@@ -47,18 +46,12 @@ sub run {
         $tagged_files->{$template_name} = $body;
     }
 
-    $module = Malts::Setup::Module->new(
-        name => $args[0],
-    );
-
+    $module = Malts::Setup::Module->new(name => $args[0]);
     $files = $module->build_files($tagged_files);
 
     $class->create_files($files, {
         dry_run => $opts->{'dry-run'},
     });
-
-
-
 }
 
 sub option_spec {

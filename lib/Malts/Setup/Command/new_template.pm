@@ -11,8 +11,8 @@ sub run {
     my $class = shift;
     my ($opts, @args) = $class->parse_options(@_);
 
-    my $base_dir = $opts->{dir}    or die;
-    my $module   = $opts->{module} or die;
+    my $base_dir = $opts->{dir}    or die "!! Can't find --dir.";
+    my $module   = $opts->{module} or die "!! Can't find --module.";
 
     my @templates;
     dir($base_dir)->recurse(
