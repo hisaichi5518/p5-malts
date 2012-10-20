@@ -27,6 +27,7 @@ all_from 'lib/Malts.pm';
 requires 'Encode'            => 2.44;
 requires 'Text::Xslate'      => 1.5009;
 requires 'Router::Simple'    => 0.09;
+requires 'Module::Find'      => 0.10;
 requires 'String::CamelCase' => 0.02;
 requires 'Plack::Middleware::Session' => 0.14;
 
