@@ -37,7 +37,7 @@ sub config {
     my $file = getcwd."/.maltsconfig";
     my $config;
     if (-e $file) {
-        print "Load $file";
+        print "Load $file\n";
         $config = do $file;
     }
 
