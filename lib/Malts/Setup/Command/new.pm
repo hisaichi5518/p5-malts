@@ -10,20 +10,19 @@ sub run {
     my ($opts, @args) = $class->parse_options(@_);
     my $config = $class->config;
 
-
     my $tag        = $opts->{tag}        or die "!! Can't find --tag.";
     my $app_name   = $config->{app_name} or die "!! Can't find app_name in .maltsconfig.";
     my $tag_config = $config->{tags}->{$opts->{tag}}
         or die "!! Can't find tags.@{[$opts->{tag}]} in .maltsconfig.";
 
-    my $template = Malts::Setup::Flavor->new(
+    my $flavor = Malts::Setup::Flavor->new(
         name => $args[1] || $config->{template_name},
     );
     my $module = Malts::Setup::Module->new(
         name => $config->{app_name},
     );
 
-    my $files = $module->build_template_files($template->files);
+    my $files = $module->build_template_files($flavor->files);
 
     my $tagged_files = {};
     for my $template_name (keys %{$files}) {
@@ -31,8 +30,20 @@ sub run {
 
         my $body = $files->{$template_name};
 
-        $template_name =~ s/$tag_config->{module_path}/<:: \$module.path ::>/g;
-        $body =~ s/$tag_config->{module_name}/<:: \$module.name ::>/g;
+        if (my $module_path = $tag_config->{module_path}) {
+            $template_name =~ s/$module_path/<:: \$module.path ::>/g;
+        }
+        if (my $module_camelized_path = $tag_config->{module_camelized_path}) {
+            $template_name =~ s/$module_camelized_path/<:: \$module.camelized_path ::>/g;
+        }
+
+        if (my $module_name = $tag_config->{module_name}) {
+            $body =~ s/$module_name/<:: \$module.name ::>/g;
+        }
+        if (my $module_camelized_name = $tag_config->{module_camelized_name}) {
+            $body =~ s/$module_camelized_name/<:: \$module.camelized_name ::>/g;
+        }
+
         $tagged_files->{$template_name} = $body;
     }
 

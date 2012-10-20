@@ -2,6 +2,7 @@ package Malts::Setup::Module;
 use strict;
 use warnings;
 use Text::Xslate;
+use String::CamelCase;
 
 sub new {
     my ($class, %args) = @_;
@@ -23,6 +24,25 @@ sub path {
 
     $self->{path} = $path;
 }
+
+sub camelized_name {
+    my ($self) = @_;
+    return $self->{camelized_name} if $self->{camelized_name};
+
+    my $name = $self->name;
+
+    $self->{camelized_name} = camelize($name);
+}
+
+sub camelized_path {
+    my ($self) = @_;
+    return $self->{camelized_path} if $self->{camelized_path};
+
+    my $path = $self->path;
+
+    $self->{camelized_path} = camelize($path);
+}
+
 
 sub dist {
     my ($self) = @_;
@@ -72,9 +92,11 @@ __END__
 
 =head2 C<< $self->name >>
 
-=head2 C<< $self->template >>
-
 =head2 C<< $self->path >>
+
+=head2 C<< $self->camelized_name >>
+
+=head2 C<< $self->camelized_path >>
 
 =head2 C<< $self->dist >>
 
