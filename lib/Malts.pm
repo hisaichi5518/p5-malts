@@ -11,7 +11,7 @@ use Malts::Web::Response;
 use Scalar::Util ();
 use Carp ();
 
-our $VERSION = '0.500';
+our $VERSION = '0.800';
 our $_context;
 
 sub new {
