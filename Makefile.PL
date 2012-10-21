@@ -24,6 +24,7 @@ use inc::Module::Install;
 all_from 'lib/Malts.pm';
 
 # parent, Plack
+requires 'Clone'             => 0.31;
 requires 'Encode'            => 2.44;
 requires 'Text::Xslate'      => 1.5009;
 requires 'Router::Simple'    => 0.09;

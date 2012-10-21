@@ -24,9 +24,9 @@ test_app
     app_name => 'MaltsApp::Test',
     app      => $app,
     client   => sub {
-        my ($app) = @_;
+        my ($cb) = @_;
         my ($res, $c);
-        ($res, $c) = $app->(GET '/test');
+        ($res, $c) = $cb->(GET '/test');
         isa_ok $res, 'HTTP::Response';
         isa_ok $c, 'MaltsApp::Test';
         isa_ok $c, 'Malts';
@@ -36,22 +36,74 @@ test_app
 ;
 
 test_app
-    app_name => 'MaltsApp::Test::Die',
+    app_name => 'MaltsApp::Test::Die::Hook',
     app => do {
-        package MaltsApp::Test::Die;
+        package MaltsApp::Test::Die::Hook;
         use parent qw/Malts/;
         __PACKAGE__->add_hooks(before_dispatch => sub { die });
         __PACKAGE__->to_app;
     },
     client => sub {
-        my ($app) = @_;
+        my ($cb) = @_;
         my ($res, $c);
-        ($res, $c) = $app->(GET '/');
+        ($res, $c) = $cb->(GET '/');
+        is $res->code, 500;
+        ok !$c;
+    }
+;
+
+test_app
+    app_name => 'MaltsApp::Test::Die::App',
+    app => do {
+        package MaltsApp::Test::Die::App;
+        use parent qw/Malts/;
+        sub dispatch { die "error" }
+        __PACKAGE__->to_app;
+    },
+    client => sub {
+        my ($cb) = @_;
+        my ($res, $c);
+        ($res, $c) = $cb->(GET '/');
+        is $res->code, 500;
+        ok !$c;
+    }
+;
+
+test_app
+    app_name => 'MaltsApp::Test::Die::App::Eval',
+    app => do {
+        package MaltsApp::Test::Die::App::Eval;
+        use parent qw/Malts/;
+        sub to_app {
+            my ($class) = @_;
+
+            return sub {
+                my $env  = shift;
+                my $self = $class->setup(env => $env);
+                local $Malts::_context = $self;
+
+                my $res;
+                $self->run_hooks('before_dispatch', \$res);
+                if (!$res) {
+                    $res = eval { die 'error' };
+                    if ($@) {
+                        $res = $self->create_response(500, [], [$@]);
+                    }
+                }
+                $self->run_hooks('after_dispatch', \$res);
+                return $res->finalize;
+            };
+        }
+        __PACKAGE__->to_app;
+    },
+    client => sub {
+        my ($cb) = @_;
+        my ($res, $c);
+        ($res, $c) = $cb->(GET '/');
         is $res->code, 500;
         ok $c;
     }
 ;
-
 
 $app = builder {mount '/mount' => $app};
 

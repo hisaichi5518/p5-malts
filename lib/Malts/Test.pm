@@ -3,7 +3,8 @@ use strict;
 use warnings;
 use Exporter 'import';
 use Plack::Test;
-use Carp;
+use Carp  qw/croak/;
+use Clone qw/clone/;
 
 our @EXPORT = qw(test_app);
 
@@ -19,13 +20,15 @@ sub test_app {
     local ($_c, $_path_info, $_script_name);
 
     if (!$_added_hook->{$app_name}) {
-        # 一番まえに入れる
         my $hooks = Malts::App->hooks->{$app_name} ||= {};
+
         unshift @{$hooks->{before_dispatch} ||= []}, sub {
             my ($context) = @_;
-            $_c           = $context;
-            $_path_info   = $_c->req->path_info;
-            $_script_name = $_c->req->script_name;
+            # dieせずに終わったらcloneする。
+            push @{$context->{_hooks}->{after_dispatch} ||= []}, sub {
+                my ($context) = @_;
+                $_c = clone($context);
+            };
         };
         $_added_hook->{$app_name}++;
     }
@@ -35,11 +38,6 @@ sub test_app {
         my $cb = sub {
             my $req = shift;
             my $res = $callback->($req);
-
-            # for mount
-            # mountはresponse_cbで元のenvに書き換えるので
-            $_c->req->env->{PATH_INFO}   = $_path_info   if $_c && $_path_info;
-            $_c->req->env->{SCRIPT_NAME} = $_script_name if $_c && $_script_name;
 
             return ($res, $_c);
         };
@@ -91,5 +89,7 @@ Malts::Test - functions for malts app test.
 =head1 FUNCTIONS
 
 =head2 C<< test_app >>
+
+NOTE: Can't use I<$c> if die at to_app. See Malts::Test tests.
 
 =cut
