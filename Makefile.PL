@@ -5,7 +5,7 @@ BEGIN {
 
     # author requires, or bundled modules
     my @devmods = qw(
-        inc::Module::Install             1.00
+        inc::Module::Install             1.06
         Module::Install::AuthorTests     0.002
     );
     my @not_available;
